@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naomy - Sitio en Construcción</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #b71c1c;
+    font-family: 'Arial Black', 'Arial Bold', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── MOSAIC BACKGROUND ── */
+  .mosaic {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0;
+    transform: rotate(-15deg) scale(1.6);
+    opacity: 0.45;
+  }
+
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .sticker {
+    background: #c62828;
+    border: 3px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 10px 14px;
+    text-align: left;
+    position: relative;
+    width: 90%;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  /* speech bubble tail */
+  .sticker::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 18px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid #c62828;
+  }
+
+  .sticker .name {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 900;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: -1px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .sticker .sub {
+    font-size: clamp(0.45rem, 1vw, 0.7rem);
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── CENTER CONTENT ── */
+  .center {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    width: 90%;
+    max-width: 900px;
+  }
+
+  .main-title {
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: -2px;
+    text-shadow:
+      4px 4px 0 rgba(0,0,0,0.35),
+      0 8px 32px rgba(0,0,0,0.5);
+    animation: titlePulse 3s ease-in-out infinite;
+  }
+
+  @keyframes titlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.015); }
+  }
+
+  .subtitle {
+    margin-top: 24px;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 1px;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  /* wrench icon */
+  .icon {
+    margin-top: 18px;
+    font-size: 2rem;
+    opacity: 0.75;
+    animation: spin 4s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin {
+    0%   { transform: rotate(0deg); }
+    20%  { transform: rotate(20deg); }
+    40%  { transform: rotate(-20deg); }
+    60%  { transform: rotate(20deg); }
+    80%  { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* ── PROGRESS BARS ── */
+  .bars-wrapper {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bar-track {
+    width: clamp(180px, 40vw, 360px);
+    height: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.9), rgba(255,255,255,0.5));
+    background-size: 200% 100%;
+    animation: barSlide 2s ease-in-out infinite;
+    width: 55%;
+  }
+
+  .bar-fill.bar2 {
+    width: 30%;
+    animation-delay: 0.4s;
+    animation-duration: 2.5s;
+  }
+
+  @keyframes barSlide {
+    0%   { width: 15%; background-position: 200% 0; }
+    50%  { width: 80%; background-position: 0% 0; }
+    100% { width: 15%; background-position: -200% 0; }
+  }
+
+  /* ── CORNER ICONS ── */
+  .corner-icon {
+    position: fixed;
+    font-size: 1.6rem;
+    opacity: 0.6;
+    z-index: 20;
+    animation: cornerPulse 2s ease-in-out infinite;
+  }
+  .corner-icon.tl { top: 18px; left: 18px; }
+  .corner-icon.bl { bottom: 18px; left: 18px; }
+
+  @keyframes cornerPulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50%       { opacity: 0.75; transform: scale(1.1); }
+  }
+
+  /* top-right progress bar */
+  .topright-bar {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .topright-bar .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    animation: dotBlink 1.5s ease-in-out infinite;
+  }
+  .topright-bar .dot:nth-child(2) { animation-delay: 0.3s; }
+  .topright-bar .dot:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes dotBlink {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+  .topright-bar .mini-track {
+    width: 80px; height: 6px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .topright-bar .mini-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    animation: barSlide 3s ease-in-out infinite;
+    animation-delay: 0.8s;
+  }
+</style>
+</head>
+<body>
+
+<!-- corner icons -->
+<div class="corner-icon tl">⛑️</div>
+<div class="corner-icon bl">⛑️</div>
+<div class="topright-bar">
+  <div class="mini-track"><div class="mini-fill"></div></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<!-- mosaic -->
+<div class="mosaic" id="mosaic"></div>
+
+<!-- center -->
+<div class="center">
+  <div class="main-title">SITIO EN<br>CONSTRUCCIÓN</div>
+  <div class="subtitle">Estamos trabajando para usted</div>
+  <div class="icon">🔧</div>
+  <div class="bars-wrapper">
+    <div class="bar-track"><div class="bar-fill"></div></div>
+    <div class="bar-track"><div class="bar-fill bar2"></div></div>
+  </div>
+</div>
+
+<script>
+  const mosaic = document.getElementById('mosaic');
+  // 5 cols × 4 rows = 20 tiles, but extend for rotation overflow
+  for (let i = 0; i < 30; i++) {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.innerHTML = `
+      <div class="sticker">
+        <div class="name">NAOMY</div>
+        <div class="sub">LISTA 2A OPCIÓN 10<br>MI CONCEJAL!</div>
+      </div>`;
+    mosaic.appendChild(tile);
+  }
+</script>
+</body>
+</html>

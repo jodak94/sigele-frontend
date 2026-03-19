@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGELE - Gestión Electoral</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons (Alternativa a Lucide para HTML puro) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Animaciones básicas */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Ocultar elementos */
+        .hidden-view { display: none !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans text-gray-800 selection:bg-red-200">
+
+    <!-- NAVBAR (Oculto por defecto, se muestra al loguearse) -->
+    <nav id="navbar" class="hidden-view bg-black text-white shadow-lg sticky top-0 z-50 border-b-2 border-red-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="ph-fill ph-shield-check text-red-600 text-3xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight hidden sm:block">SIGELE</span>
+                    <span class="ml-3 px-2.5 py-0.5 rounded-full bg-gray-800 text-xs font-medium text-gray-300 border border-gray-700 hidden md:block">Campaña 2026</span>
+                </div>
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div class="text-right hidden md:block mr-2">
+                        <div id="nav-user-name" class="text-sm font-medium"></div>
+                        <div id="nav-user-role" class="text-xs text-red-400 font-bold tracking-wider"></div>
+                    </div>
+                    <button onclick="goHome()" class="p-2 rounded-lg hover:bg-gray-800 transition text-gray-300 hover:text-white" title="Inicio">
+                        <i class="ph ph-house text-xl"></i>
+                    </button>
+                    <button onclick="logout()" class="p-2 rounded-lg hover:bg-red-900/50 hover:text-red-400 transition text-gray-300" title="Cerrar Sesión">
+                        <i class="ph ph-sign-out text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="app-container">
+        
+        <!-- VISTA: LOGIN -->
+        <div id="view-login" class="fade-in max-w-6xl mx-auto mt-4 mb-8">
+            <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[750px] border border-gray-100">
+                <!-- Sidebar Candidato (Inyectado por JS para reusar) -->
+                <div class="candidate-sidebar-container md:w-1/2 flex"></div>
+                
+                <!-- Formulario -->
+                <div class="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50">
+                    <div class="text-center mb-10">
+                        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Iniciar sesión</h1>
+                        <p class="text-gray-500 mt-2 font-medium">Ingrese sus credenciales para acceder al sistema</p>
+                    </div>
+                    <form class="space-y-5 max-w-sm mx-auto w-full" onsubmit="event.preventDefault()">
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="ph ph-user text-xl text-gray-400"></i>
+                                </div>
+                                <input type="text" placeholder="Usuario" class="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium text-gray-700" />
+                            </div>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="ph ph-lock text-xl text-gray-400"></i>
+                                </div>
+                                <input type="password" placeholder="Contraseña" class="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium text-gray-700" />
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center px-1 pt-2 pb-4">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500" />
+                                <span class="ml-2 text-sm font-bold text-gray-400">Recordarme</span>
+                            </label>
+                            <a href="#" class="text-sm text-red-600 hover:text-red-800 font-bold">¿Olvidó su contraseña?</a>
+                        </div>
+                        <!-- Botones Demo -->
+                        <div class="space-y-3 pt-2">
+                            <button onclick="login('OPERADOR')" class="w-full py-4 rounded-2xl shadow-md text-base font-bold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transition-all">Ingresar (Como Operador)</button>
+                            <div class="grid grid-cols-2 gap-3 pt-2">
+                                <button onclick="login('ADMIN')" class="w-full py-3 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200">Admin Zonal</button>
+                                <button onclick="login('SUPER_ADMIN')" class="w-full py-3 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200">Super Admin</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="mt-12 pt-8 border-t border-gray-200 flex flex-col items-center text-center">
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Naomy Ferrer - Concejal</p>
+                        <p class="text-sm text-red-700 font-black uppercase tracking-widest">San Lorenzo</p>
+                        <button onclick="navigateTo('public')" class="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full max-w-sm">
+                            <i class="ph ph-magnifying-glass text-red-600 mr-2 text-lg"></i> Consultar Padrón Público
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: CONSULTA PÚBLICA -->
+        <div id="view-public" class="hidden-view fade-in max-w-6xl mx-auto mt-4 mb-8">
+            <button onclick="navigateTo('login')" class="text-gray-500 hover:text-black mb-4 flex items-center font-bold px-2">
+                <i class="ph-bold ph-caret-left mr-1"></i> Volver al Login
+            </button>
+            <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse min-h-[750px] border border-gray-100">
+                <!-- Sidebar -->
+                <div class="candidate-sidebar-container md:w-1/2 flex"></div>
+                
+                <!-- Buscador -->
+                <div class="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50">
+                    <div class="text-center mb-10">
+                        <div class="inline-flex items-center justify-center p-4 bg-red-50 rounded-2xl mb-6 shadow-inner">
+                            <i class="ph-bold ph-magnifying-glass text-4xl text-red-600"></i>
+                        </div>
+                        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Consulta de Padrón</h1>
+                        <p class="text-gray-500 mt-2 font-medium max-w-sm mx-auto">Ingrese su número de Cédula de Identidad para verificar su lugar de votación exacto.</p>
+                    </div>
+                    <div class="max-w-sm mx-auto w-full space-y-4">
+                        <input type="text" id="public-search-input" placeholder="Ej: 1234567" class="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-600 focus:border-red-600 outline-none text-lg font-bold text-center" />
+                        <button onclick="handlePublicSearch()" class="w-full py-4 rounded-2xl shadow-md text-lg font-bold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700">Buscar Elector</button>
+                    </div>
+                    <div id="public-search-result" class="max-w-md mx-auto w-full mt-10"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: DASHBOARD OPERADOR -->
+        <div id="view-op-dash" class="hidden-view fade-in space-y-6">
+            <!-- Header -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-black">Panel Operativo</h1>
+                    <p class="text-gray-500 font-medium">Gestione su lista de electores captados.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="text-center px-4 border-r border-gray-200">
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Activos</p>
+                        <p id="op-total-activos" class="text-3xl font-extrabold text-red-600">0</p>
+                    </div>
+                    <div class="text-center px-2">
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Miembros Mesa</p>
+                        <p id="op-total-mesa" class="text-3xl font-extrabold text-black">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Formulario -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 sticky top-24">
+                        <h2 class="text-lg font-extrabold text-black mb-5 flex items-center">
+                            <i class="ph-bold ph-user-plus text-xl text-red-600 mr-2"></i> Cargar Elector
+                        </h2>
+                        <form id="op-add-form" onsubmit="handleAddRecord(event)" class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-800 mb-1">Cédula de Identidad</label>
+                                <input type="text" id="op-cedula" required placeholder="Ej: 1234567" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-600 outline-none font-bold" />
+                            </div>
+                            <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Opciones Logísticas</p>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="op-mesa" class="w-5 h-5 border-2 rounded text-black focus:ring-black" />
+                                    <span class="ml-3 text-sm text-gray-800 font-bold">Disponible Miembro de Mesa</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="op-transporte" class="w-5 h-5 border-2 rounded text-red-800 focus:ring-red-800" />
+                                    <span class="ml-3 text-sm text-gray-800 font-bold">Requiere transporte Día D</span>
+                                </label>
+                            </div>
+                            <div class="pt-3 border-t border-gray-200 mt-4 space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">Teléfono de Contacto <span class="text-red-600">*</span></label>
+                                    <input type="tel" id="op-telefono" required placeholder="Ej: 0981 123 456" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 mb-1">Dirección de Recogida (Opcional)</label>
+                                    <input type="text" id="op-direccion" placeholder="Si es distinta a padrón..." class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600" />
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm">Registrar Captación</button>
+                        </form>
+                        <div id="op-msg" class="hidden-view mt-4 p-4 rounded-xl text-sm font-bold flex items-start"></div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Registros -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-5 border-b border-gray-200 flex justify-between items-center">
+                            <h2 class="text-lg font-extrabold text-black">Mi Lista de Electores</h2>
+                            <button onclick="window.print()" class="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center">
+                                <i class="ph-bold ph-printer text-gray-500 mr-2"></i> Imprimir Planilla
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Elector</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Local / Ubicación</th>
+                                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Etiquetas</th>
+                                        <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="op-table-body" class="bg-white divide-y divide-gray-100">
+                                    <!-- Generado por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: DASHBOARD ADMINISTRADOR -->
+        <div id="view-admin-dash" class="hidden-view fade-in space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-black">Centro de Control</h1>
+                    <p class="text-gray-500 font-medium">Métricas globales y logística de campaña.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button class="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center">
+                        <i class="ph-bold ph-file-text text-red-600 mr-2"></i> Reportes D-Day
+                    </button>
+                    <button class="bg-black text-white px-4 py-2.5 rounded-xl hover:bg-gray-800 font-bold text-sm flex items-center">
+                        <i class="ph-bold ph-users mr-2"></i> Miembros Mesa
+                    </button>
+                </div>
+            </div>
+
+            <!-- Buscador Admin -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                <h2 class="text-lg font-extrabold text-black mb-4 flex items-center">
+                    <i class="ph-bold ph-magnifying-glass text-red-600 mr-2"></i> Buscar Elector en Listas
+                </h2>
+                <div class="flex flex-col sm:flex-row gap-3 max-w-2xl">
+                    <input type="text" id="admin-search-input" placeholder="N° de Cédula..." class="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold focus:ring-2 focus:ring-red-600" />
+                    <button onclick="handleAdminSearch()" class="bg-black text-white px-6 py-2.5 rounded-xl font-bold hover:bg-gray-900">Verificar</button>
+                </div>
+                <div id="admin-search-result" class="mt-4"></div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="admin-kpis">
+                <!-- Generado por JS -->
+            </div>
+
+            <!-- Directorio -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-5 border-b border-gray-200">
+                    <h2 class="text-lg font-extrabold text-black">Directorio de Cuentas (Operadores)</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Usuario / Rol</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Contacto</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Métricas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body" class="bg-white divide-y divide-gray-100">
+                            <!-- Generado por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL EDICIÓN OPERADOR -->
+    <div id="edit-modal" class="hidden-view fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="font-extrabold text-lg text-black">Editar Registro</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-black">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="saveEdit(event)" class="p-6 space-y-5">
+                <div id="edit-modal-info"></div>
+                <input type="hidden" id="edit-id" />
+                <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" id="edit-mesa" class="w-5 h-5 border-2 rounded text-black" />
+                        <span class="ml-3 text-sm text-gray-800 font-bold">Miembro de Mesa</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" id="edit-transporte" class="w-5 h-5 border-2 rounded text-red-800" />
+                        <span class="ml-3 text-sm text-gray-800 font-bold">Requiere Transporte</span>
+                    </label>
+                </div>
+                <div class="space-y-4 pt-2 border-t border-gray-200">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Teléfono</label>
+                        <input type="tel" id="edit-telefono" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Dirección Recogida</label>
+                        <input type="text" id="edit-direccion" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold" />
+                    </div>
+                </div>
+                <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 border border-gray-300 rounded-xl text-sm font-extrabold">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-extrabold text-white bg-black hover:bg-gray-900">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT: Lógica de la Aplicación -->
+    <script>
+        // ==========================================
+        // MOCK DATA (Simulación de Base de Datos)
+        // ==========================================
+        const mockLocales = [
+            { sec_loc: '3541', nombre_loc: 'ESCUELA MARGARITA V. DE BIBOLINI', seccional: '354 - GRAL. FRANCISCO I. RESQUIN', direccion: 'Barrio Centro' },
+            { sec_loc: '3551', nombre_loc: 'ESCUELA N° 144 CMTE. HEBER LEO', seccional: '355 - GRAL. HIGINIO MORINIGO', direccion: 'Ruta Principal' },
+            { sec_loc: '1721', nombre_loc: 'ESC. GRADUADA N° 91', seccional: '172 - GUARAMBARE', direccion: 'B. ACEVAL Y MANUEL DOMINGUEZ' },
+        ];
+
+        const mockElectores = [
+            { numero_ced: '1234567', nombre: 'JUAN CARLOS', apellido: 'ACEVEDO', sec_loc: '3541', mesa: '1', orden: '5' },
+            { numero_ced: '2345678', nombre: 'MARIA', apellido: 'GONZALEZ', sec_loc: '3541', mesa: '1', orden: '12' },
+            { numero_ced: '3456789', nombre: 'CARLOS', apellido: 'LOPEZ', sec_loc: '3551', mesa: '3', orden: '45' },
+            { numero_ced: '4567890', nombre: 'ANA', apellido: 'MARTINEZ', sec_loc: '1721', mesa: '2', orden: '8' },
+            { numero_ced: '5678901', nombre: 'PEDRO', apellido: 'RAMIREZ', sec_loc: '1721', mesa: '2', orden: '15' },
+        ];
+
+        let operadores = [
+            { id_usuario: 1, nombre_completo: 'Operador Central', email: 'op1@partido.com', telefono: '0981-123456', rol: 'OPERADOR' },
+            { id_usuario: 2, nombre_completo: 'Operador Norte', email: 'op2@partido.com', telefono: '0982-654321', rol: 'OPERADOR' },
+        ];
+
+        let registros = [
+            { id_registro: 101, id_operador: 1, numero_ced: '3456789', fecha_registro: new Date().toISOString(), requiere_transporte: false, disponible_miembro_mesa: true, borrado: false, telefono: '0981 111 222', direccion_recogida: '' },
+            { id_registro: 102, id_operador: 1, numero_ced: '4567890', fecha_registro: new Date().toISOString(), requiere_transporte: true, disponible_miembro_mesa: false, borrado: false, telefono: '0982 222', direccion_recogida: 'Frente plaza' },
+            { id_registro: 103, id_operador: 2, numero_ced: '5678901', fecha_registro: new Date().toISOString(), requiere_transporte: false, disponible_miembro_mesa: true, borrado: false, telefono: '0999 11', direccion_recogida: '' },
+        ];
+
+        // ==========================================
+        // ESTADO GLOBAL & NAVEGACIÓN
+        // ==========================================
+        let currentUser = null;
+        const views = ['login', 'public', 'op-dash', 'admin-dash'];
+
+        function navigateTo(viewId) {
+            views.forEach(v => document.getElementById(`view-${v}`).classList.add('hidden-view'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+            
+            // Render specific view data
+            if(viewId === 'op-dash') renderOpDash();
+            if(viewId === 'admin-dash') renderAdminDash();
+            if(viewId === 'public') resetPublicSearch();
+        }
+
+        function login(role) {
+            if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
+                currentUser = { id_usuario: 99, nombre_completo: role === 'SUPER_ADMIN' ? 'Admin Principal' : 'Admin Zonal', rol: role };
+                document.getElementById('navbar').classList.remove('hidden-view');
+                document.getElementById('nav-user-name').innerText = currentUser.nombre_completo;
+                document.getElementById('nav-user-role').innerText = currentUser.rol;
+                navigateTo('admin-dash');
+            } else {
+                currentUser = operadores[0];
+                document.getElementById('navbar').classList.remove('hidden-view');
+                document.getElementById('nav-user-name').innerText = currentUser.nombre_completo;
+                document.getElementById('nav-user-role').innerText = currentUser.rol;
+                navigateTo('op-dash');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('navbar').classList.add('hidden-view');
+            navigateTo('login');
+        }
+
+        function goHome() {
+            if(currentUser.rol.includes('ADMIN')) navigateTo('admin-dash');
+            else navigateTo('op-dash');
+        }
+
+        // ==========================================
+        // UTILIDADES Y COMPONENTES REUSABLES
+        // ==========================================
+        function getEnriched(regs) {
+            return regs.map(r => {
+                const elector = mockElectores.find(e => e.numero_ced === r.numero_ced);
+                const local = elector ? mockLocales.find(l => l.sec_loc === elector.sec_loc) : null;
+                return { ...r, elector, local };
+            });
+        }
+
+        // Inyectar Sidebar Candidato en Login y Public Search
+        const sidebarHTML = `
+            <div class="hidden md:flex flex-col justify-center items-center w-full bg-gradient-to-br from-red-600 via-red-700 to-red-800 p-10 text-white relative overflow-hidden">
+                <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-500 rounded-full mix-blend-multiply blur-3xl opacity-40"></div>
+                <div class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-red-900 rounded-full mix-blend-multiply blur-3xl opacity-60"></div>
+                <div class="relative z-10 flex flex-col items-center w-full max-w-sm">
+                    <div class="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20 relative">
+                        <!-- IMAGEN DEL CANDIDATO. Cambiar src por la ruta real -->
+                        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=600&h=800" alt="Candidato" class="object-cover w-full h-full rounded-2xl opacity-90 contrast-125" />
+                        <div class="absolute bottom-6 left-0 right-0 flex justify-center">
+                            <div class="bg-red-600 text-white font-black italic px-5 py-1.5 rounded-xl transform -skew-x-12 border-2 border-white shadow-xl flex flex-col items-center">
+                                <span class="text-3xl leading-none">LILO</span>
+                                <span class="text-[10px] leading-tight font-extrabold tracking-wider">X LA CIUDAD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">Naomy Ferrer</h2>
+                    <p class="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">CONCEJAL</p>
+                    <div class="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">SAN LORENZO</div>
+                </div>
+            </div>`;
+        document.querySelectorAll('.candidate-sidebar-container').forEach(el => el.innerHTML = sidebarHTML);
+
+        // ==========================================
+        // VISTA PÚBLICA
+        // ==========================================
+        function resetPublicSearch() {
+            document.getElementById('public-search-input').value = '';
+            document.getElementById('public-search-result').innerHTML = '';
+        }
+
+        function handlePublicSearch() {
+            const ced = document.getElementById('public-search-input').value.trim();
+            const resDiv = document.getElementById('public-search-result');
+            const elector = mockElectores.find(p => p.numero_ced === ced);
+            
+            if (elector) {
+                const local = mockLocales.find(l => l.sec_loc === elector.sec_loc);
+                resDiv.innerHTML = `
+                    <div class="fade-in bg-white border-2 border-gray-900 rounded-2xl p-6 shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-red-600"></div>
+                        <div class="flex items-center mb-5">
+                            <i class="ph-fill ph-check-circle text-2xl text-red-600 mr-2"></i>
+                            <h3 class="text-xl font-extrabold text-black">${elector.nombre} ${elector.apellido}</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
+                                <i class="ph-fill ph-map-pin text-xl text-red-500 mr-3"></i>
+                                <div>
+                                    <p class="text-xs uppercase text-gray-500 font-bold mb-1">Local de Votación</p>
+                                    <p class="text-black font-extrabold">${local?.nombre_loc}</p>
+                                    <p class="text-sm text-gray-600 font-medium">${local?.seccional}</p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
+                                <i class="ph-fill ph-file-text text-xl text-red-500 mr-3"></i>
+                                <div class="flex space-x-8">
+                                    <div>
+                                        <p class="text-xs uppercase text-gray-500 font-bold mb-1">Mesa</p>
+                                        <p class="text-2xl font-black text-black">${elector.mesa}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs uppercase text-gray-500 font-bold mb-1">Orden</p>
+                                        <p class="text-2xl font-black text-black">${elector.orden}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                resDiv.innerHTML = `
+                    <div class="fade-in bg-gray-50 border border-gray-200 text-gray-800 p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+                        <i class="ph-fill ph-warning-circle text-4xl mb-3 text-red-500"></i>
+                        <span class="font-extrabold text-lg text-black mb-1">Elector no encontrado</span>
+                        <span class="font-medium text-sm text-gray-500">No hay registros para el documento: <strong>${ced}</strong></span>
+                    </div>`;
+            }
+        }
+
+        // ==========================================
+        // VISTA OPERADOR
+        // ==========================================
+        function renderOpDash() {
+            const misBase = registros.filter(r => r.id_operador === currentUser.id_usuario);
+            const list = getEnriched(misBase).sort((a,b) => new Date(b.fecha_registro) - new Date(a.fecha_registro));
+            
+            document.getElementById('op-total-activos').innerText = list.filter(r => !r.borrado).length;
+            document.getElementById('op-total-mesa').innerText = list.filter(r => !r.borrado && r.disponible_miembro_mesa).length;
+            
+            const tbody = document.getElementById('op-table-body');
+            
+            if(list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 font-bold">No hay registros aún.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            list.forEach(r => {
+                const borradoClass = r.borrado ? 'bg-gray-50 opacity-60 grayscale line-through text-gray-400' : '';
+                html += `
+                <tr class="hover:bg-gray-50 group border-b border-gray-100 ${borradoClass}">
+                    <td class="px-6 py-4">
+                        <div class="font-extrabold text-black ${borradoClass}">${r.elector?.nombre} ${r.elector?.apellido}</div>
+                        <div class="text-sm font-bold mt-1">CI: ${r.numero_ced} ${r.telefono ? `| <i class="ph-fill ph-phone"></i> ${r.telefono}` : ''}</div>
+                        ${r.direccion_recogida ? `<div class="text-xs font-bold text-red-700 mt-1"><i class="ph-fill ph-map-pin"></i> ${r.direccion_recogida}</div>` : ''}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-bold text-gray-800 ${borradoClass}">${r.local?.nombre_loc}</div>
+                        <div class="text-xs font-bold text-gray-500 mt-1">Mesa: ${r.elector?.mesa} | Orden: ${r.elector?.orden}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col gap-1 items-start">
+                            ${r.disponible_miembro_mesa ? `<span class="px-2 py-0.5 text-xs font-bold bg-black text-white rounded">Mesa</span>` : ''}
+                            ${r.requiere_transporte ? `<span class="px-2 py-0.5 text-xs font-bold bg-red-800 text-white rounded">Transporte</span>` : ''}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        ${r.borrado 
+                            ? `<button onclick="toggleDelete(${r.id_registro})" class="text-gray-500 hover:text-black font-bold text-xs"><i class="ph-bold ph-arrow-counter-clockwise"></i> Restaurar</button>`
+                            : `<div class="flex items-center justify-center space-x-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button onclick="openEdit(${r.id_registro})" class="text-gray-600 hover:text-black"><i class="ph-bold ph-pencil-simple text-xl"></i></button>
+                                  <button onclick="toggleDelete(${r.id_registro})" class="text-red-600 hover:text-red-800"><i class="ph-bold ph-trash text-xl"></i></button>
+                               </div>`
+                        }
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function showOpMsg(type, text) {
+            const div = document.getElementById('op-msg');
+            div.className = `mt-4 p-4 rounded-xl text-sm font-bold flex items-start fade-in ${type === 'success' ? 'bg-gray-900 text-white' : 'bg-red-50 text-red-800 border border-red-200'}`;
+            div.innerHTML = `<i class="ph-fill ph-${type==='success'?'check-circle':'warning-circle'} text-xl mr-2 ${type==='success'?'text-red-500':'text-red-600'}"></i> ${text}`;
+            setTimeout(() => div.classList.add('hidden-view'), 4000);
+        }
+
+        function handleAddRecord(e) {
+            e.preventDefault();
+            const ced = document.getElementById('op-cedula').value.trim();
+            const tel = document.getElementById('op-telefono').value.trim();
+            
+            // Validar Duplicados Globales
+            const existente = registros.find(r => r.numero_ced === ced && !r.borrado);
+            if(existente) {
+                if(existente.id_operador === currentUser.id_usuario) {
+                    showOpMsg('error', 'Ya cargaste a este elector.');
+                } else {
+                    const owner = operadores.find(o => o.id_usuario === existente.id_operador);
+                    showOpMsg('error', `Registrado por: ${owner?.nombre_completo || 'Otro'}.`);
+                }
+                return;
+            }
+
+            const elector = mockElectores.find(p => p.numero_ced === ced);
+            if(elector) {
+                registros.unshift({
+                    id_registro: Date.now(),
+                    id_operador: currentUser.id_usuario,
+                    numero_ced: ced,
+                    fecha_registro: new Date().toISOString(),
+                    requiere_transporte: document.getElementById('op-transporte').checked,
+                    disponible_miembro_mesa: document.getElementById('op-mesa').checked,
+                    telefono: tel,
+                    direccion_recogida: document.getElementById('op-direccion').value.trim(),
+                    borrado: false
+                });
+                showOpMsg('success', 'Elector guardado.');
+                document.getElementById('op-add-form').reset();
+                renderOpDash();
+            } else {
+                showOpMsg('error', 'Cédula no está en el padrón.');
+            }
+        }
+
+        function toggleDelete(id) {
+            const index = registros.findIndex(r => r.id_registro === id);
+            if(index > -1) {
+                registros[index].borrado = !registros[index].borrado;
+                renderOpDash();
+            }
+        }
+
+        // EDICIÓN
+        function openEdit(id) {
+            const rec = registros.find(r => r.id_registro === id);
+            const elector = mockElectores.find(e => e.numero_ced === rec.numero_ced);
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-modal-info').innerHTML = `<p class="font-extrabold text-black text-lg">${elector.nombre} ${elector.apellido}</p><p class="text-sm font-bold text-gray-600">CI: ${rec.numero_ced}</p>`;
+            document.getElementById('edit-mesa').checked = rec.disponible_miembro_mesa;
+            document.getElementById('edit-transporte').checked = rec.requiere_transporte;
+            document.getElementById('edit-telefono').value = rec.telefono;
+            document.getElementById('edit-direccion').value = rec.direccion_recogida;
+            document.getElementById('edit-modal').classList.remove('hidden-view');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden-view');
+        }
+
+        function saveEdit(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('edit-id').value);
+            const index = registros.findIndex(r => r.id_registro === id);
+            if(index > -1) {
+                registros[index].disponible_miembro_mesa = document.getElementById('edit-mesa').checked;
+                registros[index].requiere_transporte = document.getElementById('edit-transporte').checked;
+                registros[index].telefono = document.getElementById('edit-telefono').value;
+                registros[index].direccion_recogida = document.getElementById('edit-direccion').value;
+                renderOpDash();
+                closeEditModal();
+                showOpMsg('success', 'Etiquetas guardadas.');
+            }
+        }
+
+        // ==========================================
+        // VISTA ADMINISTRADOR
+        // ==========================================
+        function renderAdminDash() {
+            const fullRegs = getEnriched(registros);
+            const activeRegs = fullRegs.filter(r => !r.borrado);
+            
+            // KPIs
+            const kpiHtml = `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-sm font-bold text-gray-500 uppercase">Total Activos</p>
+                    <p class="text-4xl font-extrabold text-red-600">${activeRegs.length}</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-sm font-bold text-gray-500 uppercase">Candidatos a Mesa</p>
+                    <p class="text-4xl font-extrabold text-black">${activeRegs.filter(r => r.disponible_miembro_mesa).length}</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-sm font-bold text-gray-500 uppercase">Req. Transporte</p>
+                    <p class="text-4xl font-extrabold text-red-800">${activeRegs.filter(r => r.requiere_transporte).length}</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-sm font-bold text-gray-500 uppercase">Tachados (Borrado)</p>
+                    <p class="text-4xl font-extrabold text-gray-500">${fullRegs.filter(r => r.borrado).length}</p>
+                </div>`;
+            document.getElementById('admin-kpis').innerHTML = kpiHtml;
+
+            // Tabla Operadores
+            const opStats = operadores.map(op => {
+                const myRegs = fullRegs.filter(r => r.id_operador === op.id_usuario);
+                return {
+                    ...op,
+                    activos: myRegs.filter(r=>!r.borrado).length,
+                    tachados: myRegs.filter(r=>r.borrado).length,
+                    mesa: myRegs.filter(r=>r.disponible_miembro_mesa && !r.borrado).length
+                };
+            }).sort((a,b) => b.activos - a.activos);
+
+            let tbodyHtml = '';
+            opStats.forEach(op => {
+                tbodyHtml += `
+                <tr class="hover:bg-gray-50 border-b border-gray-100">
+                    <td class="px-6 py-4">
+                        <div class="font-extrabold text-black">${op.nombre_completo}</div>
+                        <div class="text-[10px] font-bold uppercase text-red-600">${op.rol}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-bold text-gray-700">${op.telefono}</div>
+                        <div class="text-xs text-gray-500 font-medium">${op.email}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded">${op.activos} Reg</span>
+                            <span class="px-2 py-1 bg-black text-white text-xs font-bold rounded">${op.mesa} Mesa</span>
+                            ${op.tachados > 0 ? `<span class="px-2 py-1 bg-red-50 text-red-800 text-xs font-bold rounded">${op.tachados} Tachas</span>` : ''}
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById('admin-table-body').innerHTML = tbodyHtml;
+        }
+
+        function handleAdminSearch() {
+            const ced = document.getElementById('admin-search-input').value.trim();
+            const resDiv = document.getElementById('admin-search-result');
+            
+            const found = registros.find(r => r.numero_ced === ced && !r.borrado);
+            if (found) {
+                const elector = mockElectores.find(e => e.numero_ced === ced);
+                const op = operadores.find(o => o.id_usuario === found.id_operador);
+                resDiv.innerHTML = `
+                    <div class="fade-in p-4 bg-gray-50 border border-gray-200 rounded-xl flex items-start">
+                        <i class="ph-fill ph-check-circle text-2xl text-red-600 mr-3"></i>
+                        <div>
+                            <p class="font-extrabold text-black">¡Elector encontrado!</p>
+                            <p class="text-sm font-medium text-gray-700 mt-1">
+                                El elector <span class="font-bold">${elector.nombre} ${elector.apellido}</span> pertenece a la lista de: 
+                            </p>
+                            <div class="mt-2 inline-block px-3 py-1.5 rounded-lg bg-red-100 text-red-800 font-bold text-sm">
+                                <i class="ph-bold ph-user-plus mr-1"></i> ${op.nombre_completo}
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                resDiv.innerHTML = `
+                    <div class="fade-in p-4 bg-gray-50 border border-gray-200 rounded-xl flex items-start">
+                        <i class="ph-fill ph-warning-circle text-2xl text-gray-400 mr-3"></i>
+                        <div>
+                            <p class="font-extrabold text-gray-800">Elector libre o no empadronado.</p>
+                            <p class="text-sm text-gray-500 mt-1">Este número no está registrado actualmente en ninguna lista activa.</p>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('login');
+        });
+
+    </script>
+</body>
+</html>

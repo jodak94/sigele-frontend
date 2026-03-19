@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, ShieldCheck, MagnifyingGlass } from '@phosphor-icons/react';
+import { User, Lock, MagnifyingGlass } from '@phosphor-icons/react';
 import { login } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
 
@@ -24,7 +24,7 @@ export function LoginPage(){
                 password,
                 tenantId: 1 //TODO
             })
-            
+
             setAuth(response.accessToken, response.refreshToken, response.user);
             navigate('/operators');
         }catch{
@@ -35,32 +35,38 @@ export function LoginPage(){
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl min-h-[600px] border border-gray-100">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+            <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl min-h-[750px] border border-gray-100">
 
-                {/* Sidebar */}
-                <div className="md:w-1/2 bg-black flex flex-col items-center justify-center p-12 text-white">
-                    <ShieldCheck size={80} weight="fill" className="text-red-600 mb-6" />
-                    <h2 className="text-4xl font-black tracking-tight text-center uppercase">SIGELE</h2>
-                    <p className="text-gray-400 mt-3 text-center font-medium">
-                        Sistema de Gestión Electoral
-                    </p>
-                    <div className="mt-6 px-4 py-2 rounded-full bg-gray-800 border border-gray-700">
-                        <span className="text-xs font-bold text-gray-300 tracking-widest uppercase">
-                            Campaña 2026
-                        </span>
-                    </div>
-                    <div className="mt-16 text-center">
-                        <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-1">
-                            Naomy Ferrer - Concejal
+                {/* Sidebar Candidato */}
+                <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center bg-gradient-to-br from-red-600 via-red-700 to-red-800 p-10 text-white relative overflow-hidden">
+                    {/* Decorative blobs */}
+                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-500 rounded-full mix-blend-multiply blur-3xl opacity-40 pointer-events-none" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-red-900 rounded-full mix-blend-multiply blur-3xl opacity-60 pointer-events-none" />
+
+                    <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
+                        {/* Candidate photo card */}
+                        <div className="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20 relative">
+                            <img
+                                src="/login.jpeg"
+                                alt="Naomy Ferrer"
+                                className="object-cover object-top w-full h-full rounded-2xl opacity-90 contrast-125"
+                            />
+                        </div>
+
+                        <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
+                            Naomy Ferrer
+                        </h2>
+                        <p className="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">
+                            CONCEJAL
                         </p>
-                        <p className="text-sm text-red-500 font-black uppercase tracking-widest">
-                            San Lorenzo
-                        </p>
+                        <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
+                            SAN LORENZO
+                        </div>
                     </div>
                 </div>
 
-                {/* Form */}
+                {/* Formulario */}
                 <div className="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50">
                     <div className="text-center mb-10">
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -127,16 +133,24 @@ export function LoginPage(){
                         >
                             {isLoading ? 'Ingresando...' : 'Ingresar'}
                         </button>
+                    </form>
 
+                    <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col items-center text-center max-w-sm mx-auto w-full">
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">
+                            Naomy Ferrer - Concejal
+                        </p>
+                        <p className="text-sm text-red-700 font-black uppercase tracking-widest">
+                            San Lorenzo
+                        </p>
                         <button
                             type="button"
-                            onClick={() => navigate('/public')}
-                            className="mt-4 w-full flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold"
+                            onClick={() => navigate('/')}
+                            className="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full"
                         >
                             <MagnifyingGlass size={18} className="text-red-600 mr-2" />
                             Consultar Padrón Público
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
