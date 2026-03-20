@@ -144,7 +144,7 @@ export function LoginPage(){
                         </p>
                         <button
                             type="button"
-                            onClick={() => navigate('/public')}
+                            onClick={() => navigate('/padron')}
                             className="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full"
                         >
                             <MagnifyingGlass size={18} className="text-red-600 mr-2" />

@@ -18,7 +18,7 @@ function App() {
           </div>
         } />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/public" element={<PublicSearchPage />} />
+        <Route path="/padron" element={<PublicSearchPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/panel" element={
             <RoleGuard allowed={['OPERADOR']}>
