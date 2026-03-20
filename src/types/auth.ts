@@ -3,6 +3,7 @@ export interface UserSession {
     fullName: string;
     email: string;
     role: string;
+    mustChangePassword: boolean;
     permissions: string[];
 }
 

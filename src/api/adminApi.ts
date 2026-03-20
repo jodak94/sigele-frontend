@@ -1,5 +1,5 @@
 import axiosClient from './axiosClient';
-import type { AdminKpis, OperatorStats, VoterSearchResult, CoordinatorPerformance, BarrioStat } from '../types/admin';
+import type { AdminKpis, OperatorStats, VoterSearchResult, CoordinatorPerformance, BarrioStat, ConsultasStats } from '../types/admin';
 
 export const getAdminKpis = (): Promise<AdminKpis> =>
     axiosClient.get<AdminKpis>('/admin/kpis').then((r) => r.data);
@@ -17,3 +17,6 @@ export const getCoordinatorStats = (): Promise<CoordinatorPerformance[]> =>
 
 export const getBarrioStats = (): Promise<BarrioStat[]> =>
     axiosClient.get<BarrioStat[]>('/admin/barrio-stats').then((r) => r.data);
+
+export const getConsultasStats = (): Promise<ConsultasStats> =>
+    axiosClient.get<ConsultasStats>('/estadisticas/consultas').then((r) => r.data);

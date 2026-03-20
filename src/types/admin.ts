@@ -30,6 +30,13 @@ export interface BarrioStat {
     total: number;
 }
 
+export interface ConsultasStats {
+    hoy: number;
+    ayer: number;
+    ultimosSieteDias: number;
+    total: number;
+}
+
 export interface VoterSearchResult {
     found: boolean;
     cedula: string;

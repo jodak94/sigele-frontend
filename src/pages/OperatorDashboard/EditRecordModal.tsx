@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X } from '@phosphor-icons/react';
+import { useToast } from '../../components/Toast';
 import type { CaptacionRecord, UpdateCaptacionRequest } from '../../types/captacion';
 
 interface EditRecordModalProps {
@@ -9,6 +10,7 @@ interface EditRecordModalProps {
 }
 
 export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProps) {
+    const toast = useToast();
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(record.disponibleMiembroMesa);
     const [requiereTransporte, setRequiereTransporte] = useState(record.requiereTransporte);
     const [telefono, setTelefono] = useState(record.telefono);
@@ -20,6 +22,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
         setIsSaving(true);
         try {
             await onSave(record.id, { telefono, direccionRecogida, disponibleMiembroMesa, requiereTransporte });
+            toast.success('Registro actualizado correctamente.');
             onClose();
         } finally {
             setIsSaving(false);

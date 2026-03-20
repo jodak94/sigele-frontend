@@ -13,11 +13,16 @@ export interface CoordinatorListItem {
     fullName: string;
 }
 
+export interface Role {
+    id: number;
+    name: string;
+}
+
 export interface CreateUserRequest {
     fullName: string;
     email: string;
     phone: string;
-    role: string;
+    roleId: number;
     coordinatorId?: number;
     temporaryPassword: string;
 }

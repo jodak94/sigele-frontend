@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { FileText, Users, UserPlus } from '@phosphor-icons/react';
-import { getAdminKpis, getOperatorStats, getCoordinatorStats, getBarrioStats } from '../../api/adminApi';
+import { getAdminKpis, getOperatorStats, getCoordinatorStats, getBarrioStats, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
-import type { AdminKpis, OperatorStats, CoordinatorPerformance, BarrioStat } from '../../types/admin';
+import type { AdminKpis, OperatorStats, CoordinatorPerformance, BarrioStat, ConsultasStats } from '../../types/admin';
 import { VoterSearch } from './VoterSearch';
 import { KpiCards } from './KpiCards';
 import { OperatorDirectory } from './OperatorDirectory';
 import { CoordPerformance } from './CoordPerformance';
 import { RankingCards } from './RankingCards';
 import { CreateUserModal } from './CreateUserModal';
+import { ConsultasStatsCard } from './ConsultasStats';
 
 export function AdminDashboard() {
     const user = useAuthStore((state) => state.user);
@@ -18,22 +19,23 @@ export function AdminDashboard() {
     const [operators, setOperators] = useState<OperatorStats[]>([]);
     const [coordinators, setCoordinators] = useState<CoordinatorPerformance[]>([]);
     const [barrios, setBarrios] = useState<BarrioStat[]>([]);
+    const [consultas, setConsultas] = useState<ConsultasStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     const loadData = () => {
         setIsLoading(true);
-        const calls: Promise<unknown>[] = [getAdminKpis(), getOperatorStats(), getBarrioStats()];
-        if (isSuperAdmin) calls.push(getCoordinatorStats());
 
-        Promise.all(calls)
-            .then(([kpiData, opData, barrioData, coordData]) => {
-                setKpis(kpiData as AdminKpis);
-                setOperators(opData as OperatorStats[]);
-                setBarrios(barrioData as BarrioStat[]);
-                if (coordData) setCoordinators(coordData as CoordinatorPerformance[]);
-            })
-            .finally(() => setIsLoading(false));
+        const base = [getAdminKpis(), getOperatorStats(), getBarrioStats(), getConsultasStats()] as const;
+        const coordCall = isSuperAdmin ? getCoordinatorStats() : Promise.resolve(null);
+
+        Promise.allSettled([...base, coordCall]).then(([kpiRes, opRes, barrioRes, consultasRes, coordRes]) => {
+            if (kpiRes.status === 'fulfilled') setKpis(kpiRes.value);
+            if (opRes.status === 'fulfilled') setOperators(opRes.value);
+            if (barrioRes.status === 'fulfilled') setBarrios(barrioRes.value);
+            if (consultasRes.status === 'fulfilled') setConsultas(consultasRes.value);
+            if (coordRes.status === 'fulfilled' && coordRes.value) setCoordinators(coordRes.value);
+        }).finally(() => setIsLoading(false));
     };
 
     useEffect(() => {
@@ -67,6 +69,7 @@ export function AdminDashboard() {
                 </div>
             </div>
 
+            <ConsultasStatsCard stats={consultas} isLoading={isLoading} />
             <VoterSearch />
             <KpiCards kpis={kpis} isLoading={isLoading} />
 

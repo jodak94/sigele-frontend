@@ -18,21 +18,18 @@ export function LoginPage(){
         setError(null);
         setIsLoading(true);
 
-        try{
-            const response = await login({
-                email,
-                password,
-                tenantId: 1 //TODO
-            })
+        try {
+            const response = await login({ email, password, tenantId: 1 });
+            setAuth(response.accessToken, response.refreshToken, response.user, response.user.mustChangePassword);
 
-            setAuth(response.accessToken, response.refreshToken, response.user);
-            navigate(response.user.role.toLowerCase() === 'operador' ? '/panel' : '/admin');
-        }catch{
+            const dest = response.user.role.toLowerCase() === 'operador' ? '/panel' : '/admin';
+            navigate(dest);
+        } catch {
             setError('Credenciales incorrectas. Verifique su usuario y contraseña');
-        }finally{
-            setIsLoading(false)
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { X, UserPlus, Eye, EyeSlash, Copy, Check } from '@phosphor-icons/react';
-import { createUser, getCoordinators } from '../../api/usersApi';
-import { useAuthStore } from '../../store/authStore';
+import { createUser, getCoordinators, getRoles } from '../../api/usersApi';
 import { CustomSelect } from '../../components/CustomSelect';
-import type { CoordinatorListItem } from '../../types/user';
+import { useToast } from '../../components/Toast';
+import type { CoordinatorListItem, Role } from '../../types/user';
 import axios from 'axios';
 
 const TEMP_PASSWORD = 'SGELE-2026!';
@@ -14,14 +14,12 @@ interface CreateUserModalProps {
 }
 
 export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
-    const user = useAuthStore((state) => state.user);
-    const isSuperAdmin = user?.role.toLowerCase() === 'admin';
-    const isCoordinator = user?.role.toLowerCase() === 'coordinator';
-
+    const toast = useToast();
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [role, setRole] = useState('Operator');
+    const [roleId, setRoleId] = useState<number | ''>('');
+    const [roles, setRoles] = useState<Role[]>([]);
     const [coordinatorId, setCoordinatorId] = useState<number | ''>('');
     const [coordinators, setCoordinators] = useState<CoordinatorListItem[]>([]);
     const [showPassword, setShowPassword] = useState(false);
@@ -29,18 +27,18 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const showCoordinatorSelect = isSuperAdmin && role === 'Operator';
+    const selectedRole = roles.find((r) => r.id === roleId);
+    const showCoordinatorSelect = selectedRole?.name.toLowerCase().includes('oper') ?? false;
 
     useEffect(() => {
-        if (isSuperAdmin) {
-            getCoordinators().then(setCoordinators).catch(() => setCoordinators([]));
-        }
-    }, [isSuperAdmin]);
+        getRoles().then(setRoles).catch(() => setRoles([]));
+        getCoordinators().then(setCoordinators).catch(() => setCoordinators([]));
+    }, []);
 
     // Reset coordinator when role changes
     useEffect(() => {
         setCoordinatorId('');
-    }, [role]);
+    }, [roleId]);
 
     const handleCopyPassword = async () => {
         await navigator.clipboard.writeText(TEMP_PASSWORD);
@@ -57,10 +55,11 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                 fullName,
                 email,
                 phone,
-                role: isCoordinator ? 'Operator' : role,
+                roleId: Number(roleId),
                 coordinatorId: showCoordinatorSelect && coordinatorId ? Number(coordinatorId) : undefined,
                 temporaryPassword: TEMP_PASSWORD,
             });
+            toast.success('Usuario creado exitosamente.');
             onSuccess();
             onClose();
         } catch (err) {
@@ -140,23 +139,18 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                         />
                     </div>
 
-                    {/* Rol — solo SuperAdmin lo ve */}
-                    {isSuperAdmin && (
-                        <div>
-                            <label className="block text-xs font-bold text-gray-700 mb-1">
-                                Rol de Sistema <span className="text-red-600">*</span>
-                            </label>
-                            <CustomSelect
-                                value={role}
-                                onChange={(v) => setRole(String(v))}
-                                options={[
-                                    { value: 'Operator', label: 'Operador' },
-                                    { value: 'Coordinator', label: 'Coordinador (Admin Zonal)' },
-                                    { value: 'Admin', label: 'Administrador Principal' },
-                                ]}
-                            />
-                        </div>
-                    )}
+                    {/* Rol */}
+                    <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">
+                            Rol de Sistema <span className="text-red-600">*</span>
+                        </label>
+                        <CustomSelect
+                            value={roleId}
+                            onChange={(v) => setRoleId(v === '' ? '' : Number(v))}
+                            placeholder="— Seleccione un rol —"
+                            options={roles.map((r) => ({ value: r.id, label: r.name }))}
+                        />
+                    </div>
 
                     {/* Asignar a Coordinador — solo SuperAdmin creando Operador */}
                     {showCoordinatorSelect && (

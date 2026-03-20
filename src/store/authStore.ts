@@ -7,7 +7,9 @@ interface AuthState {
     refreshToken: string | null,
     user: UserSession | null,
     isAuthenticated: boolean;
-    setAuth: (accessToken: string, refreshToken: string, user: UserSession) => void;
+    mustChangePassword: boolean;
+    setAuth: (accessToken: string, refreshToken: string, user: UserSession, mustChangePassword: boolean) => void;
+    clearMustChangePassword: () => void;
     updateTokens: (accessToken: string, refreshToken: string) => void;
     logout: () => void;
     hasPermission: (permission: string) => boolean;
@@ -17,18 +19,22 @@ export const useAuthStore = create<AuthState>()(
     persist(
         (set, get) => ({
             accessToken: null,
-            refreshToken: null, 
+            refreshToken: null,
             user: null,
             isAuthenticated: false,
+            mustChangePassword: false,
 
-            setAuth: (accessToken, refreshToken, user) => 
-                set({accessToken, refreshToken, user, isAuthenticated: true}),
+            setAuth: (accessToken, refreshToken, user, mustChangePassword) =>
+                set({ accessToken, refreshToken, user, isAuthenticated: true, mustChangePassword }),
 
-            updateTokens: (accessToken, refreshToken) => 
+            clearMustChangePassword: () =>
+                set({ mustChangePassword: false }),
+
+            updateTokens: (accessToken, refreshToken) =>
                 set({ accessToken, refreshToken }),
 
-            logout: () => 
-                set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false}),
+            logout: () =>
+                set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false, mustChangePassword: false }),
 
             hasPermission: (permission) =>
                 get().user?.permissions.includes(permission) ?? false,

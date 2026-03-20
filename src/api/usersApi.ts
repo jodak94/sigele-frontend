@@ -1,5 +1,5 @@
 import axiosClient from "./axiosClient";
-import type { PaginatedResult, UserListItem, CoordinatorListItem, CreateUserRequest } from "../types/user";
+import type { PaginatedResult, UserListItem, CoordinatorListItem, CreateUserRequest, Role } from "../types/user";
 
 export const getOperators = async (
     page: number,
@@ -16,7 +16,20 @@ export const getCoordinators = async (): Promise<CoordinatorListItem[]> => {
     return response.data;
 }
 
+export const getRoles = async (): Promise<Role[]> => {
+    const response = await axiosClient.get<Role[]>('/roles');
+    return response.data;
+}
+
 export const createUser = async (data: CreateUserRequest): Promise<UserListItem> => {
     const response = await axiosClient.post<UserListItem>('/users', data);
     return response.data;
+}
+
+export const changePassword = async (
+    userId: number,
+    currentPassword: string,
+    newPassword: string,
+): Promise<void> => {
+    await axiosClient.post(`/users/${userId}/password`, { currentPassword, newPassword });
 }

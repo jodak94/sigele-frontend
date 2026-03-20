@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
                 return axiosClient(originalRequest);
             }catch{
                 useAuthStore.getState().logout();
-                window.location.href = '/login';
+                //window.location.href = '/login';
             }
         }
 
