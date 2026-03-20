@@ -8,6 +8,20 @@ export interface UserListItem {
     createdAt: string;
 }
 
+export interface CoordinatorListItem {
+    id: number;
+    fullName: string;
+}
+
+export interface CreateUserRequest {
+    fullName: string;
+    email: string;
+    phone: string;
+    role: string;
+    coordinatorId?: number;
+    temporaryPassword: string;
+}
+
 export interface PaginatedResult<T> {
     items: T[];
     page: number;

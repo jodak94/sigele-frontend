@@ -11,6 +11,11 @@ export function Navbar() {
         navigate('/login');
     };
 
+    const handleHome = () => {
+        if (user?.role.toLowerCase() === 'operador') navigate('/panel');
+        else navigate('/admin');
+    };
+
     return (
         <nav className="bg-black text-white shadow-lg sticky top-0 z-50 border-b-2 border-red-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +35,7 @@ export function Navbar() {
                             </div>
                         </div>
                         <button
-                            onClick={() => navigate('/operators')}
+                            onClick={handleHome}
                             className="p-2 rounded-lg hover:bg-gray-800 transition text-gray-300 hover:text-white"
                             title="Inicio"
                         >

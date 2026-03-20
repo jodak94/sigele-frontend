@@ -26,7 +26,7 @@ export function LoginPage(){
             })
 
             setAuth(response.accessToken, response.refreshToken, response.user);
-            navigate('/operators');
+            navigate(response.user.role.toLowerCase() === 'operador' ? '/panel' : '/admin');
         }catch{
             setError('Credenciales incorrectas. Verifique su usuario y contraseña');
         }finally{
@@ -144,7 +144,7 @@ export function LoginPage(){
                         </p>
                         <button
                             type="button"
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/public')}
                             className="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full"
                         >
                             <MagnifyingGlass size={18} className="text-red-600 mr-2" />

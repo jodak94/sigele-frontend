@@ -1,0 +1,21 @@
+{
+    "numeroCed": 1234567,
+    "apellido": "GAUTO JARA",
+    "nombre": "BRIGIDA",
+    "direccion": "YPACARAI - CÑIA. PEDROZO",
+    "fechaNaci": "1967-02-01",
+    "mesa": 3,
+    "orden": 188,
+    "codigoSex": 2,
+    "local": {
+        "seccLoc": 2653,
+        "nombreLoc": "COL. SAN JOSE DE LA CIA JHUGUA JHU",
+        "direccion": null
+    },
+    "seccional": {
+        "nDepart": "CENTRAL",
+        "nDistrito": "YPACARAI",
+        "descripcio": "YPACARAI",
+        "direccion": "PUEBLO"
+    }
+}
