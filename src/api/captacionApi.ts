@@ -26,3 +26,20 @@ export const deleteCaptacion = (electorId: number): Promise<void> =>
 
 export const restoreCaptacion = (electorId: number): Promise<CaptacionRecord> =>
     axiosClient.post<CaptacionRecord>(`/operadores/electores/${electorId}/restore`).then((r) => r.data);
+
+export const exportarElectores = async (formato: 'xls' | 'pdf'): Promise<void> => {
+    const response = await axiosClient.get(`/reportes/electores-por-operador`, {
+        params: { formato },
+        responseType: 'blob',
+    });
+    const ext = formato === 'xls' ? 'xlsx' : 'pdf';
+    const mimeType = formato === 'xls'
+        ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        : 'application/pdf';
+    const url = URL.createObjectURL(new Blob([response.data], { type: mimeType }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `electores.${ext}`;
+    link.click();
+    URL.revokeObjectURL(url);
+};

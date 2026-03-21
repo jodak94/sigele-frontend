@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Printer, PencilSimple, Trash } from '@phosphor-icons/react';
+import { FilePdf, FileXls, PencilSimple, Trash } from '@phosphor-icons/react';
 import type { CaptacionRecord } from '../../types/captacion';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { exportarElectores } from '../../api/captacionApi';
+import { useToast } from '../../components/Toast';
 
 interface ElectorTableProps {
     records: CaptacionRecord[];
@@ -13,7 +15,20 @@ interface ElectorTableProps {
 
 export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }: ElectorTableProps) {
     void onRestore; // disponible para uso futuro
+    const toast = useToast();
     const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+    const [exporting, setExporting] = useState<'xls' | 'pdf' | null>(null);
+
+    const handleExport = async (formato: 'xls' | 'pdf') => {
+        setExporting(formato);
+        try {
+            await exportarElectores(formato);
+        } catch {
+            toast.error('No se pudo generar el reporte. Intente de nuevo.');
+        } finally {
+            setExporting(null);
+        }
+    };
 
     return (
         <>
@@ -21,13 +36,24 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-5 border-b border-gray-200 flex justify-between items-center">
                     <h2 className="text-lg font-extrabold text-black">Mi Lista de Electores</h2>
-                    <button
-                        onClick={() => window.print()}
-                        className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center"
-                    >
-                        <Printer size={16} weight="bold" className="text-gray-500 mr-2" />
-                        Imprimir Planilla
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => handleExport('xls')}
+                            disabled={exporting !== null}
+                            className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
+                        >
+                            <FileXls size={16} weight="bold" className="text-green-600 mr-2" />
+                            {exporting === 'xls' ? 'Exportando...' : 'Excel'}
+                        </button>
+                        <button
+                            onClick={() => handleExport('pdf')}
+                            disabled={exporting !== null}
+                            className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
+                        >
+                            <FilePdf size={16} weight="bold" className="text-red-600 mr-2" />
+                            {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
+                        </button>
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">
