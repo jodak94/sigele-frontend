@@ -1,32 +1,28 @@
 import axiosClient from './axiosClient';
-import type { PaginatedResult } from '../types/user';
 import type {
     CaptacionRecord,
     CreateCaptacionRequest,
     UpdateCaptacionRequest,
 } from '../types/captacion';
 
-export const getCaptaciones = (
-    page: number,
-    pageSize: number,
-): Promise<PaginatedResult<CaptacionRecord>> =>
+export const getCaptaciones = (operadorId: number): Promise<CaptacionRecord[]> =>
     axiosClient
-        .get<PaginatedResult<CaptacionRecord>>('/captaciones', { params: { page, pageSize } })
+        .get<CaptacionRecord[]>(`/operadores/${operadorId}/electores`)
         .then((r) => r.data);
 
 export const createCaptacion = (
     data: CreateCaptacionRequest,
 ): Promise<CaptacionRecord> =>
-    axiosClient.post<CaptacionRecord>('/captaciones', data).then((r) => r.data);
+    axiosClient.post<CaptacionRecord>('/operadores/electores', data).then((r) => r.data);
 
 export const updateCaptacion = (
-    id: number,
+    electorId: number,
     data: UpdateCaptacionRequest,
 ): Promise<CaptacionRecord> =>
-    axiosClient.patch<CaptacionRecord>(`/captaciones/${id}`, data).then((r) => r.data);
+    axiosClient.put<CaptacionRecord>(`/operadores/electores/${electorId}`, data).then((r) => r.data);
 
-export const deleteCaptacion = (id: number): Promise<void> =>
-    axiosClient.delete(`/captaciones/${id}`).then(() => undefined);
+export const deleteCaptacion = (electorId: number): Promise<void> =>
+    axiosClient.delete(`/operadores/electores/${electorId}`).then(() => undefined);
 
-export const restoreCaptacion = (id: number): Promise<CaptacionRecord> =>
-    axiosClient.post<CaptacionRecord>(`/captaciones/${id}/restore`).then((r) => r.data);
+export const restoreCaptacion = (electorId: number): Promise<CaptacionRecord> =>
+    axiosClient.post<CaptacionRecord>(`/operadores/electores/${electorId}/restore`).then((r) => r.data);

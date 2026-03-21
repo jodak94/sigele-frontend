@@ -24,7 +24,7 @@ export interface CreateUserRequest {
     phone: string;
     roleId: number;
     coordinatorId?: number;
-    temporaryPassword: string;
+    password: string;
 }
 
 export interface PaginatedResult<T> {

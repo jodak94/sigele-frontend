@@ -1,4 +1,5 @@
 export interface ElectorResult {
+    id: number;
     numeroCed: number;
     nombre: string;
     apellido: string;

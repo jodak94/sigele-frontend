@@ -13,7 +13,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
     const toast = useToast();
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(record.disponibleMiembroMesa);
     const [requiereTransporte, setRequiereTransporte] = useState(record.requiereTransporte);
-    const [telefono, setTelefono] = useState(record.telefono);
+    const [nroTelefono, setNroTelefono] = useState(record.nroTelefono);
     const [direccionRecogida, setDireccionRecogida] = useState(record.direccionRecogida);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -21,9 +21,11 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
         e.preventDefault();
         setIsSaving(true);
         try {
-            await onSave(record.id, { telefono, direccionRecogida, disponibleMiembroMesa, requiereTransporte });
+            await onSave(record.electorId, { nroTelefono, direccionRecogida, disponibleMiembroMesa, requiereTransporte });
             toast.success('Registro actualizado correctamente.');
             onClose();
+        } catch {
+            toast.error('No se pudo actualizar el registro. Intente de nuevo.');
         } finally {
             setIsSaving(false);
         }
@@ -41,9 +43,9 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                 <form onSubmit={handleSubmit} className="p-6 space-y-5">
                     <div>
                         <p className="font-extrabold text-black text-lg">
-                            {record.electorNombre} {record.electorApellido}
+                            {record.nombre} {record.apellido}
                         </p>
-                        <p className="text-sm font-bold text-gray-600">CI: {record.cedula}</p>
+                        <p className="text-sm font-bold text-gray-600">CI: {record.numeroCed}</p>
                     </div>
 
                     <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
@@ -72,8 +74,8 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                             <label className="block text-xs font-bold text-gray-700 mb-1">Teléfono</label>
                             <input
                                 type="tel"
-                                value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
+                                value={nroTelefono}
+                                onChange={(e) => setNroTelefono(e.target.value)}
                                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold focus:ring-2 focus:ring-red-600"
                             />
                         </div>

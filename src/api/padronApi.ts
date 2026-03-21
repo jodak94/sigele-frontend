@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosClient from './axiosClient';
 import type { ElectorResult } from '../types/padron';
 
 const publicClient = axios.create({
@@ -8,3 +9,6 @@ const publicClient = axios.create({
 
 export const getElector = (numeroCed: string): Promise<ElectorResult[]> =>
     publicClient.get<ElectorResult[]>(`/electores/${numeroCed}`).then((r) => r.data);
+
+export const getElectorAuth = (numeroCed: string): Promise<ElectorResult[]> =>
+    axiosClient.get<ElectorResult[]>(`/electores/${numeroCed}`).then((r) => r.data);

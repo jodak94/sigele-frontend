@@ -1,52 +1,59 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getCaptaciones, deleteCaptacion, restoreCaptacion, updateCaptacion } from '../../api/captacionApi';
+import { useAuthStore } from '../../store/authStore';
+import { useToast } from '../../components/Toast';
 import type { CaptacionRecord, UpdateCaptacionRequest } from '../../types/captacion';
 import { CaptureForm } from './CaptureForm';
 import { ElectorTable } from './ElectorTable';
 import { EditRecordModal } from './EditRecordModal';
 
-const PAGE_SIZE = 10;
-
 export function OperatorDashboard() {
+    const userId = useAuthStore((s) => s.user!.id);
+    const toast = useToast();
+
     const [records, setRecords] = useState<CaptacionRecord[]>([]);
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [editTarget, setEditTarget] = useState<CaptacionRecord | null>(null);
 
-    const totalActivos = useMemo(() => records.filter((r) => !r.borrado).length, [records]);
+    const totalActivos = useMemo(() => records.length, [records]);
     const totalMesa = useMemo(
-        () => records.filter((r) => !r.borrado && r.disponibleMiembroMesa).length,
+        () => records.filter((r) => r.disponibleMiembroMesa).length,
         [records],
     );
 
-    useEffect(() => {
+    const loadRecords = () => {
         setIsLoading(true);
-        getCaptaciones(page, PAGE_SIZE)
-            .then((result) => {
-                setRecords(result.items);
-                setTotalPages(result.totalPages);
-            })
+        getCaptaciones(userId)
+            .then(setRecords)
             .finally(() => setIsLoading(false));
-    }, [page]);
-
-    const handleNewRecord = (record: CaptacionRecord) => {
-        setRecords((prev) => [record, ...prev]);
     };
 
-    const handleDelete = async (id: number) => {
-        await deleteCaptacion(id);
-        setRecords((prev) => prev.map((r) => (r.id === id ? { ...r, borrado: true } : r)));
+    useEffect(() => {
+        loadRecords();
+    }, []);
+
+    const handleNewRecord = () => {
+        loadRecords();
     };
 
-    const handleRestore = async (id: number) => {
-        const updated = await restoreCaptacion(id);
-        setRecords((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    const handleDelete = async (electorId: number) => {
+        try {
+            await deleteCaptacion(electorId);
+            setRecords((prev) => prev.filter((r) => r.electorId !== electorId));
+            toast.success('Registro eliminado correctamente.');
+        } catch {
+            toast.error('No se pudo eliminar el registro. Intente de nuevo.');
+        }
     };
 
-    const handleEditSave = async (id: number, data: UpdateCaptacionRequest) => {
-        const updated = await updateCaptacion(id, data);
-        setRecords((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    const handleRestore = async (electorId: number) => {
+        const updated = await restoreCaptacion(electorId);
+        setRecords((prev) => prev.map((r) => (r.electorId === electorId ? updated : r)));
+    };
+
+    const handleEditSave = async (electorId: number, data: UpdateCaptacionRequest) => {
+        await updateCaptacion(electorId, data);
+        setRecords((prev) => prev.map((r) => (r.electorId === electorId ? { ...r, ...data } : r)));
     };
 
     return (
@@ -74,9 +81,6 @@ export function OperatorDashboard() {
                 <ElectorTable
                     records={records}
                     isLoading={isLoading}
-                    page={page}
-                    totalPages={totalPages}
-                    onPageChange={setPage}
                     onEdit={setEditTarget}
                     onDelete={handleDelete}
                     onRestore={handleRestore}

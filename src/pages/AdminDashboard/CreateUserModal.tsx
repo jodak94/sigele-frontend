@@ -57,7 +57,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                 phone,
                 roleId: Number(roleId),
                 coordinatorId: showCoordinatorSelect && coordinatorId ? Number(coordinatorId) : undefined,
-                temporaryPassword: TEMP_PASSWORD,
+                password: TEMP_PASSWORD,
             });
             toast.success('Usuario creado exitosamente.');
             onSuccess();

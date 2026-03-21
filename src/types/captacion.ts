@@ -1,31 +1,24 @@
 export interface CaptacionRecord {
-    id: number;
-    operadorId: number;
-    cedula: string;
-    electorNombre: string;
-    electorApellido: string;
-    localNombre: string;
-    seccional: string;
-    mesa: string;
-    orden: string;
-    telefono: string;
-    direccionRecogida: string;
+    electorId: number;
+    nombre: string;
+    apellido: string;
+    numeroCed: number;
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
-    borrado: boolean;
-    fechaRegistro: string;
+    nroTelefono: string;
+    direccionRecogida: string;
 }
 
 export interface CreateCaptacionRequest {
-    cedula: string;
-    telefono: string;
+    electorId: number;
+    nroTelefono: string;
     direccionRecogida?: string;
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
 }
 
 export interface UpdateCaptacionRequest {
-    telefono: string;
+    nroTelefono: string;
     direccionRecogida?: string;
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
