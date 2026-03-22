@@ -3,6 +3,7 @@ import { X, UserPlus, Eye, EyeSlash, Copy, Check } from '@phosphor-icons/react';
 import { createUser, getCoordinators, getRoles } from '../../api/usersApi';
 import { CustomSelect } from '../../components/CustomSelect';
 import { useToast } from '../../components/Toast';
+import { useAuthStore } from '../../store/authStore';
 import type { CoordinatorListItem, Role } from '../../types/user';
 import axios from 'axios';
 
@@ -15,6 +16,9 @@ interface CreateUserModalProps {
 
 export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
     const toast = useToast();
+    const loggedUser = useAuthStore((state) => state.user);
+    const isCoordinator = loggedUser?.role.toLowerCase().includes('coord') ?? false;
+
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -28,17 +32,27 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
     const [error, setError] = useState<string | null>(null);
 
     const selectedRole = roles.find((r) => r.id === roleId);
-    const showCoordinatorSelect = selectedRole?.name.toLowerCase().includes('oper') ?? false;
+    const showCoordinatorSelect = !isCoordinator && (selectedRole?.name.toLowerCase().includes('oper') ?? false);
 
     useEffect(() => {
         getRoles().then(setRoles).catch(() => setRoles([]));
-        getCoordinators().then(setCoordinators).catch(() => setCoordinators([]));
-    }, []);
+        if (!isCoordinator) {
+            getCoordinators().then(setCoordinators).catch(() => setCoordinators([]));
+        }
+    }, [isCoordinator]);
 
-    // Reset coordinator when role changes
+    // Si el usuario logeado es coordinador, auto-seleccionar el rol Operador
     useEffect(() => {
-        setCoordinatorId('');
-    }, [roleId]);
+        if (isCoordinator && roles.length > 0) {
+            const operatorRole = roles.find((r) => r.name.toLowerCase().includes('oper'));
+            if (operatorRole) setRoleId(operatorRole.id);
+        }
+    }, [isCoordinator, roles]);
+
+    // Reset coordinator when role changes (solo aplica para admin)
+    useEffect(() => {
+        if (!isCoordinator) setCoordinatorId('');
+    }, [roleId, isCoordinator]);
 
     const handleCopyPassword = async () => {
         await navigator.clipboard.writeText(TEMP_PASSWORD);
@@ -51,12 +65,16 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
         setError(null);
         setIsSubmitting(true);
         try {
+            const effectiveCoordinatorId = isCoordinator
+                ? loggedUser!.id
+                : (showCoordinatorSelect && coordinatorId ? Number(coordinatorId) : undefined);
+
             await createUser({
                 fullName,
                 email,
                 phone,
                 roleId: Number(roleId),
-                coordinatorId: showCoordinatorSelect && coordinatorId ? Number(coordinatorId) : undefined,
+                coordinatorId: effectiveCoordinatorId,
                 password: TEMP_PASSWORD,
             });
             toast.success('Usuario creado exitosamente.');
@@ -139,20 +157,22 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                         />
                     </div>
 
-                    {/* Rol */}
-                    <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">
-                            Rol de Sistema <span className="text-red-600">*</span>
-                        </label>
-                        <CustomSelect
-                            value={roleId}
-                            onChange={(v) => setRoleId(v === '' ? '' : Number(v))}
-                            placeholder="— Seleccione un rol —"
-                            options={roles.map((r) => ({ value: r.id, label: r.name }))}
-                        />
-                    </div>
+                    {/* Rol — oculto para coordinador (siempre crea Operador) */}
+                    {!isCoordinator && (
+                        <div>
+                            <label className="block text-xs font-bold text-gray-700 mb-1">
+                                Rol de Sistema <span className="text-red-600">*</span>
+                            </label>
+                            <CustomSelect
+                                value={roleId}
+                                onChange={(v) => setRoleId(v === '' ? '' : Number(v))}
+                                placeholder="— Seleccione un rol —"
+                                options={roles.map((r) => ({ value: r.id, label: r.name }))}
+                            />
+                        </div>
+                    )}
 
-                    {/* Asignar a Coordinador — solo SuperAdmin creando Operador */}
+                    {/* Asignar a Coordinador — solo admin creando Operador */}
                     {showCoordinatorSelect && (
                         <div>
                             <label className="block text-xs font-bold text-gray-700 mb-1">

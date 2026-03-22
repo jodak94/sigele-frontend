@@ -19,7 +19,7 @@ export function LoginPage(){
         setIsLoading(true);
 
         try {
-            const response = await login({ email, password, tenantId: 1 });
+            const response = await login({ email, password });
             setAuth(response.accessToken, response.refreshToken, response.user, response.user.mustChangePassword);
 
             const dest = response.user.role.toLowerCase() === 'operador' ? '/panel' : '/admin';

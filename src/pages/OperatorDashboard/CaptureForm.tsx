@@ -100,7 +100,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.status === 409) {
                 const owner = err.response.data?.operadorNombre;
-                setMessage({ type: 'error', text: `Registrado por: ${owner ?? 'otro operador'}.` });
+                setMessage({ type: 'error', text: `Registrado por ${owner ?? 'otro operador'}.` });
             } else if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setMessage({ type: 'error', text: 'Cédula no está en el padrón.' });
             } else {

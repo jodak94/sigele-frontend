@@ -1,8 +1,8 @@
 export interface AdminKpis {
-    totalActivos: number;
+    activos: number;
     candidatosMesa: number;
     requierenTransporte: number;
-    tachados: number;
+    borrados: number;
 }
 
 export interface OperatorStats {
@@ -14,6 +14,16 @@ export interface OperatorStats {
     registros: number;
     mesa: number;
     tachas: number;
+}
+
+export interface OperatorInfo {
+    userId: number;
+    fullName: string;
+    email: string;
+    phone: string;
+    totalElectores: number;
+    miembrosMesa: number;
+    requierenTransporte: number;
 }
 
 export interface CoordinatorPerformance {
@@ -44,4 +54,21 @@ export interface VoterSearchResult {
     electorApellido?: string;
     operadorNombre?: string;
     operadorId?: number;
+}
+
+export interface ElectorEnListaResult {
+    electorId: number;
+    nombre: string;
+    apellido: string;
+    numeroCed: number;
+    disponibleMiembroMesa: boolean;
+    requiereTransporte: boolean;
+    nroTelefono: string;
+    direccionRecogida: string;
+    operador: {
+        id: number;
+        fullName: string;
+        email: string;
+        phone: string;
+    };
 }

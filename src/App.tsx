@@ -39,7 +39,7 @@ function App() {
             </RoleGuard>
           } />
           <Route path="/admin" element={
-            <RoleGuard allowed={['ADMIN', 'SUPER_ADMIN']}>
+            <RoleGuard allowed={['coordinador', 'admin']}>
               <AdminDashboard />
             </RoleGuard>
           } />

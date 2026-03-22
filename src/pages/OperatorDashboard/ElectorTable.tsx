@@ -11,9 +11,11 @@ interface ElectorTableProps {
     onEdit: (record: CaptacionRecord) => void;
     onDelete: (electorId: number) => void;
     onRestore: (electorId: number) => void;
+    readOnly?: boolean;
+    title?: string;
 }
 
-export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }: ElectorTableProps) {
+export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, readOnly = false, title }: ElectorTableProps) {
     void onRestore; // disponible para uso futuro
     const toast = useToast();
     const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
@@ -34,27 +36,29 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }
         <>
         <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-5 border-b border-gray-200 flex justify-between items-center">
-                    <h2 className="text-lg font-extrabold text-black">Mi Lista de Electores</h2>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => handleExport('xls')}
-                            disabled={exporting !== null}
-                            className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
-                        >
-                            <FileXls size={16} weight="bold" className="text-green-600 mr-2" />
-                            {exporting === 'xls' ? 'Exportando...' : 'Excel'}
-                        </button>
-                        <button
-                            onClick={() => handleExport('pdf')}
-                            disabled={exporting !== null}
-                            className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
-                        >
-                            <FilePdf size={16} weight="bold" className="text-red-600 mr-2" />
-                            {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
-                        </button>
+                {!readOnly && (
+                    <div className="p-5 border-b border-gray-200 flex justify-between items-center">
+                        <h2 className="text-lg font-extrabold text-black">{title ?? 'Mi Lista de Electores'}</h2>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => handleExport('xls')}
+                                disabled={exporting !== null}
+                                className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
+                            >
+                                <FileXls size={16} weight="bold" className="text-green-600 mr-2" />
+                                {exporting === 'xls' ? 'Exportando...' : 'Excel'}
+                            </button>
+                            <button
+                                onClick={() => handleExport('pdf')}
+                                disabled={exporting !== null}
+                                className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
+                            >
+                                <FilePdf size={16} weight="bold" className="text-red-600 mr-2" />
+                                {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -63,20 +67,22 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Elector</th>
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Contacto</th>
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Etiquetas</th>
-                                <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Acciones</th>
+                                {!readOnly && (
+                                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Acciones</th>
+                                )}
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100">
                             {isLoading && (
                                 <tr>
-                                    <td colSpan={4} className="p-8 text-center text-gray-500 font-bold">
+                                    <td colSpan={readOnly ? 3 : 4} className="p-8 text-center text-gray-500 font-bold">
                                         Cargando...
                                     </td>
                                 </tr>
                             )}
                             {!isLoading && records.length === 0 && (
                                 <tr>
-                                    <td colSpan={4} className="p-8 text-center text-gray-500 font-bold">
+                                    <td colSpan={readOnly ? 3 : 4} className="p-8 text-center text-gray-500 font-bold">
                                         No hay registros aún.
                                     </td>
                                 </tr>
@@ -117,24 +123,26 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore }
                                             )}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <div className="flex items-center justify-center space-x-3">
-                                            <button
-                                                onClick={() => onEdit(r)}
-                                                className="text-gray-600 hover:text-black"
-                                                title="Editar"
-                                            >
-                                                <PencilSimple size={20} weight="bold" />
-                                            </button>
-                                            <button
-                                                onClick={() => setPendingDeleteId(r.electorId)}
-                                                className="text-red-600 hover:text-red-800"
-                                                title="Eliminar"
-                                            >
-                                                <Trash size={20} weight="bold" />
-                                            </button>
-                                        </div>
-                                    </td>
+                                    {!readOnly && (
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex items-center justify-center space-x-3">
+                                                <button
+                                                    onClick={() => onEdit(r)}
+                                                    className="text-gray-600 hover:text-black"
+                                                    title="Editar"
+                                                >
+                                                    <PencilSimple size={20} weight="bold" />
+                                                </button>
+                                                <button
+                                                    onClick={() => setPendingDeleteId(r.electorId)}
+                                                    className="text-red-600 hover:text-red-800"
+                                                    title="Eliminar"
+                                                >
+                                                    <Trash size={20} weight="bold" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>

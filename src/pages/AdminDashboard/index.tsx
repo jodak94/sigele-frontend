@@ -81,7 +81,7 @@ export function AdminDashboard() {
             {/* Ranking Cargas + Electores por Barrio */}
             <RankingCards operators={operators} barrios={barrios} isLoading={isLoading} />
 
-            <OperatorDirectory operators={operators} isLoading={isLoading} />
+            <OperatorDirectory />
 
             {showCreateModal && (
                 <CreateUserModal
