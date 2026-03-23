@@ -6,6 +6,7 @@ import { RoleGuard } from "./components/RoleGuard"
 import { UnderConstructionPage } from "./pages/UnderConstructionPage"
 import { OperatorDashboard } from "./pages/OperatorDashboard"
 import { AdminDashboard } from "./pages/AdminDashboard"
+import { ReportesPage } from "./pages/ReportesPage"
 import { PublicSearchPage } from "./pages/PublicSearchPage"
 import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
@@ -44,6 +45,11 @@ function App() {
             </RoleGuard>
           } />
           <Route path="/operators" element={<OperatorsPage />} />
+          <Route path="/reportes" element={
+            <RoleGuard allowed={['coordinador', 'admin']}>
+              <ReportesPage />
+            </RoleGuard>
+          } />
         </Route>
       </Routes>
     </BrowserRouter>

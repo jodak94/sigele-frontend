@@ -1,24 +1,28 @@
+import { useEffect, useState } from 'react';
 import { ChartBar, MapPin } from '@phosphor-icons/react';
-import type { OperatorStats, BarrioStat } from '../../types/admin';
+import { getRankingOperadores, getSeccionalStats } from '../../api/adminApi';
+import type { OperatorRanking, SeccionalStat } from '../../types/admin';
 
-interface RankingCardsProps {
-    operators: OperatorStats[];
-    barrios: BarrioStat[];
-    isLoading: boolean;
-}
+export function RankingCards() {
+    const [ranking, setRanking] = useState<OperatorRanking[]>([]);
+    const [seccionales, setSeccionales] = useState<SeccionalStat[]>([]);
+    const [isLoadingRanking, setIsLoadingRanking] = useState(true);
+    const [isLoadingSeccionales, setIsLoadingSeccionales] = useState(true);
 
-export function RankingCards({ operators, barrios, isLoading }: RankingCardsProps) {
-    const maxOp = Math.max(...operators.map((o) => o.registros), 1);
-    const maxBarrio = Math.max(...barrios.map((b) => b.total), 1);
+    useEffect(() => {
+        getRankingOperadores()
+            .then(setRanking)
+            .catch(() => setRanking([]))
+            .finally(() => setIsLoadingRanking(false));
 
-    if (isLoading) {
-        return (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-gray-100 animate-pulse rounded-2xl h-64" />
-                <div className="bg-gray-100 animate-pulse rounded-2xl h-64" />
-            </div>
-        );
-    }
+        getSeccionalStats()
+            .then(setSeccionales)
+            .catch(() => setSeccionales([]))
+            .finally(() => setIsLoadingSeccionales(false));
+    }, []);
+
+    const maxOp = Math.max(...ranking.map((o) => o.totalElectores), 1);
+    const maxSec = Math.max(...seccionales.map((s) => s.totalElectores), 1);
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -28,16 +32,20 @@ export function RankingCards({ operators, barrios, isLoading }: RankingCardsProp
                     <ChartBar size={20} weight="fill" className="mr-2 text-red-600" />
                     Ranking Cargas
                 </h2>
-                {operators.length === 0 ? (
-                    <p className="text-gray-400 text-sm font-medium text-center py-6">
-                        Sin datos aún.
-                    </p>
+                {isLoadingRanking ? (
+                    <div className="space-y-4">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <div key={i} className="bg-gray-100 animate-pulse rounded h-8" />
+                        ))}
+                    </div>
+                ) : ranking.length === 0 ? (
+                    <p className="text-gray-400 text-sm font-medium text-center py-6">Sin datos aún.</p>
                 ) : (
                     <div className="space-y-5">
-                        {operators.map((op, idx) => {
-                            const percent = (op.registros / maxOp) * 100;
+                        {ranking.map((op, idx) => {
+                            const percent = (op.totalElectores / maxOp) * 100;
                             return (
-                                <div key={op.id}>
+                                <div key={op.userId}>
                                     <div className="flex justify-between items-end mb-1.5">
                                         <span className="font-bold text-gray-800 text-sm flex items-center gap-1 min-w-0">
                                             <span className="text-xs font-black text-gray-400 w-5 shrink-0">
@@ -46,7 +54,7 @@ export function RankingCards({ operators, barrios, isLoading }: RankingCardsProp
                                             <span className="truncate">{op.fullName}</span>
                                         </span>
                                         <span className="font-extrabold text-red-600 text-sm shrink-0 ml-2">
-                                            {op.registros}
+                                            {op.totalElectores}
                                         </span>
                                     </div>
                                     <div className="w-full bg-gray-100 rounded-full h-2.5">
@@ -62,34 +70,35 @@ export function RankingCards({ operators, barrios, isLoading }: RankingCardsProp
                 )}
             </div>
 
-            {/* Electores por Barrio */}
+            {/* Electores por Zona (Seccionales) */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                 <h2 className="text-lg font-extrabold text-black mb-6 flex items-center">
                     <MapPin size={20} weight="fill" className="mr-2 text-red-600" />
-                    Electores por Barrio
+                    Electores por Zona (Seccionales)
                 </h2>
-                {barrios.length === 0 ? (
-                    <p className="text-gray-400 text-sm font-medium text-center py-6">
-                        Sin datos aún.
-                    </p>
+                {isLoadingSeccionales ? (
+                    <div className="space-y-4">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <div key={i} className="bg-gray-100 animate-pulse rounded h-8" />
+                        ))}
+                    </div>
+                ) : seccionales.length === 0 ? (
+                    <p className="text-gray-400 text-sm font-medium text-center py-6">Sin datos aún.</p>
                 ) : (
                     <div className="space-y-5">
-                        {barrios.map((barrio, idx) => {
-                            const percent = (barrio.total / maxBarrio) * 100;
+                        {seccionales.map((sec, idx) => {
+                            const percent = (sec.totalElectores / maxSec) * 100;
                             return (
-                                <div key={barrio.nombre}>
+                                <div key={sec.codigoSeccional}>
                                     <div className="flex justify-between items-end mb-1.5">
-                                        <span
-                                            className="font-bold text-gray-800 text-sm flex items-center gap-1 min-w-0"
-                                            title={barrio.nombre}
-                                        >
+                                        <span className="font-bold text-gray-800 text-sm flex items-center gap-1 min-w-0">
                                             <span className="text-xs font-black text-gray-400 w-5 shrink-0">
                                                 {idx + 1}.
                                             </span>
-                                            <span className="truncate max-w-[200px]">{barrio.nombre}</span>
+                                            <span>Seccional {sec.codigoSeccional}</span>
                                         </span>
                                         <span className="font-extrabold text-black text-sm shrink-0 ml-2">
-                                            {barrio.total}
+                                            {sec.totalElectores}
                                         </span>
                                     </div>
                                     <div className="w-full bg-gray-100 rounded-full h-2.5">
@@ -98,11 +107,6 @@ export function RankingCards({ operators, barrios, isLoading }: RankingCardsProp
                                             style={{ width: `${percent}%` }}
                                         />
                                     </div>
-                                    {barrio.seccional && (
-                                        <div className="text-[10px] font-bold text-gray-400 uppercase mt-0.5">
-                                            Seccional {barrio.seccional}
-                                        </div>
-                                    )}
                                 </div>
                             );
                         })}

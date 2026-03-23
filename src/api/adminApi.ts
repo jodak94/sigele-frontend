@@ -1,11 +1,14 @@
 import axiosClient from './axiosClient';
-import type { AdminKpis, OperatorStats, OperatorInfo, VoterSearchResult, ElectorEnListaResult, CoordinatorPerformance, BarrioStat, ConsultasStats } from '../types/admin';
+import type { AdminKpis, OperatorStats, OperatorInfo, OperatorRanking, VoterSearchResult, ElectorEnListaResult, CoordinatorPerformance, BarrioStat, SeccionalStat, ConsultasStats } from '../types/admin';
 
 export const getAdminKpis = (): Promise<AdminKpis> =>
     axiosClient.get<AdminKpis>('/estadisticas/operadores').then((r) => r.data);
 
 export const getOperatorStats = (): Promise<OperatorStats[]> =>
     axiosClient.get<OperatorStats[]>('/admin/operators').then((r) => r.data);
+
+export const getRankingOperadores = (): Promise<OperatorRanking[]> =>
+    axiosClient.get<OperatorRanking[]>('/estadisticas/ranking-operadores').then((r) => r.data);
 
 export const searchVoterByCedula = (cedula: string): Promise<VoterSearchResult> =>
     axiosClient
@@ -17,6 +20,9 @@ export const getCoordinatorStats = (): Promise<CoordinatorPerformance[]> =>
 
 export const getBarrioStats = (): Promise<BarrioStat[]> =>
     axiosClient.get<BarrioStat[]>('/admin/barrio-stats').then((r) => r.data);
+
+export const getSeccionalStats = (): Promise<SeccionalStat[]> =>
+    axiosClient.get<SeccionalStat[]>('/estadisticas/zonales/seccionales').then((r) => r.data);
 
 export const getConsultasStats = (): Promise<ConsultasStats> =>
     axiosClient.get<ConsultasStats>('/estadisticas/consultas').then((r) => r.data);

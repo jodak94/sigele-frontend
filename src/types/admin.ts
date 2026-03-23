@@ -16,6 +16,12 @@ export interface OperatorStats {
     tachas: number;
 }
 
+export interface OperatorRanking {
+    userId: number;
+    fullName: string;
+    totalElectores: number;
+}
+
 export interface OperatorInfo {
     userId: number;
     fullName: string;
@@ -38,6 +44,11 @@ export interface BarrioStat {
     nombre: string;
     seccional: string;
     total: number;
+}
+
+export interface SeccionalStat {
+    codigoSeccional: number;
+    totalElectores: number;
 }
 
 export interface ConsultasStats {
