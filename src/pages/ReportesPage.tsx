@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Printer, Clock, ChartBar } from '@phosphor-icons/react';
+import { Printer, Clock } from '@phosphor-icons/react';
 import { getOperatorInfo, getConsultasStats, getSeccionalStats } from '../api/adminApi';
 import type { OperatorInfo, ConsultasStats, SeccionalStat } from '../types/admin';
 
