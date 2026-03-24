@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Printer, Clock } from '@phosphor-icons/react';
+import { Printer } from '@phosphor-icons/react';
 import { getOperatorInfo, getConsultasStats, getSeccionalStats } from '../api/adminApi';
 import type { OperatorInfo, ConsultasStats, SeccionalStat } from '../types/admin';
 
@@ -15,14 +15,187 @@ const TABS: { id: TabId; label: string }[] = [
     { id: 'zonas', label: 'Stats Zonas' },
 ];
 
-// ─── Placeholder card ────────────────────────────────────────────────────────
+// ─── Tab: planilla ────────────────────────────────────────────────────────────
 
-function ComingSoon({ subtitle }: { subtitle: string }) {
+const PLANILLA_ROWS = [
+    { cedula: '1.234.567', nombre: 'ACEVEDO, JUAN CARLOS', telefono: '0981 111 222', local: 'ESCUELA MARGARITA V. DE BIBOLINI', mesa: 1, orden: 5 },
+    { cedula: '2.345.678', nombre: 'GONZALEZ, MARIA',      telefono: '0982 333 444', local: 'ESCUELA MARGARITA V. DE BIBOLINI', mesa: 1, orden: 12 },
+    { cedula: '3.456.789', nombre: 'LOPEZ, CARLOS',        telefono: '0971 555 666', local: 'ESCUELA N° 144 CMTE. HEBER LEO',   mesa: 3, orden: 45 },
+];
+
+function TabPlanilla() {
     return (
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-12 flex flex-col items-center justify-center text-center gap-4">
-            <Clock size={48} weight="thin" className="text-gray-300" />
-            <p className="text-gray-500 font-bold text-lg">Este reporte está en desarrollo.</p>
-            <p className="text-gray-400 text-sm max-w-md">{subtitle}</p>
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div>
+                    <h2 className="text-xl font-extrabold uppercase text-black tracking-tight">
+                        Planilla de Electores Captados
+                    </h2>
+                    <p className="text-gray-600 text-sm mt-1">
+                        Operador Responsable: <strong className="text-black">Juan Pérez</strong>
+                    </p>
+                    <p className="text-gray-500 text-sm">Teléfono: <strong>0981 123 456</strong></p>
+                </div>
+                <div className="shrink-0 bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-center">
+                    <p className="text-xs font-bold text-gray-500 uppercase">Total en Lista</p>
+                    <p className="text-3xl font-black text-red-600">45</p>
+                </div>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead className="bg-gray-100">
+                        <tr>
+                            {['N° Cédula', 'Nombre y Apellido', 'Teléfono', 'Local de Votación', 'Mesa', 'Orden', 'Firma / Asistencia'].map((h) => (
+                                <th key={h} className="px-4 py-3 text-left font-bold text-gray-700 uppercase text-xs whitespace-nowrap">{h}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                        {PLANILLA_ROWS.map((r, i) => (
+                            <tr key={r.cedula} className={i % 2 !== 0 ? 'bg-gray-50' : 'bg-white'}>
+                                <td className="px-4 py-3 font-bold">{r.cedula}</td>
+                                <td className="px-4 py-3 font-bold">{r.nombre}</td>
+                                <td className="px-4 py-3">{r.telefono}</td>
+                                <td className="px-4 py-3">{r.local}</td>
+                                <td className="px-4 py-3 text-center font-black">{r.mesa}</td>
+                                <td className="px-4 py-3 text-center font-black">{r.orden}</td>
+                                <td className="px-4 py-3 w-32"></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+// ─── Tab: diad ────────────────────────────────────────────────────────────────
+
+const DIAD_GRUPOS = [
+    {
+        local: 'ESCUELA MARGARITA V. DE BIBOLINI',
+        seccional: '354',
+        rows: [
+            { mesa: 1, orden: 5,  cedula: '1.234.567', nombre: 'ACEVEDO, JUAN CARLOS', telefono: '0981 111 222', direccion: 'Misma del padrón',              transporte: false, operador: 'Op. Central' },
+            { mesa: 1, orden: 12, cedula: '2.345.678', nombre: 'GONZALEZ, MARIA',      telefono: '0982 333 444', direccion: 'Frente a la despensa San Juan', transporte: true,  operador: 'Op. Central' },
+        ],
+    },
+    {
+        local: 'ESC. GRADUADA N° 91',
+        seccional: '172',
+        rows: [
+            { mesa: 2, orden: 8,  cedula: '4.567.890', nombre: 'MARTINEZ, ANA',        telefono: '0999 111 222', direccion: '—',                             transporte: false, operador: 'Op. Norte' },
+        ],
+    },
+];
+
+function TabDiaD() {
+    return (
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-6 py-5 border-b-4 border-black">
+                <h2 className="text-2xl font-black text-black uppercase">Hoja de Ruta Logística (DÍA D)</h2>
+                <p className="text-gray-600 mt-1 font-medium text-sm">
+                    Electores agrupados por Local de Votación para la organización del transporte.
+                </p>
+            </div>
+            <div className="p-6 space-y-8">
+                {DIAD_GRUPOS.map((grupo) => (
+                    <div key={grupo.local}>
+                        <div className="bg-red-600 text-white px-4 py-2.5 font-black uppercase tracking-wider text-sm rounded-t-lg">
+                            LOCAL: {grupo.local} (Seccional {grupo.seccional})
+                        </div>
+                        <div className="overflow-x-auto border border-gray-200 rounded-b-lg">
+                            <table className="min-w-full divide-y divide-gray-200 text-xs">
+                                <thead className="bg-gray-100">
+                                    <tr>
+                                        {['Mesa', 'Ord.', 'Cédula', 'Nombre del Elector', 'Teléfono', 'Dirección Recogida', 'Transporte', 'Operador Resp.'].map((h) => (
+                                            <th key={h} className="px-3 py-2 text-left font-bold uppercase text-gray-700 whitespace-nowrap">{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {grupo.rows.map((r) => (
+                                        <tr key={r.cedula} className={r.transporte ? 'bg-red-50' : 'bg-white'}>
+                                            <td className="px-3 py-2 font-black text-base">{r.mesa}</td>
+                                            <td className="px-3 py-2 font-black">{r.orden}</td>
+                                            <td className="px-3 py-2">{r.cedula}</td>
+                                            <td className={`px-3 py-2 font-bold ${r.transporte ? 'text-red-900' : ''}`}>{r.nombre}</td>
+                                            <td className="px-3 py-2 font-bold">{r.telefono}</td>
+                                            <td className={`px-3 py-2 ${r.transporte ? 'font-bold text-red-700' : 'text-gray-500'}`}>{r.direccion}</td>
+                                            <td className={`px-3 py-2 text-center font-black ${r.transporte ? 'text-red-600' : 'text-gray-500'}`}>
+                                                {r.transporte ? 'SÍ' : 'NO'}
+                                            </td>
+                                            <td className="px-3 py-2">{r.operador}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// ─── Tab: mesas ───────────────────────────────────────────────────────────────
+
+const MESAS_GRUPOS = [
+    {
+        local: 'ESCUELA MARGARITA V. DE BIBOLINI',
+        rows: [
+            { nombre: 'ACEVEDO, JUAN CARLOS', cedula: '1.234.567', telefono: '0981 111 222', mesa: 1, operador: 'Operador Central' },
+        ],
+    },
+    {
+        local: 'ESC. GRADUADA N° 91 (GUARAMBARE)',
+        rows: [
+            { nombre: 'RAMIREZ, PEDRO', cedula: '5.678.901', telefono: '0982 777 888', mesa: 2, operador: 'Operador Norte' },
+        ],
+    },
+];
+
+function TabMesas() {
+    return (
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-6 py-5 border-b-4 border-gray-800">
+                <h2 className="text-2xl font-black text-black uppercase">Plantel de Miembros de Mesa</h2>
+                <p className="text-gray-600 mt-1 font-medium text-sm">
+                    Electores marcados con disponibilidad para cubrir mesas, agrupados por local.
+                </p>
+            </div>
+            <div className="p-6 space-y-8">
+                {MESAS_GRUPOS.map((grupo) => (
+                    <div key={grupo.local}>
+                        <h3 className="font-extrabold text-base bg-gray-200 px-3 py-2 border-l-4 border-black mb-0 rounded-t-lg uppercase">
+                            {grupo.local}
+                        </h3>
+                        <div className="overflow-x-auto border border-gray-200 rounded-b-lg">
+                            <table className="min-w-full divide-y divide-gray-300 text-sm">
+                                <thead className="bg-gray-100">
+                                    <tr>
+                                        {['Nombre del Candidato a Mesa', 'Cédula', 'Teléfono', 'Vota en Mesa N°', 'Operador Responsable', 'Mesa Asignada / Obs.'].map((h) => (
+                                            <th key={h} className="px-4 py-2 text-left font-bold uppercase text-gray-700 text-xs whitespace-nowrap">{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 bg-white">
+                                    {grupo.rows.map((r) => (
+                                        <tr key={r.cedula}>
+                                            <td className="px-4 py-3 font-black">{r.nombre}</td>
+                                            <td className="px-4 py-3">{r.cedula}</td>
+                                            <td className="px-4 py-3 font-bold">{r.telefono}</td>
+                                            <td className="px-4 py-3 text-center font-bold">{r.mesa}</td>
+                                            <td className="px-4 py-3">{r.operador}</td>
+                                            <td className="px-4 py-3 border-l border-gray-300 w-48"></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
@@ -312,19 +485,13 @@ export function ReportesPage() {
             </div>
 
             {/* Report content */}
-            {activeTab === 'planilla' && (
-                <ComingSoon subtitle="Próximamente podrá generar la planilla de cada operador con columna de firma para el día de las elecciones." />
-            )}
+            {activeTab === 'planilla' && <TabPlanilla />}
 
             {activeTab === 'coordinador' && <TabCoordinador />}
 
-            {activeTab === 'diad' && (
-                <ComingSoon subtitle="Próximamente mostrará la hoja de ruta logística agrupada por local de votación para organizar el transporte." />
-            )}
+            {activeTab === 'diad' && <TabDiaD />}
 
-            {activeTab === 'mesas' && (
-                <ComingSoon subtitle="Próximamente listará todos los electores disponibles como miembros de mesa, agrupados por local de votación." />
-            )}
+            {activeTab === 'mesas' && <TabMesas />}
 
             {activeTab === 'stats' && <TabStats />}
 
