@@ -54,7 +54,7 @@ export function PublicSearchPage() {
                     className="text-gray-500 hover:text-black mb-4 flex items-center font-bold px-2 transition-colors"
                 >
                     <CaretLeft size={16} weight="bold" className="mr-1" />
-                    Volver al Login
+                    Ir al Login
                 </button>
 
                 <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse min-h-[750px] border border-gray-100">
