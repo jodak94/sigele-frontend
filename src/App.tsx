@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { LoginPage } from "./pages/LoginPage"
 import { OperatorsPage } from "./pages/OperatorsPage"
@@ -11,10 +12,37 @@ import { PublicSearchPage } from "./pages/PublicSearchPage"
 import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
 import { useAuthStore } from "./store/authStore"
+import { getBranding } from "./api/brandingApi"
+import { useBrandingStore } from "./store/brandingStore"
 
 function App() {
   const mustChangePassword = useAuthStore((s) => s.mustChangePassword);
   const clearMustChangePassword = useAuthStore((s) => s.clearMustChangePassword);
+  const branding = useBrandingStore((s) => s.branding);
+  const setBranding = useBrandingStore((s) => s.setBranding);
+
+  useEffect(() => {
+    if (branding) {
+      document.title = branding.appTitle;
+      return;
+    }
+
+    getBranding()
+      .then((data) => {
+        setBranding({
+          appTitle: data.appTitle,
+          primaryColor: data.primaryColor,
+          secondaryColor: data.secondaryColor,
+          faviconUrl: data.faviconUrl,
+          candidateImageUrl: data.candidateName,
+          candidateTitle: data.candidateTitle,
+        });
+        document.title = data.appTitle;
+      })
+      .catch(() => {
+        // Si falla, se mantienen los valores por defecto del HTML
+      });
+  }, []);
 
   return (
     <ToastProvider>

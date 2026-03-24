@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { User, Lock, MagnifyingGlass } from '@phosphor-icons/react';
 import { login } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
+import { useBrandingStore } from '../store/brandingStore';
 
 export function LoginPage(){
     const navigate = useNavigate();
     const setAuth = useAuthStore((state) => state.setAuth);
+    const branding = useBrandingStore((s) => s.branding);
+
+    const candidateImage = branding?.candidateImageUrl ?? '/login.jpeg';
+    const candidateName = branding?.appTitle ?? 'Naomy Ferrer';
+    const candidateTitle = branding?.candidateTitle ?? 'Concejal';
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,17 +51,17 @@ export function LoginPage(){
                         {/* Candidate photo card */}
                         <div className="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20 relative">
                             <img
-                                src="/login.jpeg"
-                                alt="Naomy Ferrer"
+                                src={candidateImage}
+                                alt={candidateName}
                                 className="object-cover object-top w-full h-full rounded-2xl opacity-90 contrast-125"
                             />
                         </div>
 
                         <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
-                            Naomy Ferrer
+                            {candidateName}
                         </h2>
                         <p className="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">
-                            CONCEJAL
+                            {candidateTitle.toUpperCase()}
                         </p>
                         <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
                             SAN LORENZO
@@ -134,7 +140,7 @@ export function LoginPage(){
 
                     <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col items-center text-center max-w-sm mx-auto w-full">
                         <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">
-                            Naomy Ferrer - Concejal
+                            {candidateName} - {candidateTitle}
                         </p>
                         <p className="text-sm text-red-700 font-black uppercase tracking-widest">
                             San Lorenzo

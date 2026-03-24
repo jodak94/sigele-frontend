@@ -4,14 +4,20 @@ import { MagnifyingGlass, CaretLeft, MapPin, FileText, CheckCircle, WarningCircl
 import { getElector } from '../api/padronApi';
 import type { ElectorResult } from '../types/padron';
 import axios from 'axios';
+import { useBrandingStore } from '../store/brandingStore';
 
 type SearchState = 'idle' | 'loading' | 'found' | 'not_found' | 'error';
 
 export function PublicSearchPage() {
     const navigate = useNavigate();
+    const branding = useBrandingStore((s) => s.branding);
     const [cedula, setCedula] = useState('');
     const [state, setState] = useState<SearchState>('idle');
     const [results, setResults] = useState<ElectorResult[]>([]);
+
+    const candidateImage = branding?.candidateImageUrl ?? '/login.jpeg';
+    const candidateName = branding?.appTitle ?? 'Naomy Ferrer';
+    const candidateTitle = branding?.candidateTitle ?? 'Concejal';
 
     const handleSearch = async () => {
         const q = cedula.trim();
@@ -61,16 +67,16 @@ export function PublicSearchPage() {
                         <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
                             <div className="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20">
                                 <img
-                                    src="/login.jpeg"
-                                    alt="Naomy Ferrer"
+                                    src={candidateImage}
+                                    alt={candidateName}
                                     className="object-cover object-top w-full h-full rounded-2xl opacity-90 contrast-125"
                                 />
                             </div>
                             <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
-                                Naomy Ferrer
+                                {candidateName}
                             </h2>
                             <p className="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">
-                                CONCEJAL
+                                {candidateTitle.toUpperCase()}
                             </p>
                             <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
                                 SAN LORENZO
