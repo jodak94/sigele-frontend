@@ -40,6 +40,16 @@ export interface CoordinatorPerformance {
     miembrosMesa: number;
 }
 
+export interface CoordinadorResumen {
+    userId: number;
+    fullName: string;
+    email: string;
+    phone: string;
+    totalOperadores: number;
+    totalElectores: number;
+    totalMiembrosMesa: number;
+}
+
 export interface BarrioStat {
     nombre: string;
     seccional: string;

@@ -1,12 +1,19 @@
-import { ShieldCheck, Users, CheckCircle } from '@phosphor-icons/react';
-import type { CoordinatorPerformance } from '../../types/admin';
+import { useEffect, useState } from 'react';
+import { ShieldCheck, Users, CheckCircle, Envelope, Phone } from '@phosphor-icons/react';
+import { getResumenCoordinadores } from '../../api/adminApi';
+import type { CoordinadorResumen } from '../../types/admin';
 
-interface CoordPerformanceProps {
-    coordinators: CoordinatorPerformance[];
-    isLoading: boolean;
-}
+export function CoordPerformance() {
+    const [coordinators, setCoordinators] = useState<CoordinadorResumen[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-export function CoordPerformance({ coordinators, isLoading }: CoordPerformanceProps) {
+    useEffect(() => {
+        getResumenCoordinadores()
+            .then(setCoordinators)
+            .catch(() => setCoordinators([]))
+            .finally(() => setIsLoading(false));
+    }, []);
+
     if (isLoading) {
         return (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -15,7 +22,7 @@ export function CoordPerformance({ coordinators, isLoading }: CoordPerformancePr
                 </div>
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[0, 1].map((i) => (
-                        <div key={i} className="bg-gray-100 animate-pulse rounded-xl h-36" />
+                        <div key={i} className="bg-gray-100 animate-pulse rounded-xl h-40" />
                     ))}
                 </div>
             </div>
@@ -24,7 +31,8 @@ export function CoordPerformance({ coordinators, isLoading }: CoordPerformancePr
 
     if (coordinators.length === 0) return null;
 
-    const maxRegs = Math.max(...coordinators.map((c) => c.totalCargados), 1);
+    const sorted = [...coordinators].sort((a, b) => b.totalElectores - a.totalElectores);
+    const maxElectores = sorted[0].totalElectores || 1;
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -33,45 +41,59 @@ export function CoordPerformance({ coordinators, isLoading }: CoordPerformancePr
                     <ShieldCheck size={20} weight="fill" className="mr-2 text-red-600" />
                     Desempeño por Coordinador (Admin Zonal)
                 </h2>
+                <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-lg">
+                    {coordinators.length} coordinadores
+                </span>
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {coordinators.map((coord, idx) => {
-                    const percent = (coord.totalCargados / maxRegs) * 100;
+                {sorted.map((coord, idx) => {
+                    const percent = (coord.totalElectores / maxElectores) * 100;
                     const isLeader = idx === 0;
-                    const isLast = idx === coordinators.length - 1 && coordinators.length > 1;
-                    const borderColor = isLeader
-                        ? 'bg-green-500'
-                        : isLast
-                        ? 'bg-red-500'
-                        : 'bg-gray-400';
+                    const isLast = idx === sorted.length - 1 && sorted.length > 1;
+                    const borderColor = isLeader ? 'bg-green-500' : isLast ? 'bg-red-500' : 'bg-gray-400';
 
                     return (
                         <div
-                            key={coord.id}
+                            key={coord.userId}
                             className="bg-gray-50 rounded-xl p-5 border border-gray-200 relative overflow-hidden"
                         >
-                            {/* Colored left border */}
+                            {/* Colored left border accent */}
                             <div className={`absolute top-0 left-0 w-1.5 h-full ${borderColor}`} />
 
                             <div className="pl-3">
-                                <div className="flex justify-between items-start mb-3">
-                                    <div>
-                                        <h3 className="font-extrabold text-black text-lg leading-tight">
+                                {/* Name + electores count */}
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="min-w-0">
+                                        <h3 className="font-extrabold text-black text-lg leading-tight truncate">
                                             {coord.fullName}
                                         </h3>
-                                        <p className="text-sm font-bold text-gray-500 flex items-center mt-1">
-                                            <Users size={14} className="mr-1" />
-                                            {coord.cantOperadores} Operadores a cargo
-                                        </p>
+                                        <div className="flex items-center gap-3 mt-1 flex-wrap">
+                                            <span className="text-sm font-bold text-gray-500 flex items-center">
+                                                <Users size={13} className="mr-1 shrink-0" />
+                                                {coord.totalOperadores} Operadores
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className="text-right shrink-0 ml-4">
                                         <span className="block text-3xl font-black text-red-600 leading-none">
-                                            {coord.totalCargados}
+                                            {coord.totalElectores}
                                         </span>
                                         <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                                             Electores
                                         </span>
                                     </div>
+                                </div>
+
+                                {/* Contact */}
+                                <div className="flex flex-col gap-0.5 mb-3">
+                                    <span className="text-xs text-gray-500 font-medium flex items-center gap-1">
+                                        <Envelope size={11} />
+                                        {coord.email}
+                                    </span>
+                                    <span className="text-xs text-gray-500 font-medium flex items-center gap-1">
+                                        <Phone size={11} />
+                                        {coord.phone}
+                                    </span>
                                 </div>
 
                                 {/* Progress bar */}
@@ -88,7 +110,7 @@ export function CoordPerformance({ coordinators, isLoading }: CoordPerformancePr
                                     </span>
                                     <span className="flex items-center text-black bg-gray-200 px-2 py-0.5 rounded">
                                         <CheckCircle size={12} weight="fill" className="mr-1" />
-                                        {coord.miembrosMesa} Miembros Mesa
+                                        {coord.totalMiembrosMesa} Miembros Mesa
                                     </span>
                                 </div>
                             </div>
