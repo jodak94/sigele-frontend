@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Printer, MagnifyingGlass, X, FileText, FileXls, FilePdf } from '@phosphor-icons/react';
-import { getConsultasStats, getSeccionalStats, getPadronPublicoStats, getTopLocales, getUltimasConsultas } from '../api/adminApi';
+import { getSeccionalStats, getPadronPublicoStats, getTopLocales, getUltimasConsultas } from '../api/adminApi';
 import { searchOperadores, getCoordinators } from '../api/usersApi';
 import { CustomSelect } from '../components/CustomSelect';
 import { getReporteElectores, exportarReporteElectores, getReporteResumenOperadores, exportarReporteResumenOperadores, getReporteDiaD, exportarReporteDiaD, getReporteCandidatosMesa, exportarReporteCandidatosMesa } from '../api/captacionApi';
 import { useAuthStore } from '../store/authStore';
-import type { ConsultasStats, SeccionalStat, PadronPublicoStats, TopLocalItem, UltimaConsultaItem } from '../types/admin';
+import type { SeccionalStat, PadronPublicoStats, TopLocalItem, UltimaConsultaItem } from '../types/admin';
 import type { UserListItem, CoordinatorListItem } from '../types/user';
 import type { ReporteElectorItem, ReporteOperadorItem, ReporteResumenOperadoresResponse, ReporteDiaDResponse, ReporteDiaDLocal, ReporteCandidatosMesaResponse, ReporteCandidatosMesaLocal } from '../types/captacion';
 
