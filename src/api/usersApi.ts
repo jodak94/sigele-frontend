@@ -11,6 +11,13 @@ export const getOperators = async (
     return response.data;
 }
 
+export const searchOperadores = async (nombre: string): Promise<PaginatedResult<UserListItem>> => {
+    const response = await axiosClient.get<PaginatedResult<UserListItem>>('/users', {
+        params: { Page: 1, PageSize: 5, nombre },
+    });
+    return response.data;
+}
+
 export const getCoordinators = async (): Promise<CoordinatorListItem[]> => {
     const response = await axiosClient.get<CoordinatorListItem[]>('/users/coordinators');
     return response.data;

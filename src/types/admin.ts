@@ -68,6 +68,24 @@ export interface ConsultasStats {
     total: number;
 }
 
+export interface PadronPublicoStats {
+    totalConsultas: number;
+    ultimosSieteDias: number;
+    cedulasUnicas: number;
+    horarioPico: number;
+}
+
+export interface TopLocalItem {
+    localVotacion: string;
+    totalBusquedas: number;
+}
+
+export interface UltimaConsultaItem {
+    fechaHora: string;
+    cedula: string;
+    encontrado: boolean;
+}
+
 export interface VoterSearchResult {
     found: boolean;
     cedula: string;
