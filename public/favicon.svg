@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background tile -->
+  <rect width="32" height="32" rx="7" fill="#060f0e"/>
+  <!-- Shield body -->
+  <path d="M16 4 L27 8 L27 16.5 C27 22.5 22 27 16 29 C10 27 5 22.5 5 16.5 L5 8 Z" fill="#0d9488"/>
+  <!-- Inner shield highlight (subtle depth) -->
+  <path d="M16 6.5 L25 10 L25 16.5 C25 21.2 21 25.2 16 27 C11 25.2 7 21.2 7 16.5 L7 10 Z" fill="#14b8a6" opacity="0.35"/>
+  <!-- Checkmark -->
+  <polyline
+    points="10.5,16.5 14,20 21.5,13"
+    fill="none"
+    stroke="white"
+    stroke-width="2.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

@@ -16,7 +16,7 @@ export function AdminDashboard() {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
     const isSuperAdmin = user?.role.toLowerCase() === 'admin';
-
+    
     const [kpis, setKpis] = useState<AdminKpis | null>(null);
     const [consultas, setConsultas] = useState<ConsultasStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);

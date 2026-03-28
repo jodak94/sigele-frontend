@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { LoginPage } from "./pages/LoginPage"
 import { OperatorsPage } from "./pages/OperatorsPage"
 import { ProtectedRoute } from "./components/ProtectedRoute"
@@ -8,11 +8,16 @@ import { OperatorDashboard } from "./pages/OperatorDashboard"
 import { AdminDashboard } from "./pages/AdminDashboard"
 import { ReportesPage } from "./pages/ReportesPage"
 import { PublicSearchPage } from "./pages/PublicSearchPage"
+import { LandingPage } from "./pages/LandingPage"
+import { NoTenantPage } from "./pages/NoTenantPage"
 import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
 import { useAuthStore } from "./store/authStore"
 import { getBranding } from "./api/brandingApi"
 import { useBrandingStore } from "./store/brandingStore"
+import { getTenant } from "./utils/tenant"
+
+const hasTenant = !!getTenant();
 
 function App() {
   const mustChangePassword = useAuthStore((s) => s.mustChangePassword);
@@ -21,6 +26,7 @@ function App() {
   const setBranding = useBrandingStore((s) => s.setBranding);
 
   useEffect(() => {
+    if (!hasTenant) return; // No cargar branding en el dominio principal
     if (branding) {
       document.title = branding.appTitle;
       return;
@@ -38,43 +44,52 @@ function App() {
         });
         document.title = data.appTitle;
       })
-      .catch(() => {
-        // Si falla, se mantienen los valores por defecto del HTML
-      });
+      .catch(() => {});
   }, []);
 
   return (
     <ToastProvider>
-    <BrowserRouter>
-      {mustChangePassword && (
-        <ChangePasswordModal
-          forced
-          onSuccess={clearMustChangePassword}
-        />
-      )}
-      <Routes>
-        <Route path="/" element={<PublicSearchPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/panel" element={
-            <RoleGuard allowed={['OPERADOR']}>
-              <OperatorDashboard />
-            </RoleGuard>
-          } />
-          <Route path="/admin" element={
-            <RoleGuard allowed={['coordinador', 'admin']}>
-              <AdminDashboard />
-            </RoleGuard>
-          } />
-          <Route path="/operators" element={<OperatorsPage />} />
-          <Route path="/reportes" element={
-            <RoleGuard allowed={['coordinador', 'admin']}>
-              <ReportesPage />
-            </RoleGuard>
-          } />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        {mustChangePassword && (
+          <ChangePasswordModal
+            forced
+            onSuccess={clearMustChangePassword}
+          />
+        )}
+
+        {hasTenant ? (
+          /* ── Rutas con tenant (tenant.sigele.com.py) ── */
+          <Routes>
+            <Route path="/" element={<Navigate to="/padron" replace />} />
+            <Route path="/padron" element={<PublicSearchPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/panel" element={
+                <RoleGuard allowed={['OPERADOR']}>
+                  <OperatorDashboard />
+                </RoleGuard>
+              } />
+              <Route path="/admin" element={
+                <RoleGuard allowed={['coordinador', 'admin']}>
+                  <AdminDashboard />
+                </RoleGuard>
+              } />
+              <Route path="/operators" element={<OperatorsPage />} />
+              <Route path="/reportes" element={
+                <RoleGuard allowed={['coordinador', 'admin']}>
+                  <ReportesPage />
+                </RoleGuard>
+              } />
+            </Route>
+          </Routes>
+        ) : (
+          /* ── Rutas sin tenant (sigele.com.py) ── */
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="*" element={<NoTenantPage />} />
+          </Routes>
+        )}
+      </BrowserRouter>
     </ToastProvider>
   )
 }
