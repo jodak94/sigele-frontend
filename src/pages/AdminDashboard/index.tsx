@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Users, UserPlus } from '@phosphor-icons/react';
-import { getAdminKpis, getCoordinatorStats, getConsultasStats } from '../../api/adminApi';
+import { getAdminKpis, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
-import type { AdminKpis, CoordinatorPerformance, ConsultasStats } from '../../types/admin';
+import type { AdminKpis, ConsultasStats } from '../../types/admin';
 import { VoterSearch } from './VoterSearch';
 import { KpiCards } from './KpiCards';
 import { OperatorDirectory } from './OperatorDirectory';
@@ -18,21 +18,15 @@ export function AdminDashboard() {
     const isSuperAdmin = user?.role.toLowerCase() === 'admin';
 
     const [kpis, setKpis] = useState<AdminKpis | null>(null);
-    const [coordinators, setCoordinators] = useState<CoordinatorPerformance[]>([]);
     const [consultas, setConsultas] = useState<ConsultasStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     const loadData = () => {
         setIsLoading(true);
-
-        const base = [getAdminKpis(), getConsultasStats()] as const;
-        const coordCall = isSuperAdmin ? getCoordinatorStats() : Promise.resolve(null);
-
-        Promise.allSettled([...base, coordCall]).then(([kpiRes, consultasRes, coordRes]) => {
+        Promise.allSettled([getAdminKpis(), getConsultasStats()]).then(([kpiRes, consultasRes]) => {
             if (kpiRes.status === 'fulfilled') setKpis(kpiRes.value);
             if (consultasRes.status === 'fulfilled') setConsultas(consultasRes.value);
-            if (coordRes.status === 'fulfilled' && coordRes.value) setCoordinators(coordRes.value);
         }).finally(() => setIsLoading(false));
     };
 
@@ -78,9 +72,7 @@ export function AdminDashboard() {
             <KpiCards kpis={kpis} isLoading={isLoading} />
 
             {/* Desempeño por Coordinador — solo SuperAdmin */}
-            {isSuperAdmin && (
-                <CoordPerformance coordinators={coordinators} isLoading={isLoading} />
-            )}
+            {isSuperAdmin && <CoordPerformance />}
 
             {/* Ranking Cargas + Electores por Barrio */}
             <RankingCards />

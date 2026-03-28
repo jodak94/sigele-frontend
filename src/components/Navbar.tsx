@@ -15,7 +15,7 @@ export function Navbar() {
     };
 
     const handleHome = () => {
-        navigate('/padron');
+        navigate('/');
     };
 
     return (

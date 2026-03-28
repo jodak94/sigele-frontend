@@ -23,3 +23,78 @@ export interface UpdateCaptacionRequest {
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
 }
+
+export interface ReporteElectorItem {
+    nroDocumento: number;
+    nombre: string;
+    apellido: string;
+    localVotacion: string;
+    mesa: number;
+    orden: number;
+}
+
+export interface ReporteElectoresResponse {
+    operadorNombre: string;
+    electores: ReporteElectorItem[];
+}
+
+export interface ReporteOperadorItem {
+    nombreOperador: string;
+    telefono: string;
+    electoresCaptados: number;
+    miembrosMesaDisp: number;
+    reqTransporte: number;
+}
+
+export interface ReporteCandidatoMesa {
+    nombreApellido: string;
+    nroCedula: number;
+    telefono: string;
+    mesa: number;
+    operadorResponsable: string;
+}
+
+export interface ReporteCandidatosMesaLocal {
+    localVotacion: string;
+    candidatos: ReporteCandidatoMesa[];
+}
+
+export interface ReporteCandidatosMesaResponse {
+    locales: ReporteCandidatosMesaLocal[];
+}
+
+export interface ReporteCoordinadorInfo {
+    id: number;
+    nombre: string;
+    telefono: string;
+}
+
+export interface ReporteDiaDElector {
+    mesa: number;
+    orden: number;
+    nroCedula: number;
+    nombreApellido: string;
+    telefono: string;
+    direccionRecogida: string | null;
+    requiereTransporte: boolean;
+    operadorResponsable: string;
+}
+
+export interface ReporteDiaDLocal {
+    localVotacion: string;
+    electores: ReporteDiaDElector[];
+}
+
+export interface ReporteDiaDResponse {
+    locales: ReporteDiaDLocal[];
+}
+
+export interface ReporteResumenOperadoresResponse {
+    operadores: ReporteOperadorItem[];
+    totales: {
+        electoresCaptados: number;
+        miembrosMesaDisp: number;
+        reqTransporte: number;
+    };
+    coordinador: ReporteCoordinadorInfo | string | null;
+}

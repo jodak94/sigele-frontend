@@ -4,7 +4,6 @@ import { LoginPage } from "./pages/LoginPage"
 import { OperatorsPage } from "./pages/OperatorsPage"
 import { ProtectedRoute } from "./components/ProtectedRoute"
 import { RoleGuard } from "./components/RoleGuard"
-import { UnderConstructionPage } from "./pages/UnderConstructionPage"
 import { OperatorDashboard } from "./pages/OperatorDashboard"
 import { AdminDashboard } from "./pages/AdminDashboard"
 import { ReportesPage } from "./pages/ReportesPage"
@@ -54,13 +53,8 @@ function App() {
         />
       )}
       <Routes>
-        <Route path="/" element={
-          <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: '#b71c1c', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <UnderConstructionPage />
-          </div>
-        } />
+        <Route path="/" element={<PublicSearchPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/padron" element={<PublicSearchPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/panel" element={
             <RoleGuard allowed={['OPERADOR']}>
