@@ -15,8 +15,7 @@ export function Navbar() {
     };
 
     const handleHome = () => {
-        if (user?.role.toLowerCase() === 'operador') navigate('/panel');
-        else navigate('/admin');
+        navigate('/padron');
     };
 
     return (

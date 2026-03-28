@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass } from '@phosphor-icons/react';
 import { createCaptacion } from '../../api/captacionApi';
 import { getElectorAuth } from '../../api/padronApi';
@@ -15,6 +15,7 @@ interface Message {
 }
 
 export function CaptureForm({ onSuccess }: CaptureFormProps) {
+    const cedulaRef = useRef<HTMLInputElement>(null);
     const [cedula, setCedula] = useState('');
     const [elector, setElector] = useState<ElectorResult | null>(null);
     const [isSearching, setIsSearching] = useState(false);
@@ -97,6 +98,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
             onSuccess();
             resetForm();
             setMessage({ type: 'success', text: 'Elector guardado.' });
+            setTimeout(() => cedulaRef.current?.focus(), 0);
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.status === 409) {
                 const owner = err.response.data?.operadorNombre;
@@ -129,6 +131,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                         </label>
                         <div className="flex items-center bg-gray-50 border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-red-600">
                             <input
+                                ref={cedulaRef}
                                 type="text"
                                 value={cedula}
                                 onChange={handleCedulaChange}

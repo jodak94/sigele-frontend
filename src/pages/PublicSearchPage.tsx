@@ -5,12 +5,23 @@ import { getElector } from '../api/padronApi';
 import type { ElectorResult } from '../types/padron';
 import axios from 'axios';
 import { useBrandingStore } from '../store/brandingStore';
+import { useAuthStore } from '../store/authStore';
 
 type SearchState = 'idle' | 'loading' | 'found' | 'not_found' | 'error';
 
 export function PublicSearchPage() {
     const navigate = useNavigate();
     const branding = useBrandingStore((s) => s.branding);
+    const { isAuthenticated, user } = useAuthStore();
+
+    const handleBack = () => {
+        if (isAuthenticated) {
+            const role = user?.role.toLowerCase();
+            navigate(role === 'operador' ? '/panel' : '/admin');
+        } else {
+            navigate('/login');
+        }
+    };
     const [cedula, setCedula] = useState('');
     const [state, setState] = useState<SearchState>('idle');
     const [results, setResults] = useState<ElectorResult[]>([]);
@@ -50,11 +61,11 @@ export function PublicSearchPage() {
             <div className="w-full max-w-6xl">
                 {/* Back button */}
                 <button
-                    onClick={() => navigate('/login')}
+                    onClick={handleBack}
                     className="text-gray-500 hover:text-black mb-4 flex items-center font-bold px-2 transition-colors"
                 >
                     <CaretLeft size={16} weight="bold" className="mr-1" />
-                    Volver al Login
+                    {isAuthenticated ? 'Volver al panel' : 'Volver al Login'}
                 </button>
 
                 <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse min-h-[750px] border border-gray-100">
