@@ -26,7 +26,7 @@ export function LoginPage(){
 
         try {
             const response = await login({ email, password });
-            setAuth(response.accessToken, response.refreshToken, response.user, response.user.mustChangePassword);
+            setAuth(response.accessToken, response.refreshToken, response.user, response.user.mustChangePassword, response.tenantConfig);
 
             const dest = response.user.role.toLowerCase() === 'operador' ? '/panel' : '/admin';
             navigate(dest);

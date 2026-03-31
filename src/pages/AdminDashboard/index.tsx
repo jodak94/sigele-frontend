@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Users, UserPlus } from '@phosphor-icons/react';
+import { FileText, Users, UserPlus, MapPin } from '@phosphor-icons/react';
 import { getAdminKpis, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
 import type { AdminKpis, ConsultasStats } from '../../types/admin';
@@ -11,6 +11,7 @@ import { CoordPerformance } from './CoordPerformance';
 import { RankingCards } from './RankingCards';
 import { CreateUserModal } from './CreateUserModal';
 import { ConsultasStatsCard } from './ConsultasStats';
+import { MapaElectores } from './MapaElectores';
 
 export function AdminDashboard() {
     const navigate = useNavigate();
@@ -21,6 +22,9 @@ export function AdminDashboard() {
     const [consultas, setConsultas] = useState<ConsultasStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showMapa, setShowMapa] = useState(false);
+
+    const soportaUbicacion = useAuthStore((s) => s.tenantConfig?.soportaUbicacion ?? false);
 
     const loadData = () => {
         setIsLoading(true);
@@ -57,6 +61,15 @@ export function AdminDashboard() {
                         <Users size={16} weight="bold" className="mr-2" />
                         Miembros Mesa
                     </button>
+                    {soportaUbicacion && (
+                        <button
+                            onClick={() => setShowMapa(true)}
+                            className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
+                        >
+                            <MapPin size={16} weight="fill" className="text-red-600 mr-2" />
+                            Mapa de Electores
+                        </button>
+                    )}
                     <button
                         onClick={() => setShowCreateModal(true)}
                         className="bg-red-600 text-white px-4 py-2.5 rounded-xl hover:bg-red-700 font-bold text-sm flex items-center shadow-sm"
@@ -84,6 +97,10 @@ export function AdminDashboard() {
                     onClose={() => setShowCreateModal(false)}
                     onSuccess={loadData}
                 />
+            )}
+
+            {showMapa && (
+                <MapaElectores onClose={() => setShowMapa(false)} />
             )}
         </div>
     );

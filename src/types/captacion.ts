@@ -1,3 +1,19 @@
+export interface Ubicacion {
+    lat: number;
+    lng: number;
+    descripcion: string;
+}
+
+export interface ElectorUbicacion {
+    electorId: number;
+    nombre: string;
+    apellido: string;
+    lat: number;
+    lng: number;
+    descripcion: string;
+    operadorNombre: string;
+}
+
 export interface CaptacionRecord {
     electorId: number;
     nombre: string;
@@ -15,6 +31,7 @@ export interface CreateCaptacionRequest {
     direccionRecogida?: string;
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
+    ubicacion?: Ubicacion;
 }
 
 export interface UpdateCaptacionRequest {
@@ -22,6 +39,7 @@ export interface UpdateCaptacionRequest {
     direccionRecogida?: string;
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
+    ubicacion?: Ubicacion;
 }
 
 export interface ReporteElectorItem {

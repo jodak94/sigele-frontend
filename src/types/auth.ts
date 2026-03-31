@@ -7,11 +7,16 @@ export interface UserSession {
     permissions: string[];
 }
 
+export interface TenantConfig {
+    soportaUbicacion: boolean;
+}
+
 export interface AuthResponse {
     accessToken: string;
     refreshToken: string;
     expiresAt: string;
     user: UserSession;
+    tenantConfig: TenantConfig;
 }
 
 export interface LoginRequest {

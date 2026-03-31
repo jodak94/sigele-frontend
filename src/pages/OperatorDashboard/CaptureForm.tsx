@@ -3,6 +3,9 @@ import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass } from '@phosphor
 import { createCaptacion } from '../../api/captacionApi';
 import { getElectorAuth } from '../../api/padronApi';
 import type { ElectorResult } from '../../types/padron';
+import type { Ubicacion } from '../../types/captacion';
+import { MapPicker } from '../../components/MapPicker';
+import { useAuthStore } from '../../store/authStore';
 import axios from 'axios';
 
 interface CaptureFormProps {
@@ -23,10 +26,13 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
 
     const [telefono, setTelefono] = useState('');
     const [direccionRecogida, setDireccionRecogida] = useState('');
+    const [ubicacion, setUbicacion] = useState<Ubicacion | null>(null);
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(false);
     const [requiereTransporte, setRequiereTransporte] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState<Message | null>(null);
+
+    const soportaUbicacion = useAuthStore((s) => s.tenantConfig?.soportaUbicacion ?? false);
 
     useEffect(() => {
         if (!message) return;
@@ -40,6 +46,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
         setSearchError(null);
         setTelefono('');
         setDireccionRecogida('');
+        setUbicacion(null);
         setDisponibleMiembroMesa(false);
         setRequiereTransporte(false);
     };
@@ -94,6 +101,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                 direccionRecogida: direccionRecogida || undefined,
                 disponibleMiembroMesa,
                 requiereTransporte,
+                ubicacion: ubicacion ?? undefined,
             });
             onSuccess();
             resetForm();
@@ -223,6 +231,13 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600 disabled:opacity-40 disabled:cursor-not-allowed"
                             />
                         </div>
+
+                        {soportaUbicacion && !disabled && (
+                            <MapPicker
+                                value={ubicacion}
+                                onChange={setUbicacion}
+                            />
+                        )}
                     </div>
 
                     <button

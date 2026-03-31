@@ -7,7 +7,11 @@ import type {
     ReporteResumenOperadoresResponse,
     ReporteDiaDResponse,
     ReporteCandidatosMesaResponse,
+    ElectorUbicacion,
 } from '../types/captacion';
+
+export const getElectoresUbicaciones = (): Promise<ElectorUbicacion[]> =>
+    axiosClient.get<ElectorUbicacion[]>('/operadores/electores/ubicaciones').then((r) => r.data);
 
 export const getCaptaciones = (operadorId: number): Promise<CaptacionRecord[]> =>
     axiosClient
