@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import {
     ShieldCheck,
     Users,
@@ -11,12 +12,31 @@ import {
     UserPlus,
     Briefcase,
     Buildings,
+    NavigationArrow,
 } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const WA_NUMBER = '595972195087';
 const WA_INFO = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, me interesa obtener más información sobre SIGELE.')}`;
 const WA_DEMO = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, quisiera solicitar una demo de SIGELE para mi campaña.')}`;
+
+// Mock pin coordinates around San Lorenzo, Paraguay
+const MOCK_MAP_PINS = [
+    { lat: -25.3427, lng: -57.5142, nombre: 'Carlos M.',  op: 'J. Martínez' },
+    { lat: -25.3489, lng: -57.5218, nombre: 'Ana G.',     op: 'A. Gómez'    },
+    { lat: -25.3551, lng: -57.5097, nombre: 'Pedro R.',   op: 'J. Martínez' },
+    { lat: -25.3381, lng: -57.5303, nombre: 'María L.',   op: 'C. López'    },
+    { lat: -25.3624, lng: -57.5251, nombre: 'Jorge B.',   op: 'A. Gómez'    },
+    { lat: -25.3442, lng: -57.5078, nombre: 'Laura F.',   op: 'J. Martínez' },
+    { lat: -25.3583, lng: -57.5182, nombre: 'Diego V.',   op: 'R. Benítez'  },
+    { lat: -25.3401, lng: -57.5347, nombre: 'Sandra P.',  op: 'C. López'    },
+    { lat: -25.3512, lng: -57.5159, nombre: 'Roberto C.', op: 'A. Gómez'    },
+    { lat: -25.3468, lng: -57.5279, nombre: 'Elena V.',   op: 'J. Martínez' },
+    { lat: -25.3455, lng: -57.5195, nombre: 'Luis R.',    op: 'R. Benítez'  },
+    { lat: -25.3538, lng: -57.5231, nombre: 'Patricia O.', op: 'C. López'   },
+];
 
 const features = [
     {
@@ -54,6 +74,13 @@ const features = [
         title: 'Seguro y Multi-tenant',
         description:
             'Arquitectura multi-tenant con roles diferenciados: operadores, coordinadores y administradores. Datos aislados por campaña.',
+    },
+    {
+        icon: NavigationArrow,
+        title: 'Mapa Georreferenciado ✦ Nuevo',
+        description:
+            'El operador marca la ubicación exacta del elector en el mapa al momento de la captación. El coordinador visualiza todos los pines en tiempo real desde su panel.',
+        highlight: true,
     },
 ];
 
@@ -357,6 +384,57 @@ function OperatorPhoneMockup() {
     );
 }
 
+function MapaElectoresPreview() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<L.Map | null>(null);
+
+    useEffect(() => {
+        if (!containerRef.current || mapRef.current) return;
+
+        const map = L.map(containerRef.current, {
+            zoomControl: false,
+            attributionControl: false,
+            scrollWheelZoom: false,
+            dragging: false,
+            doubleClickZoom: false,
+            keyboard: false,
+            touchZoom: false,
+        }).setView([-25.3490, -25.3490], 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+        MOCK_MAP_PINS.forEach((pin) => {
+            L.circleMarker([pin.lat, pin.lng], {
+                radius: 7,
+                fillColor: '#14b8a6',
+                color: '#0d9488',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.88,
+            }).addTo(map).bindPopup(
+                `<div style="font-family:sans-serif;font-size:12px;font-weight:700">${pin.nombre}</div>` +
+                `<div style="font-size:11px;color:#555;margin-top:2px">Op: ${pin.op}</div>`
+            );
+        });
+
+        mapRef.current = map;
+
+        setTimeout(() => {
+            map.invalidateSize();
+            const bounds = L.latLngBounds(MOCK_MAP_PINS.map((p) => [p.lat, p.lng]));
+            const zoom = map.getBoundsZoom(bounds, false, L.point(24, 24));
+            map.setView(bounds.getCenter(), zoom);
+        }, 120);
+
+        return () => {
+            map.remove();
+            mapRef.current = null;
+        };
+    }, []);
+
+    return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />;
+}
+
 export function LandingPage() {
     const navigate = useNavigate();
 
@@ -543,22 +621,30 @@ export function LandingPage() {
                         {features.map((f) => (
                             <div
                                 key={f.title}
-                                className="group p-6 bg-slate-50 hover:bg-white border border-slate-200 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-50 rounded-xl transition-all duration-200"
+                                className={`group p-6 border rounded-xl transition-all duration-200 ${'highlight' in f && f.highlight
+                                    ? 'sm:col-span-2 lg:col-span-3 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 hover:from-teal-500 hover:to-teal-600 flex flex-col sm:flex-row sm:items-center gap-5'
+                                    : 'bg-slate-50 hover:bg-white border-slate-200 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-50'
+                                }`}
                             >
-                                <div className="w-10 h-10 bg-teal-50 group-hover:bg-teal-600 rounded-lg flex items-center justify-center mb-5 transition-colors duration-200">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${'highlight' in f && f.highlight
+                                    ? 'bg-white/15'
+                                    : 'bg-teal-50 group-hover:bg-teal-600 mb-5'
+                                }`}>
                                     <f.icon
                                         size={20}
                                         weight="bold"
-                                        className="text-teal-600 group-hover:text-white transition-colors duration-200"
+                                        className={`${'highlight' in f && f.highlight ? 'text-white' : 'text-teal-600 group-hover:text-white'} transition-colors duration-200`}
                                     />
                                 </div>
-                                <h3
-                                    style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                                    className="font-bold text-slate-900 mb-2 text-base"
-                                >
-                                    {f.title}
-                                </h3>
-                                <p className="text-slate-500 text-sm leading-relaxed">{f.description}</p>
+                                <div>
+                                    <h3
+                                        style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
+                                        className={`font-bold mb-2 text-base ${'highlight' in f && f.highlight ? 'text-white' : 'text-slate-900'}`}
+                                    >
+                                        {f.title}
+                                    </h3>
+                                    <p className={`text-sm leading-relaxed ${'highlight' in f && f.highlight ? 'text-teal-100' : 'text-slate-500'}`}>{f.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -604,6 +690,96 @@ export function LandingPage() {
                                 </li>
                             ))}
                         </ul>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── Mapa Georreferenciado Spotlight ── */}
+            <section className="py-24 px-6 bg-slate-900 border-y border-slate-800">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+                    {/* Left: text */}
+                    <div>
+                        <div className="inline-flex items-center gap-2 bg-teal-500/10 border border-teal-500/25 text-teal-400 text-xs font-bold px-4 py-2 rounded-full mb-6 tracking-widest uppercase">
+                            <div className="w-1.5 h-1.5 rounded-full bg-teal-400 live-blip" />
+                            Nuevo
+                        </div>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-8 h-px bg-teal-400" />
+                            <p className="text-teal-400 font-bold text-xs uppercase tracking-widest">Geolocalización</p>
+                        </div>
+                        <h2
+                            style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
+                            className="text-4xl font-black text-white mb-5"
+                        >
+                            Cada elector,
+                            <br />
+                            en el mapa.
+                        </h2>
+                        <p className="text-slate-400 text-lg leading-relaxed mb-8 font-medium">
+                            El operador marca la ubicación exacta del elector directamente desde su celular al
+                            momento de la captación. El coordinador ve todos los pines georreferenciados en tiempo
+                            real desde su panel.
+                        </p>
+                        <ul className="space-y-3">
+                            {[
+                                'El operador selecciona el punto en el mapa con un toque',
+                                'Agrega una referencia libre: portón verde, esquina, etc.',
+                                'El panel muestra todos los pines con nombre y operador',
+                                'Zoom y centrado automático sobre el área de captación',
+                            ].map((item) => (
+                                <li key={item} className="flex items-start gap-3 text-slate-300 text-sm font-medium">
+                                    <CheckCircle size={16} weight="fill" className="text-teal-500 shrink-0 mt-0.5" />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Right: live Leaflet map in dark frame */}
+                    <div>
+                        <div
+                            style={{
+                                background: 'linear-gradient(145deg, #071a18 0%, #050e0d 100%)',
+                                border: '1px solid rgba(20,184,166,0.22)',
+                                borderRadius: '18px',
+                                padding: '14px',
+                                boxShadow: '0 0 0 1px rgba(20,184,166,0.07), 0 48px 96px rgba(0,0,0,0.65)',
+                            }}
+                        >
+                            {/* Window chrome */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
+                                {[0, 1, 2].map((i) => (
+                                    <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+                                ))}
+                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)', marginLeft: '6px' }} />
+                                <span style={SL(0.45)}>Mapa de Electores</span>
+                            </div>
+
+                            {/* Map container */}
+                            <div style={{ height: '340px', borderRadius: '10px', overflow: 'hidden', position: 'relative' }}>
+                                <MapaElectoresPreview />
+
+                                {/* Floating badge */}
+                                <div style={{
+                                    position: 'absolute', top: '10px', right: '10px', zIndex: 1000,
+                                    background: 'rgba(7,26,24,0.92)', border: '1px solid rgba(20,184,166,0.35)',
+                                    borderRadius: '8px', padding: '6px 11px',
+                                    display: 'flex', alignItems: 'center', gap: '7px',
+                                    backdropFilter: 'blur(8px)',
+                                }}>
+                                    <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#14b8a6' }} />
+                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#2dd4bf', fontFamily: FONT_DISPLAY }}>
+                                        {MOCK_MAP_PINS.length} ubicaciones
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Caption */}
+                        <p className="text-slate-600 text-xs font-medium text-center mt-4">
+                            Vista real del panel de coordinadores — datos de demostración
+                        </p>
                     </div>
                 </div>
             </section>
