@@ -549,9 +549,9 @@ function ReporteResumenTable({ data, onExport, exporting }: {
                                 <tr key={`${op.nombreOperador}-${i}`} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                     <td className="px-4 py-3 font-bold text-black">{op.nombreOperador}</td>
                                     <td className="px-4 py-3 text-gray-600">{op.telefono}</td>
-                                    <td className="px-4 py-3 text-center font-bold text-black">{op.electoresCaptados.toLocaleString()}</td>
-                                    <td className="px-4 py-3 text-center text-gray-700">{op.miembrosMesaDisp.toLocaleString()}</td>
-                                    <td className="px-4 py-3 text-center text-gray-700">{op.reqTransporte.toLocaleString()}</td>
+                                    <td className="px-4 py-3 text-center font-bold text-black">{op.electoresCaptados.toLocaleString('es-PY')}</td>
+                                    <td className="px-4 py-3 text-center text-gray-700">{op.miembrosMesaDisp.toLocaleString('es-PY')}</td>
+                                    <td className="px-4 py-3 text-center text-gray-700">{op.reqTransporte.toLocaleString('es-PY')}</td>
                                 </tr>
                             ))
                         )}
@@ -560,9 +560,9 @@ function ReporteResumenTable({ data, onExport, exporting }: {
                         <tfoot>
                             <tr className="bg-gray-200 font-black text-black">
                                 <td colSpan={2} className="px-4 py-3 text-right uppercase text-sm">TOTALES:</td>
-                                <td className="px-4 py-3 text-center">{totales.electoresCaptados.toLocaleString()}</td>
-                                <td className="px-4 py-3 text-center">{totales.miembrosMesaDisp.toLocaleString()}</td>
-                                <td className="px-4 py-3 text-center">{totales.reqTransporte.toLocaleString()}</td>
+                                <td className="px-4 py-3 text-center">{totales.electoresCaptados.toLocaleString('es-PY')}</td>
+                                <td className="px-4 py-3 text-center">{totales.miembrosMesaDisp.toLocaleString('es-PY')}</td>
+                                <td className="px-4 py-3 text-center">{totales.reqTransporte.toLocaleString('es-PY')}</td>
                             </tr>
                         </tfoot>
                     )}
@@ -717,9 +717,9 @@ function TabStats() {
 
     const kpis: { label: string; value: string | number | null; accent?: boolean }[] = padron
         ? [
-            { label: 'Total Consultas', value: padron.totalConsultas.toLocaleString(), accent: true },
-            { label: 'Últimos 7 Días', value: padron.ultimosSieteDias.toLocaleString() },
-            { label: 'Cédulas Únicas', value: padron.cedulasUnicas.toLocaleString() },
+            { label: 'Total Consultas', value: padron.totalConsultas.toLocaleString('es-PY'), accent: true },
+            { label: 'Últimos 7 Días', value: padron.ultimosSieteDias.toLocaleString('es-PY') },
+            { label: 'Cédulas Únicas', value: padron.cedulasUnicas.toLocaleString('es-PY') },
             { label: 'Horario Pico', value: formatHoraPico(padron.horarioPico) },
         ]
         : [
@@ -770,7 +770,7 @@ function TabStats() {
                                             {item.localVotacion}
                                         </span>
                                         <span className="text-sm font-extrabold text-black shrink-0">
-                                            {item.totalBusquedas.toLocaleString()}
+                                            {item.totalBusquedas.toLocaleString('es-PY')}
                                         </span>
                                     </div>
                                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -898,7 +898,7 @@ function TabZonas() {
                                         </span>
                                     </div>
                                     <span className="text-sm font-extrabold text-black">
-                                        {s.totalElectores.toLocaleString()}
+                                        {s.totalElectores.toLocaleString('es-PY')}
                                     </span>
                                 </div>
                                 <div className="ml-9 h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -919,7 +919,7 @@ function TabZonas() {
                         Total electores captados
                     </span>
                     <span className="text-xl font-extrabold text-black">
-                        {total.toLocaleString()}
+                        {total.toLocaleString('es-PY')}
                     </span>
                 </div>
             )}

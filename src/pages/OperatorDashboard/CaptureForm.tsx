@@ -160,9 +160,12 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
 
                         {/* Resultado de búsqueda */}
                         {elector && (
-                            <div className="mt-2 px-3 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold flex items-center gap-2">
-                                <CheckCircle size={16} weight="fill" className="text-green-400 shrink-0" />
-                                <span>{elector.nombre} {elector.apellido}</span>
+                            <div className="mt-2 px-3 py-2 bg-gray-900 text-white rounded-xl flex items-center gap-2">
+                                <CheckCircle size={18} weight="fill" className="text-green-400 shrink-0" />
+                                <div className="min-w-0">
+                                    <p className="text-sm font-bold leading-tight truncate">{elector.nombre} {elector.apellido}</p>
+                                    <p className="text-xs text-gray-400 font-medium">CI {elector.numeroCed.toLocaleString('es-PY')}</p>
+                                </div>
                             </div>
                         )}
                         {searchError && (

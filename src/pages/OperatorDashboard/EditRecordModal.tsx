@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { X } from '@phosphor-icons/react';
 import { useToast } from '../../components/Toast';
-import type { CaptacionRecord, UpdateCaptacionRequest } from '../../types/captacion';
+import type { CaptacionRecord, UpdateCaptacionRequest, Ubicacion } from '../../types/captacion';
+import { MapPicker } from '../../components/MapPicker';
+import { useAuthStore } from '../../store/authStore';
 
 interface EditRecordModalProps {
     record: CaptacionRecord;
@@ -11,17 +13,19 @@ interface EditRecordModalProps {
 
 export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProps) {
     const toast = useToast();
+    const soportaUbicacion = useAuthStore((s) => s.tenantConfig?.soportaUbicacion ?? false);
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(record.disponibleMiembroMesa);
     const [requiereTransporte, setRequiereTransporte] = useState(record.requiereTransporte);
     const [nroTelefono, setNroTelefono] = useState(record.nroTelefono);
     const [direccionRecogida, setDireccionRecogida] = useState(record.direccionRecogida);
+    const [ubicacion, setUbicacion] = useState<Ubicacion | null>(record.ubicacion ?? null);
     const [isSaving, setIsSaving] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
         try {
-            await onSave(record.electorId, { nroTelefono, direccionRecogida, disponibleMiembroMesa, requiereTransporte });
+            await onSave(record.electorId, { nroTelefono, direccionRecogida, disponibleMiembroMesa, requiereTransporte, ubicacion: ubicacion ?? undefined });
             toast.success('Registro actualizado correctamente.');
             onClose();
         } catch {
@@ -45,7 +49,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                         <p className="font-extrabold text-black text-lg">
                             {record.nombre} {record.apellido}
                         </p>
-                        <p className="text-sm font-bold text-gray-600">CI: {record.numeroCed}</p>
+                        <p className="text-sm font-bold text-gray-600">CI: {record.numeroCed.toLocaleString('es-PY')}</p>
                     </div>
 
                     <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-200">
@@ -88,6 +92,10 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold focus:ring-2 focus:ring-red-600"
                             />
                         </div>
+
+                        {soportaUbicacion && (
+                            <MapPicker value={ubicacion} onChange={setUbicacion} />
+                        )}
                     </div>
 
                     <div className="pt-2 flex justify-end gap-3">

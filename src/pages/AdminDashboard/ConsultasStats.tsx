@@ -32,7 +32,7 @@ export function ConsultasStatsCard({ stats, isLoading }: ConsultasStatsProps) {
                     {cards.map((card) => (
                         <div key={card.label} className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
                             <p className="text-xs font-bold text-gray-400 uppercase mb-1">{card.label}</p>
-                            <p className="text-3xl font-extrabold text-black">{card.value.toLocaleString()}</p>
+                            <p className="text-3xl font-extrabold text-black">{card.value.toLocaleString('es-PY')}</p>
                         </div>
                     ))}
                 </div>

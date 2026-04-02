@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, X } from '@phosphor-icons/react';
+import { MapPin, X, Crosshair } from '@phosphor-icons/react';
 import type { Ubicacion } from '../types/captacion';
 
 // Fix default marker icons broken by bundlers
@@ -28,8 +28,10 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
     const markerRef = useRef<L.Marker | null>(null);
     const onChangeRef = useRef(onChange);
     const descripcionRef = useRef(value?.descripcion ?? '');
+    const initialValueRef = useRef(value);
 
     const [descripcion, setDescripcion] = useState(value?.descripcion ?? '');
+    const [locating, setLocating] = useState(false);
 
     useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
     useEffect(() => { descripcionRef.current = descripcion; }, [descripcion]);
@@ -37,41 +39,66 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
     useEffect(() => {
         if (!mapContainerRef.current || mapRef.current) return;
 
-        const map = L.map(mapContainerRef.current).setView(
-            [DEFAULT_LAT, DEFAULT_LNG],
-            DEFAULT_ZOOM
-        );
+        const container = mapContainerRef.current;
+        let map: L.Map;
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            maxZoom: 19,
-        }).addTo(map);
+        // Delay init so the modal finishes its CSS transition before Leaflet
+        // measures the container — prevents the _leaflet_pos error.
+        const timer = setTimeout(() => {
+            if (!container) return;
 
-        map.on('click', (e: L.LeafletMouseEvent) => {
-            const { lat, lng } = e.latlng;
+            const initial = initialValueRef.current;
+            const center: [number, number] = initial
+                ? [initial.lat, initial.lng]
+                : [DEFAULT_LAT, DEFAULT_LNG];
 
-            if (markerRef.current) {
-                markerRef.current.setLatLng([lat, lng]);
-            } else {
-                markerRef.current = L.marker([lat, lng]).addTo(map);
+            map = L.map(container).setView(center, DEFAULT_ZOOM);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 19,
+            }).addTo(map);
+
+            // Place existing marker if value was provided
+            if (initial) {
+                markerRef.current = L.marker([initial.lat, initial.lng]).addTo(map);
             }
 
-            onChangeRef.current({
-                lat: parseFloat(lat.toFixed(7)),
-                lng: parseFloat(lng.toFixed(7)),
-                descripcion: descripcionRef.current,
+            // Center on user location only when there is no existing value
+            if (!initial && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        map.setView([pos.coords.latitude, pos.coords.longitude], DEFAULT_ZOOM);
+                    },
+                    () => { /* permission denied or unavailable, keep default */ }
+                );
+            }
+
+            map.on('click', (e: L.LeafletMouseEvent) => {
+                const { lat, lng } = e.latlng;
+                if (markerRef.current) {
+                    markerRef.current.setLatLng([lat, lng]);
+                } else {
+                    markerRef.current = L.marker([lat, lng]).addTo(map);
+                }
+                onChangeRef.current({
+                    lat: parseFloat(lat.toFixed(7)),
+                    lng: parseFloat(lng.toFixed(7)),
+                    descripcion: descripcionRef.current,
+                });
             });
-        });
 
-        mapRef.current = map;
-
-        // Ensure Leaflet calculates the correct container size after mount
-        requestAnimationFrame(() => map.invalidateSize());
+            mapRef.current = map;
+            map.invalidateSize();
+        }, 100);
 
         return () => {
-            map.remove();
-            mapRef.current = null;
-            markerRef.current = null;
+            clearTimeout(timer);
+            if (mapRef.current) {
+                mapRef.current.remove();
+                mapRef.current = null;
+                markerRef.current = null;
+            }
         };
     }, []);
 
@@ -81,6 +108,18 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
         if (value) {
             onChange({ ...value, descripcion: text });
         }
+    };
+
+    const handleLocate = () => {
+        if (!navigator.geolocation || !mapRef.current) return;
+        setLocating(true);
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                mapRef.current!.setView([pos.coords.latitude, pos.coords.longitude], DEFAULT_ZOOM);
+                setLocating(false);
+            },
+            () => setLocating(false)
+        );
     };
 
     const handleClear = () => {
@@ -99,16 +138,29 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
                     <MapPin size={14} weight="fill" className="text-red-600" />
                     Ubicación en Mapa (Opcional)
                 </label>
-                {value && (
-                    <button
-                        type="button"
-                        onClick={handleClear}
-                        className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600 font-bold transition-colors"
-                    >
-                        <X size={12} weight="bold" />
-                        Limpiar
-                    </button>
-                )}
+                <div className="flex items-center gap-2">
+                    {navigator.geolocation && (
+                        <button
+                            type="button"
+                            onClick={handleLocate}
+                            disabled={locating}
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600 font-bold transition-colors disabled:opacity-40"
+                            title="Ir a mi ubicación"
+                        >
+                            <Crosshair size={14} weight="bold" className={locating ? 'animate-spin' : ''} />
+                        </button>
+                    )}
+                    {value && (
+                        <button
+                            type="button"
+                            onClick={handleClear}
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600 font-bold transition-colors"
+                        >
+                            <X size={12} weight="bold" />
+                            Limpiar
+                        </button>
+                    )}
+                </div>
             </div>
 
             <div

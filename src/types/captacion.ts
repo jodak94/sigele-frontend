@@ -8,6 +8,7 @@ export interface ElectorUbicacion {
     electorId: number;
     nombre: string;
     apellido: string;
+    numeroCed: number;
     lat: number;
     lng: number;
     descripcion: string;
@@ -23,6 +24,7 @@ export interface CaptacionRecord {
     requiereTransporte: boolean;
     nroTelefono: string;
     direccionRecogida: string;
+    ubicacion?: Ubicacion;
 }
 
 export interface CreateCaptacionRequest {
