@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const WA_NUMBER = '595972195087';
+const WA_NUMBER = '595992864352';
 const WA_INFO = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, me interesa obtener más información sobre SIGELE.')}`;
 const WA_DEMO = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, quisiera solicitar una demo de SIGELE para mi campaña.')}`;
 
