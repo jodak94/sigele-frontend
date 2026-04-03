@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldCheck, WarningCircle, ArrowRight, Buildings } from '@phosphor-icons/react';
+import { WarningCircle, ArrowRight, Buildings } from '@phosphor-icons/react';
 import { buildTenantUrl } from '../utils/tenant';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,11 +22,11 @@ export function NoTenantPage() {
 
     return (
         <div
-            className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 sigele-public"
+            className="min-h-screen bg-[#f3e8d2] flex flex-col items-center justify-center p-6 sigele-public"
             style={{
                 fontFamily: FONT_BODY,
                 backgroundImage:
-                    'linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px)',
+                    'linear-gradient(rgba(120,80,40,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(120,80,40,0.06) 1px, transparent 1px)',
                 backgroundSize: '64px 64px',
             }}
         >
@@ -35,40 +35,34 @@ export function NoTenantPage() {
                 className="absolute inset-0 pointer-events-none"
                 style={{
                     background:
-                        'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(13,148,136,0.08) 0%, transparent 70%)',
+                        'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(213,43,30,0.07) 0%, transparent 70%)',
                 }}
             />
 
             {/* Logo */}
-            <div className="relative flex items-center gap-2.5 mb-12">
-                <ShieldCheck size={28} weight="fill" className="text-teal-400" />
-                <span
-                    style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.025em' }}
-                    className="font-black text-white text-2xl"
-                >
-                    SIGELE
-                </span>
+            <div className="relative flex items-center mb-12">
+                <img src="/logo_letras.png" alt="SIGELE" className="h-12 w-auto" />
             </div>
 
             <div className="relative w-full max-w-sm">
                 <div
                     style={{
-                        background: 'linear-gradient(145deg, #071a18 0%, #050e0d 100%)',
-                        border: '1px solid rgba(20,184,166,0.2)',
+                        background: 'linear-gradient(145deg, #080810 0%, #030308 100%)',
+                        border: '1px solid rgba(213,43,30,0.2)',
                         borderRadius: '18px',
                         padding: '32px',
-                        boxShadow: '0 0 0 1px rgba(20,184,166,0.07), 0 40px 80px rgba(0,0,0,0.55)',
+                        boxShadow: '0 0 0 1px rgba(213,43,30,0.07), 0 40px 80px rgba(0,0,0,0.55)',
                     }}
                 >
                     {/* Icon */}
                     <div
                         className="w-14 h-14 flex items-center justify-center mx-auto mb-6 rounded-xl"
                         style={{
-                            background: 'rgba(20,184,166,0.08)',
-                            border: '1px solid rgba(20,184,166,0.22)',
+                            background: 'rgba(213,43,30,0.08)',
+                            border: '1px solid rgba(213,43,30,0.22)',
                         }}
                     >
-                        <Buildings size={28} weight="bold" className="text-teal-400" />
+                        <Buildings size={28} weight="bold" className="text-[#D52B1E]" />
                     </div>
 
                     <h1
@@ -80,7 +74,7 @@ export function NoTenantPage() {
 
                     <p className="text-slate-400 text-sm leading-relaxed text-center mb-7 font-medium">
                         El acceso es del tipo{' '}
-                        <span className="text-teal-400 font-bold font-mono">tuorganizacion.sigele.com.py</span>
+                        <span className="text-[#D52B1E] font-bold font-mono">tuorganizacion.sigele.com.py</span>
                     </p>
 
                     {/* Input */}
@@ -110,7 +104,7 @@ export function NoTenantPage() {
                                 placeholder="tuorganizacion"
                                 className="flex-1 px-4 py-3 bg-transparent outline-none text-white font-bold placeholder:text-slate-600 text-sm focus:outline-none"
                                 style={{
-                                    caretColor: '#60a5fa',
+                                    caretColor: '#D52B1E',
                                 }}
                             />
                             <span className="pr-4 text-slate-500 text-xs font-bold whitespace-nowrap">
@@ -125,9 +119,9 @@ export function NoTenantPage() {
                         className="w-full flex items-center justify-center gap-2 text-white font-bold py-3 rounded-lg transition-all mb-5 mt-1 disabled:opacity-35 disabled:cursor-not-allowed"
                         style={{
                             background: tenant.trim()
-                                ? 'linear-gradient(135deg, #0d9488, #0f766e)'
-                                : 'rgba(13,148,136,0.5)',
-                            boxShadow: tenant.trim() ? '0 4px 16px rgba(13,148,136,0.35)' : 'none',
+                                ? 'linear-gradient(135deg, #D52B1E, #b02318)'
+                                : 'rgba(213,43,30,0.5)',
+                            boxShadow: tenant.trim() ? '0 4px 16px rgba(213,43,30,0.35)' : 'none',
                         }}
                     >
                         Ir a mi organización

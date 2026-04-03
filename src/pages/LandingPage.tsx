@@ -145,48 +145,47 @@ const SL = (opacity = 0.55) => ({
     letterSpacing: '0.1em',
 });
 
+const SL_D = (op = 0.5) => ({ fontSize: '9px', color: `rgba(90,60,30,${op})`, textTransform: 'uppercase' as const, letterSpacing: '0.1em' });
+
 function DashboardPreview() {
     return (
         <div className="relative dashboard-animate" style={{ fontFamily: FONT_BODY }}>
             <div
-                className="absolute inset-0 rounded-3xl pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at center, rgba(13,148,136,0.16) 0%, transparent 70%)' }}
-            />
-            <div
                 style={{
-                    background: 'linear-gradient(145deg, #071a18 0%, #050e0d 100%)',
-                    border: '1px solid rgba(20,184,166,0.22)',
+                    background: '#fefaf4',
+                    border: '1px solid rgba(180,130,70,0.22)',
                     borderRadius: '18px',
                     padding: '16px',
                     position: 'relative',
-                    boxShadow: '0 0 0 1px rgba(20,184,166,0.07), 0 48px 96px rgba(0,0,0,0.65)',
+                    boxShadow: '0 1px 0 rgba(180,130,70,0.1), 0 24px 56px rgba(100,60,20,0.12)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '10px',
                 }}
             >
-                {/* Window chrome */}
+                {/* Window chrome — macOS style dots */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    {[0,1,2].map((i) => (
-                        <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+                    {[{ bg: '#ff5f57', b: '#e0443e' }, { bg: '#febc2e', b: '#d4a017' }, { bg: '#28c840', b: '#1aaa2e' }].map((d) => (
+                        <div key={d.bg} style={{ width: '8px', height: '8px', borderRadius: '50%', background: d.bg, border: `0.5px solid ${d.b}` }} />
                     ))}
-                    <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)', marginLeft: '6px' }} />
-                    <span style={SL(0.45)}>Centro de Control</span>
+                    <div style={{ flex: 1, height: '1px', background: 'rgba(180,130,70,0.18)', marginLeft: '6px' }} />
+                    <span style={SL_D(0.45)}>Centro de Control</span>
                 </div>
 
                 {/* 4 KPI cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '6px' }}>
                     {MOCK_KPIS.map((k) => (
                         <div key={k.label} style={{
-                            background: 'rgba(255,255,255,0.025)',
-                            border: `1px solid ${k.accent ? 'rgba(20,184,166,0.25)' : 'rgba(255,255,255,0.06)'}`,
+                            background: k.accent ? 'rgba(0,56,168,0.05)' : '#ffffff',
+                            border: `1px solid ${k.accent ? 'rgba(0,56,168,0.2)' : 'rgba(180,130,70,0.15)'}`,
                             borderRadius: '8px', padding: '7px 9px',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                         }}>
-                            <div style={{ ...SL(), marginBottom: '3px' }}>{k.label}</div>
+                            <div style={{ ...SL_D(), marginBottom: '3px' }}>{k.label}</div>
                             <div style={{
                                 fontSize: '17px', fontWeight: '900', lineHeight: 1,
                                 letterSpacing: '-0.03em', fontFamily: FONT_DISPLAY,
-                                color: k.accent ? '#2dd4bf' : 'white',
+                                color: k.accent ? '#0038A8' : '#1c1208',
                                 fontVariantNumeric: 'tabular-nums',
                             }}>{k.value}</div>
                         </div>
@@ -194,67 +193,65 @@ function DashboardPreview() {
                 </div>
 
                 {/* Buscador de Electores */}
-                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '10px 12px' }}>
-                    <div style={{ ...SL(0.45), marginBottom: '8px' }}>Buscar Elector en Listas</div>
-                    {/* Input row */}
+                <div style={{ background: '#ffffff', border: '1px solid rgba(180,130,70,0.15)', borderRadius: '10px', padding: '10px 12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <div style={{ ...SL_D(0.45), marginBottom: '8px' }}>Buscar Elector en Listas</div>
                     <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
                         <div style={{
                             flex: 1, display: 'flex', alignItems: 'center',
-                            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)',
+                            background: '#fafaf8', border: '1px solid rgba(180,130,70,0.2)',
                             borderRadius: '7px', padding: '5px 9px', gap: '6px',
                         }}>
-                            <span style={{ fontSize: '10px', color: 'rgba(148,163,184,0.4)' }}>🔍</span>
-                            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', fontWeight: '600' }}>3.421.876</span>
+                            <span style={{ fontSize: '10px', color: 'rgba(90,60,30,0.35)' }}>🔍</span>
+                            <span style={{ fontSize: '11px', color: '#3a2818', fontWeight: '600' }}>3.421.876</span>
                         </div>
                         <div style={{
                             padding: '5px 10px', borderRadius: '7px', fontSize: '10px', fontWeight: '700',
-                            color: 'white', background: 'rgba(20,184,166,0.2)', border: '1px solid rgba(20,184,166,0.3)',
+                            color: 'white', background: '#D52B1E',
                             display: 'flex', alignItems: 'center',
+                            boxShadow: '0 2px 6px rgba(213,43,30,0.3)',
                         }}>Verificar</div>
                     </div>
-                    {/* Found result */}
                     <div style={{
-                        padding: '7px 10px', background: 'rgba(20,184,166,0.07)', border: '1px solid rgba(20,184,166,0.2)',
+                        padding: '7px 10px', background: 'rgba(0,56,168,0.05)', border: '1px solid rgba(0,56,168,0.18)',
                         borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' as const,
                     }}>
-                        <span style={{ fontSize: '10px', color: '#2dd4bf' }}>✓</span>
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)', fontWeight: '700' }}>Pedro García R.</span>
-                        <span style={{ fontSize: '9px', color: 'rgba(148,163,184,0.5)' }}>CI: 3.421.876</span>
-                        <span style={{ fontSize: '9px', fontWeight: '700', padding: '1px 6px', borderRadius: '4px', background: 'rgba(13,148,136,0.6)', color: 'white' }}>Mesa</span>
-                        <span style={{ fontSize: '9px', color: 'rgba(148,163,184,0.5)' }}>Lista de: <span style={{ color: '#2dd4bf', fontWeight: '600' }}>J. Martínez</span></span>
+                        <span style={{ fontSize: '10px', color: '#0038A8' }}>✓</span>
+                        <span style={{ fontSize: '11px', color: '#1c1208', fontWeight: '700' }}>Pedro García R.</span>
+                        <span style={{ fontSize: '9px', color: 'rgba(90,60,30,0.5)' }}>CI: 3.421.876</span>
+                        <span style={{ fontSize: '9px', fontWeight: '700', padding: '1px 6px', borderRadius: '4px', background: 'rgba(213,43,30,0.08)', color: '#D52B1E', border: '1px solid rgba(213,43,30,0.2)' }}>Mesa</span>
+                        <span style={{ fontSize: '9px', color: 'rgba(90,60,30,0.5)' }}>Lista de: <span style={{ color: '#0038A8', fontWeight: '600' }}>J. Martínez</span></span>
                     </div>
                 </div>
 
                 {/* Ranking + Consultas */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '8px' }}>
-                    {/* Ranking */}
-                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '10px 12px' }}>
-                        <div style={{ ...SL(0.45), marginBottom: '8px' }}>Ranking Cargas</div>
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(180,130,70,0.15)', borderRadius: '10px', padding: '10px 12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                        <div style={{ ...SL_D(0.45), marginBottom: '8px' }}>Ranking Cargas</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
                             {MOCK_RANKING.map((op, i) => (
                                 <div key={op.name}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-                                        <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.65)', fontWeight: '600', display: 'flex', gap: '4px' }}>
-                                            <span style={{ color: 'rgba(148,163,184,0.4)', fontWeight: '700' }}>{i + 1}.</span>
+                                        <span style={{ fontSize: '10px', color: '#3a2818', fontWeight: '600', display: 'flex', gap: '4px' }}>
+                                            <span style={{ color: 'rgba(90,60,30,0.35)', fontWeight: '700' }}>{i + 1}.</span>
                                             {op.name}
                                         </span>
-                                        <span style={{ fontSize: '10px', fontWeight: '800', color: '#2dd4bf', fontVariantNumeric: 'tabular-nums' }}>{op.total}</span>
+                                        <span style={{ fontSize: '10px', fontWeight: '800', color: '#D52B1E', fontVariantNumeric: 'tabular-nums' }}>{op.total}</span>
                                     </div>
-                                    <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px' }}>
-                                        <div style={{ height: '100%', width: `${op.pct}%`, background: 'linear-gradient(90deg, #0d9488, #2dd4bf)', borderRadius: '2px' }} />
+                                    <div style={{ height: '3px', background: 'rgba(180,130,70,0.15)', borderRadius: '2px' }}>
+                                        <div style={{ height: '100%', width: `${op.pct}%`, background: 'linear-gradient(90deg, #D52B1E, #ff7b72)', borderRadius: '2px' }} />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
-                    {/* Consultas */}
-                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '10px 12px' }}>
-                        <div style={{ ...SL(0.45), marginBottom: '8px' }}>Consultas al Padrón</div>
+
+                    <div style={{ background: '#ffffff', border: '1px solid rgba(180,130,70,0.15)', borderRadius: '10px', padding: '10px 12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                        <div style={{ ...SL_D(0.45), marginBottom: '8px' }}>Consultas al Padrón</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
                             {MOCK_CONSULTAS.map((c) => (
                                 <div key={c.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '10px', color: 'rgba(148,163,184,0.55)', fontWeight: '500' }}>{c.label}</span>
-                                    <span style={{ fontSize: '12px', fontWeight: '800', color: 'white', fontVariantNumeric: 'tabular-nums', fontFamily: FONT_DISPLAY }}>{c.value}</span>
+                                    <span style={{ fontSize: '10px', color: 'rgba(90,60,30,0.55)', fontWeight: '500' }}>{c.label}</span>
+                                    <span style={{ fontSize: '12px', fontWeight: '800', color: '#1c1208', fontVariantNumeric: 'tabular-nums', fontFamily: FONT_DISPLAY }}>{c.value}</span>
                                 </div>
                             ))}
                         </div>
@@ -262,39 +259,38 @@ function DashboardPreview() {
                 </div>
 
                 {/* Desempeño por Coordinador */}
-                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px', padding: '10px 12px' }}>
-                    <div style={{ ...SL(0.45), marginBottom: '8px' }}>Desempeño por Coordinador</div>
+                <div style={{ background: '#ffffff', border: '1px solid rgba(180,130,70,0.15)', borderRadius: '10px', padding: '10px 12px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                    <div style={{ ...SL_D(0.45), marginBottom: '8px' }}>Desempeño por Coordinador</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                         {MOCK_COORDS.map((c) => (
                             <div key={c.name} style={{
-                                background: 'rgba(255,255,255,0.025)',
-                                border: '1px solid rgba(255,255,255,0.06)',
+                                background: c.leader ? 'rgba(213,43,30,0.04)' : '#fafaf8',
+                                border: `1px solid ${c.leader ? 'rgba(213,43,30,0.18)' : 'rgba(180,130,70,0.15)'}`,
                                 borderRadius: '8px', padding: '9px 10px',
                                 position: 'relative', overflow: 'hidden',
                             }}>
-                                {/* Left accent bar */}
                                 <div style={{
                                     position: 'absolute', top: 0, left: 0, width: '3px', height: '100%',
-                                    background: c.leader ? '#14b8a6' : 'rgba(148,163,184,0.3)',
+                                    background: c.leader ? '#D52B1E' : 'rgba(180,130,70,0.3)',
                                     borderRadius: '8px 0 0 8px',
                                 }} />
                                 <div style={{ paddingLeft: '6px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
                                         <div>
-                                            <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.85)', fontFamily: FONT_DISPLAY }}>{c.name}</div>
-                                            <div style={{ fontSize: '9px', color: 'rgba(148,163,184,0.5)', marginTop: '1px' }}>{c.operadores} operadores</div>
+                                            <div style={{ fontSize: '11px', fontWeight: '700', color: '#1c1208', fontFamily: FONT_DISPLAY }}>{c.name}</div>
+                                            <div style={{ fontSize: '9px', color: 'rgba(90,60,30,0.45)', marginTop: '1px' }}>{c.operadores} operadores</div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <div style={{ fontSize: '16px', fontWeight: '900', color: c.leader ? '#2dd4bf' : 'white', fontFamily: FONT_DISPLAY, fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{c.electores}</div>
-                                            <div style={{ fontSize: '8px', color: 'rgba(148,163,184,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>electores</div>
+                                            <div style={{ fontSize: '16px', fontWeight: '900', color: c.leader ? '#0038A8' : '#1c1208', fontFamily: FONT_DISPLAY, fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{c.electores}</div>
+                                            <div style={{ fontSize: '8px', color: 'rgba(90,60,30,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>electores</div>
                                         </div>
                                     </div>
-                                    <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', marginBottom: '5px' }}>
-                                        <div style={{ height: '100%', width: `${c.pct}%`, background: c.leader ? 'linear-gradient(90deg,#0d9488,#2dd4bf)' : 'rgba(148,163,184,0.35)', borderRadius: '2px' }} />
+                                    <div style={{ height: '3px', background: 'rgba(180,130,70,0.15)', borderRadius: '2px', marginBottom: '5px' }}>
+                                        <div style={{ height: '100%', width: `${c.pct}%`, background: c.leader ? 'linear-gradient(90deg,#D52B1E,#ff7b72)' : 'rgba(180,130,70,0.3)', borderRadius: '2px' }} />
                                     </div>
-                                    <div style={{ fontSize: '9px', color: 'rgba(148,163,184,0.5)' }}>
-                                        {c.mesa} <span style={{ opacity: 0.6 }}>miembros mesa</span>
-                                        {c.leader && <span style={{ marginLeft: '6px', color: '#2dd4bf' }}>🏆</span>}
+                                    <div style={{ fontSize: '9px', color: 'rgba(90,60,30,0.45)' }}>
+                                        {c.mesa} <span style={{ opacity: 0.7 }}>miembros mesa</span>
+                                        {c.leader && <span style={{ marginLeft: '6px', color: '#D52B1E' }}>🏆</span>}
                                     </div>
                                 </div>
                             </div>
@@ -308,76 +304,119 @@ function DashboardPreview() {
 
 function OperatorPhoneMockup() {
     return (
-        <div style={{ fontFamily: FONT_BODY, maxWidth: '240px', margin: '0 auto' }}>
-            {/* Phone frame */}
+        <div style={{ fontFamily: FONT_BODY, width: '220px', margin: '0 auto', position: 'relative' }}>
+
+            {/* ── Botones laterales izquierdos ── */}
+            {/* Silencio */}
+            <div style={{ position: 'absolute', left: '-4px', top: '72px', width: '4px', height: '22px', background: 'linear-gradient(180deg,#48484a,#3a3a3c)', borderRadius: '3px 0 0 3px', boxShadow: '-1px 1px 2px rgba(0,0,0,0.4)' }} />
+            {/* Volumen + */}
+            <div style={{ position: 'absolute', left: '-4px', top: '104px', width: '4px', height: '30px', background: 'linear-gradient(180deg,#48484a,#3a3a3c)', borderRadius: '3px 0 0 3px', boxShadow: '-1px 1px 2px rgba(0,0,0,0.4)' }} />
+            {/* Volumen − */}
+            <div style={{ position: 'absolute', left: '-4px', top: '144px', width: '4px', height: '30px', background: 'linear-gradient(180deg,#48484a,#3a3a3c)', borderRadius: '3px 0 0 3px', boxShadow: '-1px 1px 2px rgba(0,0,0,0.4)' }} />
+            {/* ── Botón de encendido derecho ── */}
+            <div style={{ position: 'absolute', right: '-4px', top: '110px', width: '4px', height: '52px', background: 'linear-gradient(180deg,#48484a,#3a3a3c)', borderRadius: '0 3px 3px 0', boxShadow: '1px 1px 2px rgba(0,0,0,0.4)' }} />
+
+            {/* ── Cuerpo del teléfono ── */}
             <div style={{
-                background: 'linear-gradient(145deg, #071a18 0%, #050e0d 100%)',
-                border: '1px solid rgba(20,184,166,0.2)',
-                borderRadius: '24px',
-                padding: '16px',
-                boxShadow: '0 0 0 1px rgba(20,184,166,0.06), 0 32px 64px rgba(0,0,0,0.7)',
-                position: 'relative',
+                background: 'linear-gradient(160deg, #3d3d3f 0%, #1c1c1e 100%)',
+                borderRadius: '42px',
+                padding: '10px',
+                boxShadow: '0 0 0 1px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12), 0 32px 64px rgba(0,0,0,0.45)',
             }}>
-                {/* Notch */}
-                <div style={{ width: '60px', height: '5px', background: 'rgba(255,255,255,0.07)', borderRadius: '3px', margin: '0 auto 14px' }} />
+                {/* ── Pantalla ── */}
+                <div style={{ background: '#f9f5ef', borderRadius: '33px', overflow: 'hidden', position: 'relative' }}>
 
-                {/* Header */}
-                <div style={{ marginBottom: '12px' }}>
-                    <div style={{ fontSize: '11px', fontWeight: '800', color: 'white', fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}>Panel Operativo</div>
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '7px', padding: '5px 8px', flex: 1 }}>
-                            <div style={SL()}>Activos</div>
-                            <div style={{ fontSize: '16px', fontWeight: '900', color: 'white', fontFamily: FONT_DISPLAY }}>47</div>
-                        </div>
-                        <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '7px', padding: '5px 8px', flex: 1 }}>
-                            <div style={SL()}>Mesa</div>
-                            <div style={{ fontSize: '16px', fontWeight: '900', color: '#2dd4bf', fontFamily: FONT_DISPLAY }}>12</div>
+                    {/* Barra de estado */}
+                    <div style={{ padding: '10px 18px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
+                        {/* Dynamic Island */}
+                        <div style={{ position: 'absolute', top: '8px', left: '50%', transform: 'translateX(-50%)', width: '80px', height: '24px', background: '#1c1c1e', borderRadius: '12px' }} />
+                        <span style={{ fontSize: '10px', fontWeight: '700', color: '#1c1208', fontFamily: FONT_BODY }}>9:41</span>
+                        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                            {/* Señal */}
+                            <svg width="13" height="9" viewBox="0 0 13 9"><rect x="0" y="5" width="2" height="4" rx="0.5" fill="#1c1208" opacity="0.8"/><rect x="3.5" y="3" width="2" height="6" rx="0.5" fill="#1c1208" opacity="0.8"/><rect x="7" y="1.5" width="2" height="7.5" rx="0.5" fill="#1c1208" opacity="0.8"/><rect x="10.5" y="0" width="2" height="9" rx="0.5" fill="#1c1208" opacity="0.3"/></svg>
+                            {/* Batería */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1px' }}>
+                                <div style={{ width: '17px', height: '8px', border: '1px solid rgba(28,18,8,0.45)', borderRadius: '2px', padding: '1px' }}>
+                                    <div style={{ width: '65%', height: '100%', background: '#1c1208', borderRadius: '1px', opacity: 0.75 }} />
+                                </div>
+                                <div style={{ width: '2px', height: '4px', background: 'rgba(28,18,8,0.35)', borderRadius: '0 1px 1px 0' }} />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)', marginBottom: '12px' }} />
+                    {/* Contenido de la app */}
+                    <div style={{ padding: '2px 14px 0' }}>
 
-                {/* Capture form */}
-                <div style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.65)', marginBottom: '8px' }}>Cargar Elector</div>
-
-                {/* CI */}
-                <div style={{ marginBottom: '7px' }}>
-                    <div style={{ ...SL(), marginBottom: '3px' }}>Cédula</div>
-                    <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '7px', overflow: 'hidden' }}>
-                        <span style={{ flex: 1, padding: '5px 8px', fontSize: '11px', color: 'white', fontWeight: '700' }}>1.234.567</span>
-                        <span style={{ padding: '5px 7px', fontSize: '10px', color: '#2dd4bf' }}>🔍</span>
-                    </div>
-                </div>
-
-                {/* Found */}
-                <div style={{ marginBottom: '7px', padding: '5px 8px', background: 'rgba(20,184,166,0.08)', border: '1px solid rgba(20,184,166,0.22)', borderRadius: '7px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <span style={{ color: '#2dd4bf', fontSize: '10px' }}>✓</span>
-                    <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.75)', fontWeight: '600' }}>Carlos Martínez R.</span>
-                </div>
-
-                {/* Phone */}
-                <div style={{ marginBottom: '7px' }}>
-                    <div style={{ ...SL(), marginBottom: '3px' }}>Teléfono *</div>
-                    <div style={{ padding: '5px 8px', fontSize: '11px', color: 'rgba(255,255,255,0.45)', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '7px' }}>0981 123 456</div>
-                </div>
-
-                {/* Checkboxes */}
-                <div style={{ marginBottom: '10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    {[
-                        { label: 'Miembro de Mesa', checked: true },
-                        { label: 'Requiere Transporte', checked: false },
-                    ].map((cb) => (
-                        <div key={cb.label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <div style={{ width: '11px', height: '11px', borderRadius: '3px', flexShrink: 0, border: cb.checked ? '1.5px solid rgba(20,184,166,0.7)' : '1.5px solid rgba(255,255,255,0.12)', background: cb.checked ? 'rgba(20,184,166,0.15)' : 'transparent' }} />
-                            <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.55)', fontWeight: '500' }}>{cb.label}</span>
+                        {/* Header app */}
+                        <div style={{ marginBottom: '10px' }}>
+                            <div style={{ fontSize: '12px', fontWeight: '800', color: '#1c1208', fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}>Panel Operativo</div>
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+                                <div style={{ background: '#fff', border: '1px solid rgba(180,130,70,0.2)', borderRadius: '8px', padding: '5px 8px', flex: 1, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                                    <div style={{ fontSize: '8px', color: 'rgba(90,60,30,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: '2px' }}>Activos</div>
+                                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#1c1208', fontFamily: FONT_DISPLAY }}>47</div>
+                                </div>
+                                <div style={{ background: '#fff', border: '1px solid rgba(0,56,168,0.2)', borderRadius: '8px', padding: '5px 8px', flex: 1, boxShadow: '0 1px 3px rgba(0,56,168,0.07)' }}>
+                                    <div style={{ fontSize: '8px', color: 'rgba(90,60,30,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: '2px' }}>Mesa</div>
+                                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#0038A8', fontFamily: FONT_DISPLAY }}>12</div>
+                                </div>
+                            </div>
                         </div>
-                    ))}
-                </div>
 
-                {/* Button */}
-                <div style={{ padding: '7px', textAlign: 'center', background: 'linear-gradient(135deg, #0d9488, #0f766e)', borderRadius: '8px', fontSize: '10px', fontWeight: '700', color: 'white' }}>
-                    Registrar Captación
+                        <div style={{ height: '1px', background: 'rgba(180,130,70,0.18)', marginBottom: '10px' }} />
+
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#3a2818', marginBottom: '8px' }}>Cargar Elector</div>
+
+                        {/* Cédula */}
+                        <div style={{ marginBottom: '6px' }}>
+                            <div style={{ fontSize: '8px', color: 'rgba(90,60,30,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '3px' }}>Cédula</div>
+                            <div style={{ display: 'flex', background: '#fff', border: '1px solid rgba(180,130,70,0.25)', borderRadius: '7px', overflow: 'hidden', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                                <span style={{ flex: 1, padding: '5px 8px', fontSize: '11px', color: '#1c1208', fontWeight: '700' }}>1.234.567</span>
+                                <span style={{ padding: '5px 7px', fontSize: '10px', color: '#D52B1E' }}>🔍</span>
+                            </div>
+                        </div>
+
+                        {/* Encontrado */}
+                        <div style={{ marginBottom: '6px', padding: '5px 8px', background: 'rgba(0,56,168,0.06)', border: '1px solid rgba(0,56,168,0.18)', borderRadius: '7px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <span style={{ color: '#0038A8', fontSize: '10px', fontWeight: '700' }}>✓</span>
+                            <span style={{ fontSize: '10px', color: '#1c1208', fontWeight: '600' }}>Carlos Martínez R.</span>
+                        </div>
+
+                        {/* Teléfono */}
+                        <div style={{ marginBottom: '6px' }}>
+                            <div style={{ fontSize: '8px', color: 'rgba(90,60,30,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '3px' }}>Teléfono *</div>
+                            <div style={{ padding: '5px 8px', fontSize: '11px', color: 'rgba(60,40,20,0.4)', background: '#fff', border: '1px solid rgba(180,130,70,0.2)', borderRadius: '7px' }}>0981 123 456</div>
+                        </div>
+
+                        {/* Checkboxes */}
+                        <div style={{ marginBottom: '10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                            {[
+                                { label: 'Miembro de Mesa', checked: true },
+                                { label: 'Requiere Transporte', checked: false },
+                            ].map((cb) => (
+                                <div key={cb.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <div style={{
+                                        width: '12px', height: '12px', borderRadius: '3px', flexShrink: 0,
+                                        border: cb.checked ? '1.5px solid #D52B1E' : '1.5px solid rgba(180,130,70,0.4)',
+                                        background: cb.checked ? 'rgba(213,43,30,0.1)' : '#fff',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        {cb.checked && <span style={{ fontSize: '8px', color: '#D52B1E', lineHeight: 1, fontWeight: '800' }}>✓</span>}
+                                    </div>
+                                    <span style={{ fontSize: '9px', color: '#3a2818', fontWeight: '500' }}>{cb.label}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Botón */}
+                        <div style={{ padding: '8px', textAlign: 'center', background: 'linear-gradient(135deg, #D52B1E, #b02318)', borderRadius: '9px', fontSize: '10px', fontWeight: '700', color: 'white', boxShadow: '0 3px 10px rgba(213,43,30,0.35)', marginBottom: '4px' }}>
+                            Registrar Captación
+                        </div>
+                    </div>
+
+                    {/* Home indicator */}
+                    <div style={{ padding: '8px 0 7px', display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ width: '90px', height: '4px', background: '#1c1208', borderRadius: '2px', opacity: 0.15 }} />
+                    </div>
                 </div>
             </div>
         </div>
@@ -406,8 +445,8 @@ function MapaElectoresPreview() {
         MOCK_MAP_PINS.forEach((pin) => {
             L.circleMarker([pin.lat, pin.lng], {
                 radius: 7,
-                fillColor: '#14b8a6',
-                color: '#0d9488',
+                fillColor: '#D52B1E',
+                color: '#b02318',
                 weight: 2,
                 opacity: 1,
                 fillOpacity: 0.88,
@@ -442,31 +481,21 @@ export function LandingPage() {
         <div className="min-h-screen antialiased sigele-public">
 
             {/* ── Navbar ── */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/96 backdrop-blur-md border-b border-slate-800/70">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-[#f3e8d2]/95 backdrop-blur-md border-b border-[#c4a882]/40">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <ShieldCheck size={24} weight="fill" className="text-teal-400" />
-                        <span
-                            style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                            className="font-black text-white text-xl"
-                        >
-                            SIGELE
-                        </span>
-                        <div className="hidden sm:block w-px h-4 bg-slate-700 mx-0.5" />
-                        <span className="hidden sm:block text-xs font-medium text-slate-500 tracking-wide">
-                            Gestión Electoral
-                        </span>
+                    <div className="flex items-center">
+                        <img src="/logo_letras.png" alt="SIGELE" className="h-9 w-auto" />
                     </div>
                     <nav className="flex items-center gap-2">
                         <button
                             onClick={() => navigate('/padron')}
-                            className="hidden sm:block text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-2"
+                            className="hidden sm:block text-sm font-medium text-[#6b5035] hover:text-[#1c1208] transition-colors px-3 py-2"
                         >
                             Consultar Padrón
                         </button>
                         <button
                             onClick={() => navigate('/login')}
-                            className="hidden sm:block text-sm font-semibold text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500 transition-all px-4 py-2 rounded-lg"
+                            className="hidden sm:block text-sm font-semibold text-[#3a2818] hover:text-[#1c1208] border border-[#c4a882] hover:border-[#8a6040] transition-all px-4 py-2 rounded-lg"
                         >
                             Ingresar
                         </button>
@@ -474,7 +503,7 @@ export function LandingPage() {
                             href={WA_DEMO}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 bg-teal-600 hover:bg-teal-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors shadow-sm shadow-teal-600/30"
+                            className="flex items-center gap-1.5 bg-[#D52B1E] hover:bg-[#b02318] text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors shadow-sm shadow-[#D52B1E]/30"
                         >
                             <WhatsappLogo size={15} weight="fill" />
                             Solicitar Demo
@@ -484,13 +513,13 @@ export function LandingPage() {
             </header>
 
             {/* ── Hero ── */}
-            <section className="relative bg-slate-950 min-h-screen flex items-center pt-16 overflow-hidden">
-                {/* Precision grid background */}
+            <section className="relative bg-[#f3e8d2] min-h-screen flex items-center pt-16 overflow-hidden">
+                {/* Subtle grid */}
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
                         backgroundImage:
-                            'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
+                            'linear-gradient(rgba(120,80,40,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(120,80,40,0.06) 1px, transparent 1px)',
                         backgroundSize: '64px 64px',
                     }}
                 />
@@ -499,21 +528,21 @@ export function LandingPage() {
                     className="absolute inset-0 pointer-events-none"
                     style={{
                         background:
-                            'radial-gradient(ellipse 90% 55% at 50% -5%, rgba(13,148,136,0.1) 0%, transparent 70%)',
+                            'radial-gradient(ellipse 90% 55% at 50% -5%, rgba(213,43,30,0.08) 0%, transparent 70%)',
                     }}
                 />
 
                 <div className="relative max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-14 xl:gap-20 items-center w-full">
                     {/* Left: Copy */}
                     <div className="hero-animate">
-                        <div className="inline-flex items-center gap-2 bg-teal-500/8 border border-teal-500/22 text-teal-400 text-xs font-bold px-4 py-2 rounded-full mb-8 tracking-widest uppercase">
-                            <div className="w-1.5 h-1.5 rounded-full bg-teal-400 live-blip" />
+                        <div className="inline-flex items-center gap-2 bg-[#D52B1E]/[0.08] border border-[#D52B1E]/30 text-[#D52B1E] text-xs font-bold px-4 py-2 rounded-full mb-8 tracking-widest uppercase">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#D52B1E] live-blip" />
                             Sistema de Gestión Electoral — Paraguay
                         </div>
 
                         <h1
                             style={{ fontFamily: FONT_DISPLAY, lineHeight: 1.02, letterSpacing: '-0.035em' }}
-                            className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6"
+                            className="text-5xl sm:text-6xl lg:text-7xl font-black text-[#1c1208] mb-6"
                         >
                             Tecnología que
                             <br />
@@ -521,7 +550,7 @@ export function LandingPage() {
                             <br />
                             <span
                                 style={{
-                                    background: 'linear-gradient(135deg, #5eead4 0%, #14b8a6 55%, #0f766e 100%)',
+                                    background: 'linear-gradient(135deg, #ff6b5b 0%, #D52B1E 45%, #0038A8 100%)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
                                     backgroundClip: 'text',
@@ -531,7 +560,7 @@ export function LandingPage() {
                             </span>
                         </h1>
 
-                        <p className="text-slate-400 text-lg max-w-lg mb-10 leading-relaxed font-medium">
+                        <p className="text-[#5a3e28] text-lg max-w-lg mb-10 leading-relaxed font-medium">
                             SIGELE conecta a tu equipo de campo con los datos electorales en tiempo real. Captación
                             masiva, padrón público y reportes — todo en una plataforma.
                         </p>
@@ -541,7 +570,7 @@ export function LandingPage() {
                                 href={WA_DEMO}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-base px-7 py-3.5 rounded-xl shadow-lg shadow-teal-600/25 transition-all hover:scale-[1.02] hover:shadow-teal-500/35"
+                                className="flex items-center justify-center gap-2 bg-[#D52B1E] hover:bg-[#b02318] text-white font-bold text-base px-7 py-3.5 rounded-xl shadow-lg shadow-[#D52B1E]/25 transition-all hover:scale-[1.02] hover:shadow-[#D52B1E]/35"
                             >
                                 <WhatsappLogo size={20} weight="fill" />
                                 Solicitar Demo Gratis
@@ -550,7 +579,7 @@ export function LandingPage() {
                                 href={WA_INFO}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-semibold text-base px-7 py-3.5 rounded-xl transition-all"
+                                className="flex items-center justify-center gap-2 border border-[#c4a882] hover:border-[#8a6040] text-[#3a2818] hover:text-[#1c1208] font-semibold text-base px-7 py-3.5 rounded-xl transition-all"
                             >
                                 Más información
                                 <ArrowRight size={16} weight="bold" />
@@ -559,15 +588,15 @@ export function LandingPage() {
 
                         <div className="flex flex-wrap gap-x-5 gap-y-2">
                             {['Sin contratos largos', 'Implementación rápida', 'Soporte incluido'].map((t) => (
-                                <span key={t} className="flex items-center gap-1.5 text-slate-500 text-sm font-medium">
-                                    <CheckCircle size={14} weight="fill" className="text-teal-500/70" />
+                                <span key={t} className="flex items-center gap-1.5 text-[#8a6840] text-sm font-medium">
+                                    <CheckCircle size={14} weight="fill" className="text-[#D52B1E]/70" />
                                     {t}
                                 </span>
                             ))}
                         </div>
                     </div>
 
-                    {/* Right: Dashboard preview */}
+                    {/* Right: Dashboard preview — dark panel floating on paper */}
                     <div className="hidden lg:block">
                         <DashboardPreview />
                     </div>
@@ -575,7 +604,7 @@ export function LandingPage() {
             </section>
 
             {/* ── Stats strip ── */}
-            <section className="bg-slate-900 border-y border-slate-800 py-10 px-6">
+            <section className="bg-[#ede0c8] border-y border-[#c4a882]/40 py-10 px-6">
                 <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
                     {stats.map((s) => (
                         <div key={s.label} className="text-center">
@@ -585,12 +614,12 @@ export function LandingPage() {
                                     fontVariantNumeric: 'tabular-nums',
                                     letterSpacing: '-0.03em',
                                 }}
-                                className="text-3xl font-black text-teal-400"
+                                className="text-3xl font-black text-[#D52B1E]"
                             >
                                 {s.value}
                             </p>
-                            <div className="w-6 h-px bg-teal-500/35 mx-auto my-2" />
-                            <p className="text-slate-400 text-sm font-medium">{s.label}</p>
+                            <div className="w-6 h-px bg-[#D52B1E]/35 mx-auto my-2" />
+                            <p className="text-[#6b5035] text-sm font-medium">{s.label}</p>
                         </div>
                     ))}
                 </div>
@@ -601,18 +630,18 @@ export function LandingPage() {
                 <div className="max-w-6xl mx-auto">
                     <div className="max-w-2xl mb-16">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-px bg-teal-600" />
-                            <p className="text-teal-600 font-bold text-xs uppercase tracking-widest">Funcionalidades</p>
+                            <div className="w-8 h-px bg-[#D52B1E]" />
+                            <p className="text-[#D52B1E] font-bold text-xs uppercase tracking-widest">Funcionalidades</p>
                         </div>
                         <h2
                             style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
-                            className="text-4xl font-black text-slate-900 mb-4"
+                            className="text-4xl font-black text-[#1c1208] mb-4"
                         >
                             Todo lo que necesita
                             <br />
                             tu campaña
                         </h2>
-                        <p className="text-slate-500 text-lg leading-relaxed">
+                        <p className="text-[#6b5035] text-lg leading-relaxed">
                             Una plataforma completa, pensada para la realidad del trabajo político en Paraguay.
                         </p>
                     </div>
@@ -622,28 +651,28 @@ export function LandingPage() {
                             <div
                                 key={f.title}
                                 className={`group p-6 border rounded-xl transition-all duration-200 ${'highlight' in f && f.highlight
-                                    ? 'sm:col-span-2 lg:col-span-3 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 hover:from-teal-500 hover:to-teal-600 flex flex-col sm:flex-row sm:items-center gap-5'
-                                    : 'bg-slate-50 hover:bg-white border-slate-200 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-50'
+                                    ? 'sm:col-span-2 lg:col-span-3 bg-gradient-to-r from-[#D52B1E] to-[#b02318] border-[#D52B1E] hover:from-[#b02318] hover:to-[#8B0000] flex flex-col sm:flex-row sm:items-center gap-5'
+                                    : 'bg-[#faf5eb] hover:bg-white border-[#c4a882]/40 hover:border-[#D52B1E]/30 hover:shadow-xl hover:shadow-red-50'
                                 }`}
                             >
                                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200 ${'highlight' in f && f.highlight
                                     ? 'bg-white/15'
-                                    : 'bg-teal-50 group-hover:bg-teal-600 mb-5'
+                                    : 'bg-[#f5e8d5] group-hover:bg-[#D52B1E] mb-5'
                                 }`}>
                                     <f.icon
                                         size={20}
                                         weight="bold"
-                                        className={`${'highlight' in f && f.highlight ? 'text-white' : 'text-teal-600 group-hover:text-white'} transition-colors duration-200`}
+                                        className={`${'highlight' in f && f.highlight ? 'text-white' : 'text-[#D52B1E] group-hover:text-white'} transition-colors duration-200`}
                                     />
                                 </div>
                                 <div>
                                     <h3
                                         style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                                        className={`font-bold mb-2 text-base ${'highlight' in f && f.highlight ? 'text-white' : 'text-slate-900'}`}
+                                        className={`font-bold mb-2 text-base ${'highlight' in f && f.highlight ? 'text-white' : 'text-[#1c1208]'}`}
                                     >
                                         {f.title}
                                     </h3>
-                                    <p className={`text-sm leading-relaxed ${'highlight' in f && f.highlight ? 'text-teal-100' : 'text-slate-500'}`}>{f.description}</p>
+                                    <p className={`text-sm leading-relaxed ${'highlight' in f && f.highlight ? 'text-red-100' : 'text-[#6b5035]'}`}>{f.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -652,26 +681,25 @@ export function LandingPage() {
             </section>
 
             {/* ── Operator in the field ── */}
-            <section className="py-24 px-6 bg-slate-950">
+            <section className="py-24 px-6 bg-[#f3e8d2]">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    {/* Phone mockup */}
+                    {/* Phone mockup — dark panel on paper */}
                     <div className="flex justify-center lg:justify-end order-2 lg:order-1">
                         <OperatorPhoneMockup />
                     </div>
 
-                    {/* Text */}
                     <div className="order-1 lg:order-2">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-px bg-teal-400" />
-                            <p className="text-teal-400 font-bold text-xs uppercase tracking-widest">Panel Operativo</p>
+                            <div className="w-8 h-px bg-[#D52B1E]" />
+                            <p className="text-[#D52B1E] font-bold text-xs uppercase tracking-widest">Panel Operativo</p>
                         </div>
                         <h2
                             style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
-                            className="text-4xl font-black text-white mb-5"
+                            className="text-4xl font-black text-[#1c1208] mb-5"
                         >
                             El campo, en tiempo real
                         </h2>
-                        <p className="text-slate-400 text-lg leading-relaxed mb-8 font-medium">
+                        <p className="text-[#5a3e28] text-lg leading-relaxed mb-8 font-medium">
                             El operador busca al elector por cédula directamente en el padrón,
                             completa los datos logísticos y registra la captación en segundos —
                             desde cualquier celular, sin instalar nada.
@@ -684,8 +712,8 @@ export function LandingPage() {
                                 'Indicación de si requiere transporte el Día D',
                                 'Exportación a Excel y PDF con un clic',
                             ].map((item) => (
-                                <li key={item} className="flex items-start gap-3 text-slate-300 text-sm font-medium">
-                                    <CheckCircle size={16} weight="fill" className="text-teal-500 shrink-0 mt-0.5" />
+                                <li key={item} className="flex items-start gap-3 text-[#3a2818] text-sm font-medium">
+                                    <CheckCircle size={16} weight="fill" className="text-[#D52B1E] shrink-0 mt-0.5" />
                                     {item}
                                 </li>
                             ))}
@@ -695,28 +723,27 @@ export function LandingPage() {
             </section>
 
             {/* ── Mapa Georreferenciado Spotlight ── */}
-            <section className="py-24 px-6 bg-slate-900 border-y border-slate-800">
+            <section className="py-24 px-6 bg-[#ede0c8] border-y border-[#c4a882]/40">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                    {/* Left: text */}
                     <div>
-                        <div className="inline-flex items-center gap-2 bg-teal-500/10 border border-teal-500/25 text-teal-400 text-xs font-bold px-4 py-2 rounded-full mb-6 tracking-widest uppercase">
-                            <div className="w-1.5 h-1.5 rounded-full bg-teal-400 live-blip" />
+                        <div className="inline-flex items-center gap-2 bg-[#D52B1E]/10 border border-[#D52B1E]/25 text-[#D52B1E] text-xs font-bold px-4 py-2 rounded-full mb-6 tracking-widest uppercase">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#D52B1E] live-blip" />
                             Nuevo
                         </div>
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-px bg-teal-400" />
-                            <p className="text-teal-400 font-bold text-xs uppercase tracking-widest">Geolocalización</p>
+                            <div className="w-8 h-px bg-[#D52B1E]" />
+                            <p className="text-[#D52B1E] font-bold text-xs uppercase tracking-widest">Geolocalización</p>
                         </div>
                         <h2
                             style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
-                            className="text-4xl font-black text-white mb-5"
+                            className="text-4xl font-black text-[#1c1208] mb-5"
                         >
                             Cada elector,
                             <br />
                             en el mapa.
                         </h2>
-                        <p className="text-slate-400 text-lg leading-relaxed mb-8 font-medium">
+                        <p className="text-[#5a3e28] text-lg leading-relaxed mb-8 font-medium">
                             El operador marca la ubicación exacta del elector directamente desde su celular al
                             momento de la captación. El coordinador ve todos los pines georreferenciados en tiempo
                             real desde su panel.
@@ -728,73 +755,66 @@ export function LandingPage() {
                                 'El panel muestra todos los pines con nombre y operador',
                                 'Zoom y centrado automático sobre el área de captación',
                             ].map((item) => (
-                                <li key={item} className="flex items-start gap-3 text-slate-300 text-sm font-medium">
-                                    <CheckCircle size={16} weight="fill" className="text-teal-500 shrink-0 mt-0.5" />
+                                <li key={item} className="flex items-start gap-3 text-[#3a2818] text-sm font-medium">
+                                    <CheckCircle size={16} weight="fill" className="text-[#D52B1E] shrink-0 mt-0.5" />
                                     {item}
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Right: live Leaflet map in dark frame */}
+                    {/* Map card — clean, no device frame */}
                     <div>
                         <div
                             style={{
-                                background: 'linear-gradient(145deg, #071a18 0%, #050e0d 100%)',
-                                border: '1px solid rgba(20,184,166,0.22)',
-                                borderRadius: '18px',
-                                padding: '14px',
-                                boxShadow: '0 0 0 1px rgba(20,184,166,0.07), 0 48px 96px rgba(0,0,0,0.65)',
+                                border: '1px solid rgba(180,130,70,0.28)',
+                                borderRadius: '16px',
+                                overflow: 'hidden',
+                                boxShadow: '0 4px 24px rgba(100,60,20,0.1)',
                             }}
                         >
-                            {/* Window chrome */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
-                                {[0, 1, 2].map((i) => (
-                                    <div key={i} style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
-                                ))}
-                                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)', marginLeft: '6px' }} />
-                                <span style={SL(0.45)}>Mapa de Electores</span>
-                            </div>
-
-                            {/* Map container */}
-                            <div style={{ height: '340px', borderRadius: '10px', overflow: 'hidden', position: 'relative' }}>
-                                <MapaElectoresPreview />
-
-                                {/* Floating badge */}
-                                <div style={{
-                                    position: 'absolute', top: '10px', right: '10px', zIndex: 1000,
-                                    background: 'rgba(7,26,24,0.92)', border: '1px solid rgba(20,184,166,0.35)',
-                                    borderRadius: '8px', padding: '6px 11px',
-                                    display: 'flex', alignItems: 'center', gap: '7px',
-                                    backdropFilter: 'blur(8px)',
-                                }}>
-                                    <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#14b8a6' }} />
-                                    <span style={{ fontSize: '11px', fontWeight: '700', color: '#2dd4bf', fontFamily: FONT_DISPLAY }}>
-                                        {MOCK_MAP_PINS.length} ubicaciones
+                            {/* Header */}
+                            <div style={{
+                                background: '#fefaf4',
+                                borderBottom: '1px solid rgba(180,130,70,0.2)',
+                                padding: '10px 14px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            }}>
+                                <span style={{ fontSize: '11px', fontWeight: '700', color: '#3a2818', fontFamily: FONT_DISPLAY, letterSpacing: '-0.01em' }}>
+                                    Mapa de Electores
+                                </span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <div className="live-blip" style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#D52B1E' }} />
+                                    <span style={{ fontSize: '10px', fontWeight: '700', color: '#D52B1E', fontFamily: FONT_DISPLAY }}>
+                                        {MOCK_MAP_PINS.length} ubicaciones activas
                                     </span>
                                 </div>
                             </div>
+
+                            {/* Mapa */}
+                            <div style={{ height: '340px', position: 'relative' }}>
+                                <MapaElectoresPreview />
+                            </div>
                         </div>
 
-                        {/* Caption */}
-                        <p className="text-slate-600 text-xs font-medium text-center mt-4">
-                            Vista real del panel de coordinadores — datos de demostración
+                        <p className="text-[#9a7a55] text-xs font-medium text-center mt-4">
+                            Vista del panel de coordinadores — datos de demostración
                         </p>
                     </div>
                 </div>
             </section>
 
             {/* ── How it works ── */}
-            <section className="py-24 px-6 bg-slate-950">
+            <section className="py-24 px-6 bg-[#f3e8d2]">
                 <div className="max-w-5xl mx-auto">
                     <div className="max-w-2xl mb-16">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-px bg-teal-400" />
-                            <p className="text-teal-400 font-bold text-xs uppercase tracking-widest">¿Cómo funciona?</p>
+                            <div className="w-8 h-px bg-[#0038A8]" />
+                            <p className="text-[#0038A8] font-bold text-xs uppercase tracking-widest">¿Cómo funciona?</p>
                         </div>
                         <h2
                             style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
-                            className="text-4xl font-black text-white"
+                            className="text-4xl font-black text-[#1c1208]"
                         >
                             Tres pasos para digitalizar
                             <br />
@@ -806,21 +826,21 @@ export function LandingPage() {
                         {steps.map((step, i) => (
                             <div key={step.number} className="relative">
                                 {i < steps.length - 1 && (
-                                    <div className="hidden md:block absolute top-7 left-[calc(50%+36px)] w-[calc(100%-72px)] border-t border-dashed border-slate-700" />
+                                    <div className="hidden md:block absolute top-7 left-[calc(50%+36px)] w-[calc(100%-72px)] border-t border-dashed border-[#c4a882]/50" />
                                 )}
                                 <div
                                     style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.04em' }}
-                                    className="text-7xl font-black text-teal-500/15 leading-none mb-5 select-none"
+                                    className="text-7xl font-black text-[#0038A8]/25 leading-none mb-5 select-none"
                                 >
                                     {step.number}
                                 </div>
                                 <h3
                                     style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                                    className="font-bold text-white text-lg mb-3"
+                                    className="font-bold text-[#1c1208] text-lg mb-3"
                                 >
                                     {step.title}
                                 </h3>
-                                <p className="text-slate-400 text-sm leading-relaxed">{step.description}</p>
+                                <p className="text-[#6b5035] text-sm leading-relaxed">{step.description}</p>
                             </div>
                         ))}
                     </div>
@@ -828,16 +848,16 @@ export function LandingPage() {
             </section>
 
             {/* ── For who ── */}
-            <section className="py-24 px-6 bg-slate-50">
+            <section className="py-24 px-6 bg-[#faf5eb]">
                 <div className="max-w-5xl mx-auto">
                     <div className="max-w-2xl mb-16">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-px bg-teal-600" />
-                            <p className="text-teal-600 font-bold text-xs uppercase tracking-widest">¿Para quién?</p>
+                            <div className="w-8 h-px bg-[#D52B1E]" />
+                            <p className="text-[#D52B1E] font-bold text-xs uppercase tracking-widest">¿Para quién?</p>
                         </div>
                         <h2
                             style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.03em' }}
-                            className="text-4xl font-black text-slate-900"
+                            className="text-4xl font-black text-[#1c1208]"
                         >
                             Pensado para todos
                             <br />
@@ -885,24 +905,24 @@ export function LandingPage() {
                                 key={card.role}
                                 className={`p-7 rounded-xl border-2 transition-all ${
                                     card.featured
-                                        ? 'bg-teal-600 border-teal-500'
-                                        : 'bg-white border-slate-200 hover:border-teal-200 hover:shadow-lg hover:shadow-teal-50'
+                                        ? 'bg-[#D52B1E] border-[#b02318]'
+                                        : 'bg-white border-[#c4a882]/40 hover:border-[#D52B1E]/30 hover:shadow-lg hover:shadow-red-50'
                                 }`}
                             >
                                 <div
                                     className={`w-11 h-11 rounded-lg flex items-center justify-center mb-5 ${
-                                        card.featured ? 'bg-white/15' : 'bg-slate-100'
+                                        card.featured ? 'bg-white/15' : 'bg-[#ede0c8]'
                                     }`}
                                 >
                                     <card.icon
                                         size={22}
                                         weight="bold"
-                                        className={card.featured ? 'text-white' : 'text-slate-700'}
+                                        className={card.featured ? 'text-white' : 'text-[#3a2818]'}
                                     />
                                 </div>
                                 <h3
                                     style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                                    className={`font-bold text-lg mb-5 ${card.featured ? 'text-white' : 'text-slate-900'}`}
+                                    className={`font-bold text-lg mb-5 ${card.featured ? 'text-white' : 'text-[#1c1208]'}`}
                                 >
                                     {card.role}
                                 </h3>
@@ -911,13 +931,13 @@ export function LandingPage() {
                                         <li
                                             key={p}
                                             className={`flex items-start gap-2.5 text-sm font-medium ${
-                                                card.featured ? 'text-teal-100' : 'text-slate-600'
+                                                card.featured ? 'text-red-100' : 'text-[#5a3e28]'
                                             }`}
                                         >
                                             <CheckCircle
                                                 size={15}
                                                 weight="fill"
-                                                className={`shrink-0 mt-0.5 ${card.featured ? 'text-teal-200' : 'text-teal-500'}`}
+                                                className={`shrink-0 mt-0.5 ${card.featured ? 'text-red-200' : 'text-[#D52B1E]'}`}
                                             />
                                             {p}
                                         </li>
@@ -929,12 +949,12 @@ export function LandingPage() {
                 </div>
             </section>
 
-            {/* ── Pull quote ── */}
-            <section className="py-20 px-6 bg-slate-900 border-y border-slate-800">
+            {/* ── Pull quote — warm dark ink ── */}
+            <section className="py-20 px-6 bg-[#1c1208] border-y border-[#3d2a18]">
                 <div className="max-w-4xl mx-auto">
                     <div
                         style={{ fontFamily: 'Georgia, serif', lineHeight: 0.8 }}
-                        className="text-8xl font-black text-teal-500/18 select-none mb-2"
+                        className="text-8xl font-black text-[#0038A8]/20 select-none mb-2"
                     >
                         "
                     </div>
@@ -946,8 +966,8 @@ export function LandingPage() {
                         equipo.
                     </blockquote>
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-px bg-teal-500" />
-                        <p className="text-teal-400 font-bold text-xs uppercase tracking-widest">
+                        <div className="w-8 h-px bg-[#0038A8]" />
+                        <p className="text-[#6699ff] font-bold text-xs uppercase tracking-widest">
                             SIGELE — Tecnología para campañas que ganan
                         </p>
                     </div>
@@ -955,15 +975,14 @@ export function LandingPage() {
             </section>
 
             {/* ── Final CTA ── */}
-            <section className="py-24 px-6 bg-slate-950">
+            <section className="py-24 px-6 bg-[#f3e8d2]">
                 <div className="max-w-4xl mx-auto">
                     <div
                         className="relative rounded-2xl p-12 text-center overflow-hidden"
                         style={{
-                            background: 'linear-gradient(135deg, #115e59 0%, #0f766e 50%, #0d9488 100%)',
+                            background: 'linear-gradient(135deg, #8B0000 0%, #D52B1E 40%, #0038A8 80%, #001f6e 100%)',
                         }}
                     >
-                        {/* Inner grid */}
                         <div
                             className="absolute inset-0 pointer-events-none"
                             style={{
@@ -973,7 +992,7 @@ export function LandingPage() {
                             }}
                         />
                         <div className="relative">
-                            <ShieldCheck size={44} weight="fill" className="text-teal-200 mx-auto mb-6" />
+                            <ShieldCheck size={44} weight="fill" className="text-white/80 mx-auto mb-6" />
                             <h2
                                 style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.035em' }}
                                 className="text-4xl font-black text-white mb-4"
@@ -982,7 +1001,7 @@ export function LandingPage() {
                                 <br />
                                 tu campaña?
                             </h2>
-                            <p className="text-teal-200 text-lg mb-10 font-medium max-w-xl mx-auto leading-relaxed">
+                            <p className="text-white/75 text-lg mb-10 font-medium max-w-xl mx-auto leading-relaxed">
                                 Contáctanos hoy por WhatsApp. Te mostramos la plataforma en funcionamiento y diseñamos
                                 juntos el plan para tu campaña.
                             </p>
@@ -991,7 +1010,7 @@ export function LandingPage() {
                                     href={WA_DEMO}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 bg-white hover:bg-teal-50 text-teal-700 font-bold text-base px-8 py-3.5 rounded-xl transition-colors shadow-lg"
+                                    className="flex items-center justify-center gap-2 bg-white hover:bg-red-50 text-[#D52B1E] font-bold text-base px-8 py-3.5 rounded-xl transition-colors shadow-lg"
                                 >
                                     <WhatsappLogo size={20} weight="fill" />
                                     Solicitar Demo
@@ -1011,20 +1030,13 @@ export function LandingPage() {
                 </div>
             </section>
 
-            {/* ── Footer ── */}
-            <footer className="bg-slate-950 border-t border-slate-800/80 py-10 px-6">
+            {/* ── Footer — warm dark ink ── */}
+            <footer className="bg-[#1c1208] border-t border-[#3d2a18]/80 py-10 px-6">
                 <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-2.5">
-                        <ShieldCheck size={20} weight="fill" className="text-teal-400" />
-                        <span
-                            style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.02em' }}
-                            className="font-black text-white"
-                        >
-                            SIGELE
-                        </span>
-                        <span className="text-slate-600 text-sm ml-1">Gestión Electoral Digital</span>
+                    <div className="flex items-center">
+                        <img src="/logo_letras.png" alt="SIGELE" className="h-7 w-auto" />
                     </div>
-                    <div className="flex items-center gap-6 text-sm font-medium text-slate-500">
+                    <div className="flex items-center gap-6 text-sm font-medium text-[#9a7a55]">
                         <button onClick={() => navigate('/padron')} className="hover:text-white transition-colors">
                             Consultar Padrón
                         </button>
@@ -1040,7 +1052,7 @@ export function LandingPage() {
                             Contacto
                         </a>
                     </div>
-                    <p className="text-slate-700 text-xs">© {new Date().getFullYear()} SIGELE. Paraguay.</p>
+                    <p className="text-[#4a3020] text-xs">© {new Date().getFullYear()} SIGELE. Paraguay.</p>
                 </div>
             </footer>
         </div>
