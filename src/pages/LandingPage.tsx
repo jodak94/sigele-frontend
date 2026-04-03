@@ -138,12 +138,6 @@ const MOCK_COORDS = [
     { name: 'M. Villalba',  operadores: 3, electores: 448, mesa: 67,  pct: 73,  leader: false },
 ];
 
-const SL = (opacity = 0.55) => ({
-    fontSize: '9px',
-    color: `rgba(148,163,184,${opacity})`,
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.1em',
-});
 
 const SL_D = (op = 0.5) => ({ fontSize: '9px', color: `rgba(90,60,30,${op})`, textTransform: 'uppercase' as const, letterSpacing: '0.1em' });
 
