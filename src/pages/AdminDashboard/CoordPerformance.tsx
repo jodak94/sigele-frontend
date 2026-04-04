@@ -38,7 +38,7 @@ export function CoordPerformance() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
                 <h2 className="text-lg font-extrabold text-black flex items-center">
-                    <ShieldCheck size={20} weight="fill" className="mr-2 text-red-600" />
+                    <ShieldCheck size={20} weight="fill" className="mr-2 text-primary" />
                     Desempeño por Coordinador (Admin Zonal)
                 </h2>
                 <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-lg">
@@ -50,7 +50,7 @@ export function CoordPerformance() {
                     const percent = (coord.totalElectores / maxElectores) * 100;
                     const isLeader = idx === 0;
                     const isLast = idx === sorted.length - 1 && sorted.length > 1;
-                    const borderColor = isLeader ? 'bg-green-500' : isLast ? 'bg-red-500' : 'bg-gray-400';
+                    const borderColor = isLeader ? 'bg-green-500' : isLast ? 'bg-primary' : 'bg-gray-400';
 
                     return (
                         <div
@@ -75,7 +75,7 @@ export function CoordPerformance() {
                                         </div>
                                     </div>
                                     <div className="text-right shrink-0 ml-4">
-                                        <span className="block text-3xl font-black text-red-600 leading-none">
+                                        <span className="block text-3xl font-black text-primary leading-none">
                                             {coord.totalElectores}
                                         </span>
                                         <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
@@ -99,7 +99,7 @@ export function CoordPerformance() {
                                 {/* Progress bar */}
                                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                                     <div
-                                        className="bg-red-600 h-2 rounded-full transition-all duration-1000"
+                                        className="bg-primary h-2 rounded-full transition-all duration-1000"
                                         style={{ width: `${percent}%` }}
                                     />
                                 </div>

@@ -123,7 +123,7 @@ function TabPlanilla() {
                     {/* Autocomplete */}
                     <div className="relative flex-1 min-w-0" ref={wrapperRef}>
                         <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                            Operador <span className="text-red-600">*</span>
+                            Operador <span className="text-primary">*</span>
                         </label>
                         <div className="relative">
                             <input
@@ -135,11 +135,12 @@ function TabPlanilla() {
                                 }}
                                 onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
                                 placeholder="Buscar operador por nombre..."
-                                className="w-full pl-10 pr-9 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                className="w-full pl-10 pr-9 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-sm font-bold outline-none input-focus-primary"
                             />
                             <MagnifyingGlass
                                 size={16}
-                                className={`absolute left-3 top-1/2 -translate-y-1/2 ${isSearching ? 'text-red-500 animate-pulse' : 'text-gray-400'}`}
+                                className={`absolute left-3 top-1/2 -translate-y-1/2 ${isSearching ? 'animate-pulse' : 'text-gray-400'}`}
+                                style={isSearching ? { color: 'var(--primary)' } : undefined}
                             />
                             {query && (
                                 <button
@@ -172,7 +173,7 @@ function TabPlanilla() {
                     <button
                         onClick={handleGenerar}
                         disabled={!selected || isLoadingReport}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold text-white bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold btn-primary shrink-0"
                     >
                         <FileText size={16} weight="bold" />
                         {isLoadingReport ? 'Generando...' : 'Generar Reporte'}
@@ -214,13 +215,13 @@ function TabPlanilla() {
                                     disabled={exporting !== null}
                                     className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
                                 >
-                                    <FilePdf size={15} weight="bold" className="text-red-600" />
+                                    <FilePdf size={15} weight="bold" className="text-primary" />
                                     {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
                                 </button>
                             </div>
                             <div className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-center">
                                 <p className="text-xs font-bold text-gray-500 uppercase">Total en Lista</p>
-                                <p className="text-3xl font-black text-red-600">{records.length}</p>
+                                <p className="text-3xl font-black text-primary">{records.length}</p>
                             </div>
                         </div>
                     </div>
@@ -265,7 +266,7 @@ function TabPlanilla() {
 function DiaDLocalTable({ local }: { local: ReporteDiaDLocal }) {
     return (
         <div>
-            <div className="bg-red-600 text-white px-4 py-2.5 font-black uppercase tracking-wider text-sm rounded-t-lg">
+            <div className="text-white px-4 py-2.5 font-black uppercase tracking-wider text-sm rounded-t-lg" style={{ background: 'var(--primary)' }}>
                 LOCAL: {local.localVotacion}
             </div>
             <div className="overflow-x-auto border border-gray-200 rounded-b-lg">
@@ -279,14 +280,14 @@ function DiaDLocalTable({ local }: { local: ReporteDiaDLocal }) {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {local.electores.map((r, i) => (
-                            <tr key={`${r.nroCedula}-${i}`} className={r.requiereTransporte ? 'bg-red-50' : 'bg-white'}>
+                            <tr key={`${r.nroCedula}-${i}`} style={r.requiereTransporte ? { background: 'rgba(var(--primary-rgb), 0.05)' } : { background: 'white' }}>
                                 <td className="px-3 py-2 font-black text-base">{r.mesa}</td>
                                 <td className="px-3 py-2 font-black">{r.orden}</td>
                                 <td className="px-3 py-2">{r.nroCedula}</td>
-                                <td className={`px-3 py-2 font-bold ${r.requiereTransporte ? 'text-red-900' : ''}`}>{r.nombreApellido}</td>
+                                <td className="px-3 py-2 font-bold" style={r.requiereTransporte ? { color: 'var(--primary-darker)' } : undefined}>{r.nombreApellido}</td>
                                 <td className="px-3 py-2 font-bold">{r.telefono}</td>
-                                <td className={`px-3 py-2 ${r.requiereTransporte ? 'font-bold text-red-700' : 'text-gray-500'}`}>{r.direccionRecogida ?? '—'}</td>
-                                <td className={`px-3 py-2 text-center font-black ${r.requiereTransporte ? 'text-red-600' : 'text-gray-500'}`}>
+                                <td className="px-3 py-2" style={r.requiereTransporte ? { fontWeight: 'bold', color: 'var(--primary-dark)' } : { color: '#6b7280' }}>{r.direccionRecogida ?? '—'}</td>
+                                <td className="px-3 py-2 text-center font-black" style={{ color: r.requiereTransporte ? 'var(--primary)' : '#6b7280' }}>
                                     {r.requiereTransporte ? 'SÍ' : 'NO'}
                                 </td>
                                 <td className="px-3 py-2">{r.operadorResponsable}</td>
@@ -355,7 +356,7 @@ function TabDiaD() {
                         disabled={exporting !== null}
                         className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
                     >
-                        <FilePdf size={15} weight="bold" className="text-red-600" />
+                        <FilePdf size={15} weight="bold" className="text-primary" />
                         {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
                     </button>
                     <span className="bg-gray-100 text-gray-700 text-sm font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
@@ -463,7 +464,7 @@ function TabMesas() {
                         disabled={exporting !== null}
                         className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
                     >
-                        <FilePdf size={15} weight="bold" className="text-red-600" />
+                        <FilePdf size={15} weight="bold" className="text-primary" />
                         {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
                     </button>
                     <span className="bg-gray-100 text-gray-700 text-sm font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
@@ -518,7 +519,7 @@ function ReporteResumenTable({ data, onExport, exporting }: {
                         disabled={exporting !== null}
                         className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
                     >
-                        <FilePdf size={15} weight="bold" className="text-red-600" />
+                        <FilePdf size={15} weight="bold" className="text-primary" />
                         {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
                     </button>
                     <span className="bg-gray-100 text-gray-700 text-sm font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
@@ -644,7 +645,7 @@ function TabCoordinador() {
                     <div className="flex flex-col sm:flex-row gap-3 items-end">
                         <div className="flex-1 min-w-0">
                             <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                                Coordinador <span className="text-red-600">*</span>
+                                Coordinador <span className="text-primary">*</span>
                             </label>
                             <CustomSelect
                                 value={selectedCoordId}
@@ -661,7 +662,7 @@ function TabCoordinador() {
                         <button
                             onClick={handleGenerar}
                             disabled={!selectedCoordId || isLoadingReport}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold text-white bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold btn-primary shrink-0"
                         >
                             <FileText size={16} weight="bold" />
                             {isLoadingReport ? 'Generando...' : 'Generar Reporte'}
@@ -738,7 +739,7 @@ function TabStats() {
                         {isLoading ? (
                             <div className="h-10 bg-gray-200 rounded animate-pulse w-2/3" />
                         ) : (
-                            <p className={`text-3xl font-extrabold ${accent ? 'text-red-600' : 'text-black'}`}>
+                            <p className={`text-3xl font-extrabold ${accent ? 'text-primary' : 'text-black'}`}>
                                 {value ?? '—'}
                             </p>
                         )}
@@ -775,7 +776,7 @@ function TabStats() {
                                     </div>
                                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-red-600 rounded-full"
+                                            className="h-full bg-primary rounded-full"
                                             style={{ width: `${(item.totalBusquedas / maxBusquedas) * 100}%` }}
                                         />
                                     </div>
@@ -818,7 +819,12 @@ function TabStats() {
                                         </td>
                                         <td className="px-5 py-3 font-extrabold text-black">{c.cedula}</td>
                                         <td className="px-5 py-3">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.encontrado ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'}`}>
+                                            <span
+                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+                                                style={c.encontrado
+                                                    ? { background: '#dcfce7', color: '#166534' }
+                                                    : { background: 'rgba(var(--primary-rgb), 0.1)', color: 'var(--primary-darker)' }}
+                                            >
                                                 {c.encontrado ? 'Encontrado' : 'No encontrado'}
                                             </span>
                                         </td>
@@ -903,7 +909,7 @@ function TabZonas() {
                                 </div>
                                 <div className="ml-9 h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-red-600 rounded-full transition-all duration-500"
+                                        className="h-full bg-primary rounded-full transition-all duration-500"
                                         style={{ width: `${pct}%` }}
                                     />
                                 </div>
@@ -963,7 +969,7 @@ export function ReportesPage() {
                     {TABS.map((tab) => {
                         const isActive = activeTab === tab.id;
                         let activeClasses = 'bg-black text-white';
-                        if (isActive && tab.id === 'diad') activeClasses = 'bg-red-600 text-white';
+                        if (isActive && tab.id === 'diad') activeClasses = 'bg-primary text-white';
                         return (
                             <button
                                 key={tab.id}

@@ -49,7 +49,7 @@ export function OperatorsPage() {
             {/* Header */}
             <div className="mb-8">
                 <div className="flex items-center gap-3 mb-1">
-                    <Users size={28} className="text-red-600" weight="fill" />
+                    <Users size={28} className="text-primary" weight="fill" />
                     <h1 className="text-2xl font-extrabold text-gray-900">
                         {user?.role === 'Admin' ? 'Todos los Operadores' : 'Mis Operadores'}
                     </h1>
@@ -61,7 +61,7 @@ export function OperatorsPage() {
 
             {/* Error */}
             {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 font-medium">
+                <div className="mb-6 p-4 rounded-2xl font-medium" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' }}>
                     {error}
                 </div>
             )}
@@ -103,7 +103,7 @@ export function OperatorsPage() {
                                 <tr key={op.id} className="hover:bg-gray-50 border-b border-gray-100">
                                     <td className="px-6 py-4">
                                         <div className="font-extrabold text-black">{op.fullName}</div>
-                                        <div className="text-xs font-bold uppercase text-red-600">{op.role}</div>
+                                        <div className="text-xs font-bold uppercase text-primary">{op.role}</div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="text-sm font-bold text-gray-700">{op.phone}</div>

@@ -42,10 +42,10 @@ export function LoginPage(){
             <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl min-h-[750px] border border-gray-100">
 
                 {/* Sidebar Candidato */}
-                <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center bg-gradient-to-br from-red-600 via-red-700 to-red-800 p-10 text-white relative overflow-hidden">
+                <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center sidebar-primary p-10 text-white relative overflow-hidden">
                     {/* Decorative blobs */}
-                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-500 rounded-full mix-blend-multiply blur-3xl opacity-40 pointer-events-none" />
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-red-900 rounded-full mix-blend-multiply blur-3xl opacity-60 pointer-events-none" />
+                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full mix-blend-multiply blur-3xl opacity-40 pointer-events-none" style={{ background: 'var(--primary)' }} />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full mix-blend-multiply blur-3xl opacity-60 pointer-events-none" style={{ background: 'var(--primary-darker)' }} />
 
                     <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
                         {/* Candidate photo card */}
@@ -60,7 +60,7 @@ export function LoginPage(){
                         <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
                             {candidateName}
                         </h2>
-                        <p className="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">
+                        <p className="font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm" style={{ color: 'rgba(255,255,255,0.72)' }}>
                             {candidateTitle.toUpperCase()}
                         </p>
                         <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
@@ -82,7 +82,7 @@ export function LoginPage(){
 
                     <form onSubmit={handleLogin} className="space-y-5 max-w-sm mx-auto w-full">
                         {error && (
-                            <div className="p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm font-medium">
+                            <div className="p-4 rounded-2xl text-sm font-medium" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' }}>
                                 {error}
                             </div>
                         )}
@@ -98,7 +98,7 @@ export function LoginPage(){
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium text-gray-700"
+                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm outline-none font-medium text-gray-700 input-focus-primary"
                                 />
                             </div>
                             <div className="relative">
@@ -111,7 +111,7 @@ export function LoginPage(){
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium text-gray-700"
+                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm outline-none font-medium text-gray-700 input-focus-primary"
                                 />
                             </div>
                         </div>
@@ -120,11 +120,11 @@ export function LoginPage(){
                             <label className="flex items-center cursor-pointer">
                                 <input
                                     type="checkbox"
-                                    className="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                    className="w-4 h-4 rounded border-gray-300 checkbox-primary"
                                 />
                                 <span className="ml-2 text-sm font-bold text-gray-400">Recordarme</span>
                             </label>
-                            <a href="#" className="text-sm text-red-600 hover:text-red-800 font-bold">
+                            <a href="#" className="text-sm font-bold text-primary hover:opacity-75">
                                 ¿Olvidó su contraseña?
                             </a>
                         </div>
@@ -132,7 +132,7 @@ export function LoginPage(){
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 rounded-2xl shadow-md text-base font-bold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                            className="w-full py-4 rounded-2xl shadow-md text-base font-bold btn-primary"
                         >
                             {isLoading ? 'Ingresando...' : 'Ingresar'}
                         </button>
@@ -142,7 +142,7 @@ export function LoginPage(){
                         <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">
                             {candidateName} - {candidateTitle}
                         </p>
-                        <p className="text-sm text-red-700 font-black uppercase tracking-widest">
+                        <p className="text-sm font-black uppercase tracking-widest text-primary">
                             San Lorenzo
                         </p>
                         <button
@@ -150,7 +150,7 @@ export function LoginPage(){
                             onClick={() => navigate('/')}
                             className="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full"
                         >
-                            <MagnifyingGlass size={18} className="text-red-600 mr-2" />
+                            <MagnifyingGlass size={18} className="text-primary mr-2" />
                             Consultar Padrón Público
                         </button>
                     </div>

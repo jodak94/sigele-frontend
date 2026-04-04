@@ -29,7 +29,7 @@ export function RankingCards() {
             {/* Ranking Cargas */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                 <h2 className="text-lg font-extrabold text-black mb-6 flex items-center">
-                    <ChartBar size={20} weight="fill" className="mr-2 text-red-600" />
+                    <ChartBar size={20} weight="fill" className="mr-2 text-primary" />
                     Ranking Cargas
                 </h2>
                 {isLoadingRanking ? (
@@ -53,13 +53,13 @@ export function RankingCards() {
                                             </span>
                                             <span className="truncate">{op.fullName}</span>
                                         </span>
-                                        <span className="font-extrabold text-red-600 text-sm shrink-0 ml-2">
+                                        <span className="font-extrabold text-primary text-sm shrink-0 ml-2">
                                             {op.totalElectores}
                                         </span>
                                     </div>
                                     <div className="w-full bg-gray-100 rounded-full h-2.5">
                                         <div
-                                            className="bg-red-600 h-2.5 rounded-full transition-all duration-1000"
+                                            className="bg-primary h-2.5 rounded-full transition-all duration-1000"
                                             style={{ width: `${percent}%` }}
                                         />
                                     </div>
@@ -73,7 +73,7 @@ export function RankingCards() {
             {/* Electores por Zona (Seccionales) */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
                 <h2 className="text-lg font-extrabold text-black mb-6 flex items-center">
-                    <MapPin size={20} weight="fill" className="mr-2 text-red-600" />
+                    <MapPin size={20} weight="fill" className="mr-2 text-primary" />
                     Electores por Zona (Seccionales)
                 </h2>
                 {isLoadingSeccionales ? (

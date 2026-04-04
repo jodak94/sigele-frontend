@@ -67,7 +67,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                                 type="checkbox"
                                 checked={requiereTransporte}
                                 onChange={(e) => setRequiereTransporte(e.target.checked)}
-                                className="w-5 h-5 border-2 rounded text-red-800 focus:ring-red-800"
+                                className="w-5 h-5 border-2 rounded checkbox-primary"
                             />
                             <span className="ml-3 text-sm text-gray-800 font-bold">Requiere Transporte</span>
                         </label>
@@ -80,7 +80,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                                 type="tel"
                                 value={nroTelefono}
                                 onChange={(e) => setNroTelefono(e.target.value)}
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold focus:ring-2 focus:ring-red-600"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold input-focus-primary"
                             />
                         </div>
                         <div>
@@ -89,7 +89,7 @@ export function EditRecordModal({ record, onClose, onSave }: EditRecordModalProp
                                 type="text"
                                 value={direccionRecogida}
                                 onChange={(e) => setDireccionRecogida(e.target.value)}
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold focus:ring-2 focus:ring-red-600"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none text-sm font-bold input-focus-primary"
                             />
                         </div>
 

@@ -21,8 +21,8 @@ export function ConfirmDialog({
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
                 <div className="p-6 flex flex-col items-center text-center gap-4">
-                    <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-50">
-                        <WarningCircle size={32} weight="fill" className="text-red-600" />
+                    <div className="flex items-center justify-center w-14 h-14 rounded-full" style={{ background: 'rgba(var(--primary-rgb), 0.07)' }}>
+                        <WarningCircle size={32} weight="fill" className="text-primary" />
                     </div>
                     <div>
                         <h3 className="text-lg font-extrabold text-black">{title}</h3>
@@ -38,7 +38,7 @@ export function ConfirmDialog({
                     </button>
                     <button
                         onClick={onConfirm}
-                        className="flex-1 px-4 py-2.5 rounded-xl text-sm font-extrabold text-white bg-red-600 hover:bg-red-700"
+                        className="flex-1 px-4 py-2.5 rounded-xl text-sm font-extrabold btn-primary"
                     >
                         {confirmLabel}
                     </button>

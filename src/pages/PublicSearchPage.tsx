@@ -71,9 +71,9 @@ export function PublicSearchPage() {
                 <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse min-h-[750px] border border-gray-100">
 
                     {/* Sidebar Candidato — derecha en desktop */}
-                    <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center bg-gradient-to-br from-red-600 via-red-700 to-red-800 p-10 text-white relative overflow-hidden">
-                        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-red-500 rounded-full mix-blend-multiply blur-3xl opacity-40 pointer-events-none" />
-                        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-red-900 rounded-full mix-blend-multiply blur-3xl opacity-60 pointer-events-none" />
+                    <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center sidebar-primary p-10 text-white relative overflow-hidden">
+                        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full mix-blend-multiply blur-3xl opacity-40 pointer-events-none" style={{ background: 'var(--primary)' }} />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full mix-blend-multiply blur-3xl opacity-60 pointer-events-none" style={{ background: 'var(--primary-darker)' }} />
 
                         <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
                             <div className="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20">
@@ -86,7 +86,7 @@ export function PublicSearchPage() {
                             <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
                                 {candidateName}
                             </h2>
-                            <p className="text-red-200 font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm">
+                            <p className="font-bold tracking-[0.3em] mb-6 drop-shadow text-center text-sm" style={{ color: 'rgba(255,255,255,0.72)' }}>
                                 {candidateTitle.toUpperCase()}
                             </p>
                             <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
@@ -98,8 +98,8 @@ export function PublicSearchPage() {
                     {/* Buscador — izquierda */}
                     <div className="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50">
                         <div className="text-center mb-10">
-                            <div className="inline-flex items-center justify-center p-4 bg-red-50 rounded-2xl mb-6 shadow-inner">
-                                <MagnifyingGlass size={40} weight="bold" className="text-red-600" />
+                            <div className="inline-flex items-center justify-center p-4 rounded-2xl mb-6 shadow-inner" style={{ background: 'rgba(var(--primary-rgb), 0.07)' }}>
+                                <MagnifyingGlass size={40} weight="bold" className="text-primary" />
                             </div>
                             <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
                                 Consulta de Padrón
@@ -116,12 +116,12 @@ export function PublicSearchPage() {
                                 onChange={(e) => setCedula(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 placeholder="Ej: 1234567"
-                                className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-red-600 focus:border-red-600 outline-none text-lg font-bold text-center"
+                                className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm outline-none text-lg font-bold text-center input-focus-primary"
                             />
                             <button
                                 onClick={handleSearch}
                                 disabled={state === 'loading'}
-                                className="w-full py-4 rounded-2xl shadow-md text-lg font-bold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                                className="w-full py-4 rounded-2xl shadow-md text-lg font-bold btn-primary"
                             >
                                 {state === 'loading' ? 'Buscando...' : 'Buscar Elector'}
                             </button>
@@ -139,9 +139,9 @@ export function PublicSearchPage() {
                                     )}
                                     {results.map((result, idx) => (
                                         <div key={idx} className="fade-in bg-white border-2 border-gray-900 rounded-2xl p-6 shadow-lg relative overflow-hidden">
-                                            <div className="absolute top-0 left-0 w-2 h-full bg-red-600" />
+                                            <div className="absolute top-0 left-0 w-2 h-full bg-primary" />
                                             <div className="flex items-center mb-5">
-                                                <CheckCircle size={26} weight="fill" className="text-red-600 mr-2 shrink-0" />
+                                                <CheckCircle size={26} weight="fill" className="text-primary mr-2 shrink-0" />
                                                 <h3 className="text-xl font-extrabold text-black">
                                                     {result.nombre} {result.apellido}
                                                 </h3>
@@ -153,7 +153,7 @@ export function PublicSearchPage() {
                                             </div>
                                             <div className="space-y-4">
                                                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
-                                                    <MapPin size={22} weight="fill" className="text-red-500 mr-3 shrink-0 mt-0.5" />
+                                                    <MapPin size={22} weight="fill" className="text-primary mr-3 shrink-0 mt-0.5" />
                                                     <div>
                                                         <p className="text-xs uppercase text-gray-500 font-bold mb-1">
                                                             Local de Votación
@@ -170,7 +170,7 @@ export function PublicSearchPage() {
                                                     </div>
                                                 </div>
                                                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
-                                                    <FileText size={22} weight="fill" className="text-red-500 mr-3 shrink-0 mt-0.5" />
+                                                    <FileText size={22} weight="fill" className="text-primary mr-3 shrink-0 mt-0.5" />
                                                     <div className="flex space-x-8">
                                                         <div>
                                                             <p className="text-xs uppercase text-gray-500 font-bold mb-1">Mesa</p>
@@ -190,7 +190,7 @@ export function PublicSearchPage() {
 
                             {state === 'not_found' && (
                                 <div className="fade-in bg-gray-50 border border-gray-200 text-gray-800 p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
-                                    <WarningCircle size={40} weight="fill" className="mb-3 text-red-500" />
+                                    <WarningCircle size={40} weight="fill" className="mb-3 text-primary" />
                                     <span className="font-extrabold text-lg text-black mb-1">
                                         Elector no encontrado
                                     </span>
@@ -202,9 +202,9 @@ export function PublicSearchPage() {
                             )}
 
                             {state === 'error' && (
-                                <div className="fade-in bg-red-50 border border-red-200 p-6 rounded-2xl flex flex-col items-center text-center">
-                                    <WarningCircle size={40} weight="fill" className="mb-3 text-red-600" />
-                                    <span className="font-extrabold text-red-800">
+                                <div className="fade-in p-6 rounded-2xl flex flex-col items-center text-center" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)' }}>
+                                    <WarningCircle size={40} weight="fill" className="mb-3 text-primary" />
+                                    <span className="font-extrabold" style={{ color: 'var(--primary-darker)' }}>
                                         Error de conexión. Intente de nuevo.
                                     </span>
                                 </div>

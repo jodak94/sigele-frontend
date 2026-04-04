@@ -97,7 +97,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                 {/* Header */}
                 <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
                     <div className="flex items-center gap-2">
-                        <UserPlus size={20} weight="bold" className="text-red-600" />
+                        <UserPlus size={20} weight="bold" className="text-primary" />
                         <h3 className="font-extrabold text-lg text-black">Nuevo Usuario</h3>
                     </div>
                     <button onClick={onClose} className="text-gray-400 hover:text-black">
@@ -107,7 +107,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-5">
                     {error && (
-                        <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                        <div className="p-3 rounded-xl text-sm font-medium" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' }}>
                             {error}
                         </div>
                     )}
@@ -115,7 +115,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                     {/* Nombre */}
                     <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">
-                            Nombre Completo <span className="text-red-600">*</span>
+                            Nombre Completo <span className="text-primary">*</span>
                         </label>
                         <input
                             type="text"
@@ -123,14 +123,14 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                             onChange={(e) => setFullName(e.target.value)}
                             required
                             placeholder="Ej: Juan Carlos Pérez"
-                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm focus:ring-2 focus:ring-red-600"
+                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm input-focus-primary"
                         />
                     </div>
 
                     {/* Email */}
                     <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">
-                            Correo Electrónico (Usuario) <span className="text-red-600">*</span>
+                            Correo Electrónico (Usuario) <span className="text-primary">*</span>
                         </label>
                         <input
                             type="email"
@@ -138,14 +138,14 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             placeholder="usuario@ejemplo.com"
-                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm focus:ring-2 focus:ring-red-600"
+                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm input-focus-primary"
                         />
                     </div>
 
                     {/* Teléfono */}
                     <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">
-                            Teléfono Móvil <span className="text-red-600">*</span>
+                            Teléfono Móvil <span className="text-primary">*</span>
                         </label>
                         <input
                             type="tel"
@@ -153,7 +153,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                             onChange={(e) => setPhone(e.target.value)}
                             required
                             placeholder="Ej: 0981 123 456"
-                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm focus:ring-2 focus:ring-red-600"
+                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm input-focus-primary"
                         />
                     </div>
 
@@ -161,7 +161,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                     {!isCoordinator && (
                         <div>
                             <label className="block text-xs font-bold text-gray-700 mb-1">
-                                Rol de Sistema <span className="text-red-600">*</span>
+                                Rol de Sistema <span className="text-primary">*</span>
                             </label>
                             <CustomSelect
                                 value={roleId}
@@ -176,7 +176,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                     {showCoordinatorSelect && (
                         <div>
                             <label className="block text-xs font-bold text-gray-700 mb-1">
-                                Asignar a Coordinador <span className="text-red-600">*</span>
+                                Asignar a Coordinador <span className="text-primary">*</span>
                             </label>
                             <CustomSelect
                                 value={coordinatorId}
@@ -231,7 +231,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="px-5 py-2.5 rounded-xl text-sm font-extrabold text-white bg-red-600 hover:bg-red-700 disabled:opacity-60 flex items-center gap-2"
+                            className="px-5 py-2.5 rounded-xl text-sm font-extrabold btn-primary flex items-center gap-2"
                         >
                             <UserPlus size={16} weight="bold" />
                             {isSubmitting ? 'Creando...' : 'Crear Usuario'}

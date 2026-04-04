@@ -135,7 +135,7 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
         <div className="space-y-2">
             <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold text-gray-700 flex items-center gap-1">
-                    <MapPin size={14} weight="fill" className="text-red-600" />
+                    <MapPin size={14} weight="fill" className="text-primary" />
                     Ubicación en Mapa (Opcional)
                 </label>
                 <div className="flex items-center gap-2">
@@ -144,7 +144,7 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
                             type="button"
                             onClick={handleLocate}
                             disabled={locating}
-                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600 font-bold transition-colors disabled:opacity-40"
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-primary font-bold transition-colors disabled:opacity-40"
                             title="Ir a mi ubicación"
                         >
                             <Crosshair size={14} weight="bold" className={locating ? 'animate-spin' : ''} />
@@ -154,7 +154,7 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
                         <button
                             type="button"
                             onClick={handleClear}
-                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600 font-bold transition-colors"
+                            className="flex items-center gap-1 text-xs text-gray-400 hover:text-primary font-bold transition-colors"
                         >
                             <X size={12} weight="bold" />
                             Limpiar
@@ -184,7 +184,7 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
                 onChange={handleDescripcionChange}
                 disabled={!value}
                 placeholder="Referencia (ej: Mi casa, portón verde)"
-                className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm input-focus-primary disabled:opacity-40 disabled:cursor-not-allowed"
             />
         </div>
     );

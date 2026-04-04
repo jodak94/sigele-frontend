@@ -130,7 +130,7 @@ export function MapaElectores({ onClose }: MapaElectoresProps) {
             {/* Topbar */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white z-10 shrink-0">
                 <div className="flex items-center gap-2">
-                    <MapPin size={20} weight="fill" className="text-red-600" />
+                    <MapPin size={20} weight="fill" className="text-primary" />
                     <span className="font-extrabold text-gray-900 text-base">Mapa de Electores</span>
                     {!isLoading && !error && (
                         <span className="ml-2 text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
@@ -167,13 +167,13 @@ export function MapaElectores({ onClose }: MapaElectoresProps) {
                                 type="button"
                                 onClick={handleSearch}
                                 disabled={!searchQuery.trim()}
-                                className="px-3 py-2.5 text-gray-400 hover:text-red-600 disabled:opacity-40 transition-colors"
+                                className="px-3 py-2.5 text-gray-400 hover:text-primary disabled:opacity-40 transition-colors"
                             >
                                 <MagnifyingGlass size={18} weight="bold" />
                             </button>
                         </div>
                         {searchError && (
-                            <p className="mt-1 text-xs font-bold text-red-600 text-center bg-white/90 rounded-lg px-3 py-1 shadow">
+                            <p className="mt-1 text-xs font-bold text-primary text-center bg-white/90 rounded-lg px-3 py-1 shadow">
                                 {searchError}
                             </p>
                         )}
@@ -183,7 +183,7 @@ export function MapaElectores({ onClose }: MapaElectoresProps) {
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
                         <div className="flex flex-col items-center gap-3 text-gray-500">
-                            <SpinnerGap size={32} weight="bold" className="animate-spin text-red-600" />
+                            <SpinnerGap size={32} weight="bold" className="animate-spin text-primary" />
                             <span className="text-sm font-bold">Cargando ubicaciones...</span>
                         </div>
                     </div>

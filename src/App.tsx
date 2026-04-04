@@ -16,6 +16,7 @@ import { useAuthStore } from "./store/authStore"
 import { getBranding } from "./api/brandingApi"
 import { useBrandingStore } from "./store/brandingStore"
 import { getTenant } from "./utils/tenant"
+import { applyPrimaryColor } from "./utils/color"
 
 const hasTenant = !!getTenant();
 
@@ -29,6 +30,7 @@ function App() {
     if (!hasTenant) return; // No cargar branding en el dominio principal
     if (branding) {
       document.title = branding.appTitle;
+      applyPrimaryColor(branding.primaryColor);
       return;
     }
 
@@ -43,6 +45,7 @@ function App() {
           candidateTitle: data.candidateTitle,
         });
         document.title = data.appTitle;
+        applyPrimaryColor(data.primaryColor);
       })
       .catch(() => {});
   }, []);

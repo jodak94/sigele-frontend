@@ -51,7 +51,7 @@ export function AdminDashboard() {
                         onClick={() => navigate('/reportes?tab=diad')}
                         className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
                     >
-                        <FileText size={16} weight="bold" className="text-red-600 mr-2" />
+                        <FileText size={16} weight="bold" className="text-primary mr-2" />
                         Reportes D-Day
                     </button>
                     <button
@@ -66,13 +66,13 @@ export function AdminDashboard() {
                             onClick={() => setShowMapa(true)}
                             className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
                         >
-                            <MapPin size={16} weight="fill" className="text-red-600 mr-2" />
+                            <MapPin size={16} weight="fill" className="text-primary mr-2" />
                             Mapa de Electores
                         </button>
                     )}
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="bg-red-600 text-white px-4 py-2.5 rounded-xl hover:bg-red-700 font-bold text-sm flex items-center shadow-sm"
+                        className="text-white px-4 py-2.5 rounded-xl font-bold text-sm flex items-center shadow-sm btn-primary"
                     >
                         <UserPlus size={16} weight="bold" className="mr-2" />
                         Nuevo Usuario

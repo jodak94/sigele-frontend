@@ -127,7 +127,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
         <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 sticky top-24">
                 <h2 className="text-lg font-extrabold text-black mb-5 flex items-center">
-                    <UserPlus size={22} weight="bold" className="text-red-600 mr-2" />
+                    <UserPlus size={22} weight="bold" className="text-primary mr-2" />
                     Cargar Elector
                 </h2>
 
@@ -137,7 +137,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                         <label className="block text-sm font-bold text-gray-800 mb-1">
                             Cédula de Identidad
                         </label>
-                        <div className="flex items-center bg-gray-50 border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-red-600">
+                        <div className="flex items-center bg-gray-50 border border-gray-300 rounded-xl overflow-hidden focus-within-primary">
                             <input
                                 ref={cedulaRef}
                                 type="text"
@@ -151,7 +151,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 type="button"
                                 onClick={handleSearch}
                                 disabled={isSearching || !cedula.trim()}
-                                className="px-4 py-3 text-gray-400 hover:text-red-600 disabled:opacity-40 transition-colors"
+                                className="px-4 py-3 text-gray-400 hover:text-primary disabled:opacity-40 transition-colors"
                                 title="Buscar en padrón"
                             >
                                 <MagnifyingGlass size={20} weight="bold" className={isSearching ? 'animate-pulse' : ''} />
@@ -169,7 +169,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                             </div>
                         )}
                         {searchError && (
-                            <div className="mt-2 px-3 py-2 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-bold flex items-center gap-2">
+                            <div className="mt-2 px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-2" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' }}>
                                 <WarningCircle size={16} weight="fill" className="shrink-0" />
                                 {searchError}
                             </div>
@@ -198,7 +198,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 checked={requiereTransporte}
                                 onChange={(e) => setRequiereTransporte(e.target.checked)}
                                 disabled={disabled}
-                                className="w-5 h-5 border-2 rounded text-red-800 focus:ring-red-800"
+                                className="w-5 h-5 border-2 rounded checkbox-primary"
                             />
                             <span className="ml-3 text-sm text-gray-800 font-bold">
                                 Requiere transporte Día D
@@ -209,7 +209,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                     <div className="pt-3 border-t border-gray-200 space-y-4">
                         <div>
                             <label className="block text-xs font-bold text-gray-700 mb-1">
-                                Teléfono de Contacto <span className="text-red-600">*</span>
+                                Teléfono de Contacto <span className="text-primary">*</span>
                             </label>
                             <input
                                 type="tel"
@@ -218,7 +218,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 required
                                 disabled={disabled}
                                 placeholder="Ej: 0981 123 456"
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm input-focus-primary disabled:opacity-40 disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -231,7 +231,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 onChange={(e) => setDireccionRecogida(e.target.value)}
                                 disabled={disabled}
                                 placeholder="Si es distinta a padrón..."
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm focus:ring-2 focus:ring-red-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg outline-none font-bold text-sm input-focus-primary disabled:opacity-40 disabled:cursor-not-allowed"
                             />
                         </div>
 
@@ -246,25 +246,20 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                     <button
                         type="submit"
                         disabled={isSubmitting || disabled}
-                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-full font-bold py-3 px-4 rounded-xl shadow-sm btn-primary"
                     >
                         {isSubmitting ? 'Registrando...' : 'Registrar Captación'}
                     </button>
                 </form>
 
                 <div
-                    className={`mt-4 p-4 rounded-xl text-sm font-bold flex items-start transition-all ${
-                        message
-                            ? message.type === 'success'
-                                ? 'bg-gray-900 text-white'
-                                : 'bg-red-50 text-red-800 border border-red-200'
-                            : 'hidden'
-                    }`}
+                    className={`mt-4 p-4 rounded-xl text-sm font-bold flex items-start transition-all ${message ? '' : 'hidden'}`}
+                    style={message && message.type !== 'success' ? { background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' } : message ? { background: '#111827', color: 'white' } : undefined}
                 >
                     {message?.type === 'success' ? (
                         <CheckCircle size={20} weight="fill" className="text-green-400 mr-2 shrink-0 mt-0.5" />
                     ) : (
-                        <WarningCircle size={20} weight="fill" className="text-red-600 mr-2 shrink-0 mt-0.5" />
+                        <WarningCircle size={20} weight="fill" className="text-primary mr-2 shrink-0 mt-0.5" />
                     )}
                     {message?.text}
                 </div>

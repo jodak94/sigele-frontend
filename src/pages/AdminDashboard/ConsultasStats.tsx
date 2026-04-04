@@ -17,7 +17,7 @@ export function ConsultasStatsCard({ stats, isLoading }: ConsultasStatsProps) {
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-2 mb-4">
-                <MagnifyingGlass size={18} weight="bold" className="text-red-600" />
+                <MagnifyingGlass size={18} weight="bold" className="text-primary" />
                 <h2 className="text-sm font-bold text-gray-500 uppercase">Consultas al Padrón Público</h2>
             </div>
 

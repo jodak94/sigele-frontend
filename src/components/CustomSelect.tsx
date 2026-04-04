@@ -50,7 +50,7 @@ export function CustomSelect({
                 onClick={() => !disabled && setOpen((v) => !v)}
                 disabled={disabled}
                 className={`w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 border rounded-xl text-sm font-bold text-left transition-all outline-none
-                    ${open ? 'border-red-500 ring-2 ring-red-600/20' : 'border-gray-300'}
+                    ${open ? 'border-primary' : 'border-gray-300'}
                     ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-gray-400 cursor-pointer'}`}
             >
                 <span className={selected ? 'text-gray-900' : 'text-gray-400'}>
@@ -59,7 +59,7 @@ export function CustomSelect({
                 <CaretDown
                     size={16}
                     weight="bold"
-                    className={`text-gray-400 transition-transform duration-200 shrink-0 ml-2 ${open ? 'rotate-180 text-red-500' : ''}`}
+                    className={`transition-transform duration-200 shrink-0 ml-2 ${open ? 'rotate-180 text-primary' : 'text-gray-400'}`}
                 />
             </button>
 
@@ -73,14 +73,12 @@ export function CustomSelect({
                                     <button
                                         type="button"
                                         onClick={() => handleSelect(opt)}
-                                        className={`w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold text-left transition-colors
-                                            ${isSelected
-                                                ? 'bg-red-50 text-red-700'
-                                                : 'text-gray-700 hover:bg-gray-50'}`}
+                                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-bold text-left transition-colors hover:bg-gray-50"
+                                        style={isSelected ? { background: 'rgba(var(--primary-rgb), 0.07)', color: 'var(--primary-dark)' } : { color: '#374151' }}
                                     >
                                         <span>{opt.label}</span>
                                         {isSelected && (
-                                            <Check size={14} weight="bold" className="text-red-600 shrink-0" />
+                                            <Check size={14} weight="bold" className="text-primary shrink-0" />
                                         )}
                                     </button>
                                 </li>

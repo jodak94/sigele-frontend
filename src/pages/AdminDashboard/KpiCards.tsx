@@ -17,9 +17,9 @@ export function KpiCards({ kpis, isLoading }: KpiCardsProps) {
     }
 
     const cards = [
-        { label: 'Total Activos', value: kpis?.activos ?? 0, valueClass: 'text-red-600' },
+        { label: 'Total Activos', value: kpis?.activos ?? 0, valueClass: 'text-primary' },
         { label: 'Candidatos a Mesa', value: kpis?.candidatosMesa ?? 0, valueClass: 'text-black' },
-        { label: 'Req. Transporte', value: kpis?.requierenTransporte ?? 0, valueClass: 'text-red-800' },
+        { label: 'Req. Transporte', value: kpis?.requierenTransporte ?? 0, valueClass: 'text-primary' },
         { label: 'Tachados (Borrado)', value: kpis?.borrados ?? 0, valueClass: 'text-gray-500' },
     ];
 

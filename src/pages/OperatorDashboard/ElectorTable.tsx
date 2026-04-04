@@ -53,7 +53,7 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                 disabled={exporting !== null}
                                 className="text-sm border border-gray-300 px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold flex items-center disabled:opacity-50"
                             >
-                                <FilePdf size={16} weight="bold" className="text-red-600 mr-2" />
+                                <FilePdf size={16} weight="bold" className="text-primary mr-2" />
                                 {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
                             </button>
                         </div>
@@ -97,7 +97,7 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                             CI: {r.numeroCed}
                                         </div>
                                         {r.direccionRecogida && (
-                                            <div className="text-xs font-bold text-red-700 mt-1">
+                                            <div className="text-xs font-bold mt-1 text-primary">
                                                 📍 {r.direccionRecogida}
                                             </div>
                                         )}
@@ -117,7 +117,7 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                                 </span>
                                             )}
                                             {r.requiereTransporte && (
-                                                <span className="px-2 py-0.5 text-xs font-bold bg-red-800 text-white rounded">
+                                                <span className="px-2 py-0.5 text-xs font-bold text-white rounded bg-primary">
                                                     Transporte
                                                 </span>
                                             )}
@@ -135,7 +135,7 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                                 </button>
                                                 <button
                                                     onClick={() => setPendingDeleteId(r.electorId)}
-                                                    className="text-red-600 hover:text-red-800"
+                                                    className="text-primary hover:opacity-75"
                                                     title="Eliminar"
                                                 >
                                                     <Trash size={20} weight="bold" />

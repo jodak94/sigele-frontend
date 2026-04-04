@@ -26,7 +26,7 @@ export function OperatorElectoresModal({ operatorId, operatorName, onClose }: Op
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
                 <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50 shrink-0">
                     <h3 className="font-extrabold text-lg text-black">
-                        Electores de: <span className="text-red-600">{operatorName}</span>
+                        Electores de: <span className="text-primary">{operatorName}</span>
                     </h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-black">
                         <X size={22} weight="bold" />

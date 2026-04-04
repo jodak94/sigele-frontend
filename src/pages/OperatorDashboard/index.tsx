@@ -67,7 +67,7 @@ export function OperatorDashboard() {
                 <div className="flex space-x-4">
                     <div className="text-center px-4 border-r border-gray-200">
                         <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Activos</p>
-                        <p className="text-3xl font-extrabold text-red-600">{totalActivos}</p>
+                        <p className="text-3xl font-extrabold text-primary">{totalActivos}</p>
                     </div>
                     <div className="text-center px-2">
                         <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Miembros Mesa</p>

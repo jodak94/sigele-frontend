@@ -58,7 +58,7 @@ export function ChangePasswordModal({ onClose, onSuccess, forced = false }: Chan
                 {/* Header */}
                 <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
                     <div className="flex items-center gap-2">
-                        <ShieldCheck size={20} weight="bold" className="text-red-600" />
+                        <ShieldCheck size={20} weight="bold" className="text-primary" />
                         <div>
                             <h3 className="font-extrabold text-lg text-black leading-tight">
                                 {forced ? 'Cambio de contraseña requerido' : 'Cambiar contraseña'}
@@ -79,7 +79,7 @@ export function ChangePasswordModal({ onClose, onSuccess, forced = false }: Chan
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     {error && (
-                        <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                        <div className="p-3 rounded-xl text-sm font-medium" style={{ background: 'rgba(var(--primary-rgb), 0.06)', border: '1px solid rgba(var(--primary-rgb), 0.25)', color: 'var(--primary-darker)' }}>
                             {error}
                         </div>
                     )}
@@ -123,7 +123,7 @@ export function ChangePasswordModal({ onClose, onSuccess, forced = false }: Chan
                         <button
                             type="submit"
                             disabled={isSubmitting || mismatch || !current || !next || !confirm}
-                            className="px-5 py-2.5 rounded-xl text-sm font-extrabold text-white bg-red-600 hover:bg-red-700 disabled:opacity-60 flex items-center gap-2"
+                            className="px-5 py-2.5 rounded-xl text-sm font-extrabold btn-primary flex items-center gap-2"
                         >
                             <Lock size={16} weight="bold" />
                             {isSubmitting ? 'Guardando...' : 'Cambiar contraseña'}
@@ -149,9 +149,9 @@ function PasswordField({ label, value, onChange, show, onToggle, invalid, hint }
     return (
         <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">
-                {label} <span className="text-red-600">*</span>
+                {label} <span className="text-primary">*</span>
             </label>
-            <div className={`flex items-center bg-gray-50 border rounded-xl px-4 py-2.5 ${invalid ? 'border-red-400' : 'border-gray-300'}`}>
+            <div className={`flex items-center bg-gray-50 border rounded-xl px-4 py-2.5 ${invalid ? 'border-primary' : 'border-gray-300'}`}>
                 <input
                     type={show ? 'text' : 'password'}
                     value={value}
@@ -163,7 +163,7 @@ function PasswordField({ label, value, onChange, show, onToggle, invalid, hint }
                     {show ? <EyeSlash size={16} /> : <Eye size={16} />}
                 </button>
             </div>
-            {hint && <p className="text-xs text-red-500 font-medium mt-1">{hint}</p>}
+            {hint && <p className="text-xs font-medium mt-1 text-primary">{hint}</p>}
         </div>
     );
 }

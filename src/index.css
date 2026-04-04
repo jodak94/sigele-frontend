@@ -1,5 +1,47 @@
 @import "tailwindcss";
 
+/* ── Primary color CSS variables (overridden by JS from branding API) ── */
+:root {
+  --primary: #D52B1E;
+  --primary-dark: #b02318;
+  --primary-darker: #8c1e12;
+  --primary-rgb: 213,43,30;
+}
+
+/* Utility classes that consume the primary CSS variable */
+.text-primary        { color: var(--primary); }
+.bg-primary          { background-color: var(--primary); }
+.border-primary      { border-color: var(--primary); }
+
+.btn-primary {
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
+  color: white;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to right, var(--primary-dark), var(--primary-darker));
+}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.sidebar-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark) 55%, var(--primary-darker));
+}
+
+.input-focus-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.35);
+  border-color: var(--primary) !important;
+}
+
+.btn-logout:hover { background: rgba(var(--primary-rgb), 0.18); color: white; }
+
+.focus-within-primary:focus-within {
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.35);
+  border-color: var(--primary) !important;
+}
+
+.checkbox-primary { accent-color: var(--primary); }
+
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .fade-in { animation: fadeIn 0.3s ease-in-out; }
 

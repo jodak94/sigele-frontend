@@ -28,7 +28,7 @@ export function VoterSearch() {
     return (
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
             <h2 className="text-lg font-extrabold text-black mb-4 flex items-center">
-                <MagnifyingGlass size={20} weight="bold" className="text-red-600 mr-2" />
+                <MagnifyingGlass size={20} weight="bold" className="text-primary mr-2" />
                 Buscar Elector en Listas
             </h2>
             <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
@@ -38,7 +38,7 @@ export function VoterSearch() {
                     onChange={(e) => setCedula(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="N° de Cédula..."
-                    className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold focus:ring-2 focus:ring-red-600"
+                    className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold input-focus-primary"
                 />
                 <button
                     onClick={handleSearch}
@@ -57,7 +57,7 @@ export function VoterSearch() {
                                 <div key={r.electorId} className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
                                     {/* Fila 1: ícono + nombre + CI + etiquetas + operador */}
                                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                                        <CheckCircle size={20} weight="fill" className="text-red-600 shrink-0" />
+                                        <CheckCircle size={20} weight="fill" className="text-primary shrink-0" />
                                         <span className="font-extrabold text-black">
                                             {r.nombre} {r.apellido}
                                         </span>
@@ -74,7 +74,7 @@ export function VoterSearch() {
                                         )}
                                         <span className="text-sm text-gray-500 font-medium">
                                             Lista de:{' '}
-                                            <span className="font-bold text-red-700">{r.operador.fullName}</span>
+                                            <span className="font-bold text-primary">{r.operador.fullName}</span>
                                         </span>
                                     </div>
                                     {/* Fila 2: teléfono y dirección (si tiene) */}
