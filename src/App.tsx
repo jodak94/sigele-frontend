@@ -43,6 +43,7 @@ function App() {
           faviconUrl: data.faviconUrl,
           candidateImageUrl: data.candidateName,
           candidateTitle: data.candidateTitle,
+          zona: data.zona,
         });
         document.title = data.appTitle;
         applyPrimaryColor(data.primaryColor);

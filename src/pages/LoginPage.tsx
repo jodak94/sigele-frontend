@@ -10,9 +10,10 @@ export function LoginPage(){
     const setAuth = useAuthStore((state) => state.setAuth);
     const branding = useBrandingStore((s) => s.branding);
 
-    const candidateImage = branding?.candidateImageUrl ?? '/login.jpeg';
+    const candidateImage = branding?.candidateImageUrl ?? null;
     const candidateName = branding?.appTitle ?? 'Naomy Ferrer';
     const candidateTitle = branding?.candidateTitle ?? 'Concejal';
+    const zona = branding?.zona ?? '';
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -50,11 +51,15 @@ export function LoginPage(){
                     <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
                         {/* Candidate photo card */}
                         <div className="w-full aspect-[3/4] bg-white/10 backdrop-blur-md rounded-3xl p-2 shadow-2xl mb-8 border border-white/20 relative">
-                            <img
-                                src={candidateImage}
-                                alt={candidateName}
-                                className="object-cover object-top w-full h-full rounded-2xl opacity-90 contrast-125"
-                            />
+                            {candidateImage ? (
+                                <img
+                                    src={candidateImage}
+                                    alt={candidateName}
+                                    className="object-cover object-top w-full h-full rounded-2xl opacity-90 contrast-125"
+                                />
+                            ) : (
+                                <div className="w-full h-full rounded-2xl bg-white/10" />
+                            )}
                         </div>
 
                         <h2 className="text-4xl font-extrabold tracking-tight mb-1 drop-shadow-md text-center uppercase">
@@ -64,7 +69,7 @@ export function LoginPage(){
                             {candidateTitle.toUpperCase()}
                         </p>
                         <div className="px-8 py-2.5 bg-white/10 backdrop-blur-md rounded-full font-extrabold text-sm tracking-widest border border-white/20 shadow-inner">
-                            SAN LORENZO
+                            {zona.toUpperCase()}
                         </div>
                     </div>
                 </div>
@@ -143,7 +148,7 @@ export function LoginPage(){
                             {candidateName} - {candidateTitle}
                         </p>
                         <p className="text-sm font-black uppercase tracking-widest text-primary">
-                            San Lorenzo
+                            {zona}
                         </p>
                         <button
                             type="button"

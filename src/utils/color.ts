@@ -1,4 +1,4 @@
-const DEFAULT_PRIMARY = '#D52B1E';
+const DEFAULT_PRIMARY = '#6B7280';
 
 /** Normaliza cualquier string de color hex a formato #RRGGBB válido.
  *  Si el input es inválido, devuelve el color primario por defecto. */

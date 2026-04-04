@@ -7,6 +7,7 @@ export interface BrandingResponse {
     faviconUrl: string;
     candidateName: string; // URL de la imagen del candidato
     candidateTitle: string;
+    zona: string;
 }
 
 const publicClient = axios.create({

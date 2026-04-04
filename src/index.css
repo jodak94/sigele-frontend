@@ -2,10 +2,10 @@
 
 /* ── Primary color CSS variables (overridden by JS from branding API) ── */
 :root {
-  --primary: #D52B1E;
-  --primary-dark: #b02318;
-  --primary-darker: #8c1e12;
-  --primary-rgb: 213,43,30;
+  --primary: #6b7280;
+  --primary-dark: #4b5563;
+  --primary-darker: #374151;
+  --primary-rgb: 107, 114, 128;
 }
 
 /* Utility classes that consume the primary CSS variable */

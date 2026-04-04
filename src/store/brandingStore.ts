@@ -8,6 +8,7 @@ interface BrandingData {
     faviconUrl: string;
     candidateImageUrl: string;
     candidateTitle: string;
+    zona: string;
 }
 
 interface BrandingStore {
