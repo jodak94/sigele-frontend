@@ -15,7 +15,10 @@ export function Navbar() {
     };
 
     const handleHome = () => {
-        navigate('/padron');
+        const role = user?.role?.toLowerCase();
+        if (role === 'operador') navigate('/panel');
+        else if (role === 'coordinador' || role === 'admin') navigate('/admin');
+        else navigate('/padron');
     };
 
     return (
