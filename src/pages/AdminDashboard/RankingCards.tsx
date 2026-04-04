@@ -41,7 +41,7 @@ export function RankingCards() {
                 ) : ranking.length === 0 ? (
                     <p className="text-gray-400 text-sm font-medium text-center py-6">Sin datos aún.</p>
                 ) : (
-                    <div className="space-y-5">
+                    <div className="space-y-5 max-h-80 overflow-y-auto pr-1">
                         {ranking.map((op, idx) => {
                             const percent = (op.totalElectores / maxOp) * 100;
                             return (
@@ -85,7 +85,7 @@ export function RankingCards() {
                 ) : seccionales.length === 0 ? (
                     <p className="text-gray-400 text-sm font-medium text-center py-6">Sin datos aún.</p>
                 ) : (
-                    <div className="space-y-5">
+                    <div className="space-y-5 max-h-80 overflow-y-auto pr-1">
                         {seccionales.map((sec, idx) => {
                             const percent = (sec.totalElectores / maxSec) * 100;
                             return (
