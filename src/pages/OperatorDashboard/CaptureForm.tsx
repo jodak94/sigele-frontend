@@ -27,12 +27,27 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
     const [telefono, setTelefono] = useState('');
     const [direccionRecogida, setDireccionRecogida] = useState('');
     const [ubicacion, setUbicacion] = useState<Ubicacion | null>(null);
+    const [operadorUbicacion, setOperadorUbicacion] = useState<Ubicacion | null>(null);
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(false);
     const [requiereTransporte, setRequiereTransporte] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState<Message | null>(null);
 
     const soportaUbicacion = useAuthStore((s) => s.tenantConfig?.soportaUbicacion ?? false);
+
+    // Obtener ubicación del operador silenciosamente al montar
+    useEffect(() => {
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(
+            (pos) => setOperadorUbicacion({
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+                descripcion: '',
+            }),
+            () => setOperadorUbicacion(null),
+            { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 },
+        );
+    }, []);
 
     useEffect(() => {
         if (!message) return;
@@ -102,6 +117,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                 disponibleMiembroMesa,
                 requiereTransporte,
                 ubicacion: ubicacion ?? undefined,
+                operadorUbicacion,
             });
             onSuccess();
             resetForm();

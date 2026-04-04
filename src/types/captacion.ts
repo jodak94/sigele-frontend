@@ -34,6 +34,7 @@ export interface CreateCaptacionRequest {
     disponibleMiembroMesa: boolean;
     requiereTransporte: boolean;
     ubicacion?: Ubicacion;
+    operadorUbicacion: Ubicacion | null;
 }
 
 export interface UpdateCaptacionRequest {

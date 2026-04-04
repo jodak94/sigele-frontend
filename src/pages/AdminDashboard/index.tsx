@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Users, UserPlus, MapPin } from '@phosphor-icons/react';
+import { FileText, Users, UserPlus, MapPin, Fingerprint } from '@phosphor-icons/react';
 import { getAdminKpis, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
 import type { AdminKpis, ConsultasStats } from '../../types/admin';
@@ -70,6 +70,13 @@ export function AdminDashboard() {
                             Mapa de Electores
                         </button>
                     )}
+                    <button
+                        onClick={() => navigate('/auditoria')}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
+                    >
+                        <Fingerprint size={16} weight="fill" className="text-primary mr-2" />
+                        Auditoría
+                    </button>
                     <button
                         onClick={() => setShowCreateModal(true)}
                         className="text-white px-4 py-2.5 rounded-xl font-bold text-sm flex items-center shadow-sm btn-primary"
