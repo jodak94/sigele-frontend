@@ -40,26 +40,26 @@ export function NoTenantPage() {
             />
 
             {/* Logo */}
-            <div className="relative flex items-center mb-12">
+            <div className="relative flex items-center mb-10">
                 <img src="/logo_letras.png" alt="SIGELE" className="h-12 w-auto" />
             </div>
 
             <div className="relative w-full max-w-sm">
                 <div
                     style={{
-                        background: 'linear-gradient(145deg, #080810 0%, #030308 100%)',
-                        border: '1px solid rgba(213,43,30,0.2)',
+                        background: '#fefaf4',
+                        border: '1px solid rgba(180,130,70,0.28)',
                         borderRadius: '18px',
                         padding: '32px',
-                        boxShadow: '0 0 0 1px rgba(213,43,30,0.07), 0 40px 80px rgba(0,0,0,0.55)',
+                        boxShadow: '0 4px 24px rgba(100,60,20,0.1)',
                     }}
                 >
                     {/* Icon */}
                     <div
                         className="w-14 h-14 flex items-center justify-center mx-auto mb-6 rounded-xl"
                         style={{
-                            background: 'rgba(213,43,30,0.08)',
-                            border: '1px solid rgba(213,43,30,0.22)',
+                            background: 'rgba(213,43,30,0.07)',
+                            border: '1px solid rgba(213,43,30,0.2)',
                         }}
                     >
                         <Buildings size={28} weight="bold" className="text-[#D52B1E]" />
@@ -67,12 +67,12 @@ export function NoTenantPage() {
 
                     <h1
                         style={{ fontFamily: FONT_DISPLAY, letterSpacing: '-0.025em' }}
-                        className="text-xl font-black text-white text-center mb-3"
+                        className="text-xl font-black text-[#1c1208] text-center mb-3"
                     >
                         Acceso con link de organización
                     </h1>
 
-                    <p className="text-slate-400 text-sm leading-relaxed text-center mb-7 font-medium">
+                    <p className="text-[#6b5035] text-sm leading-relaxed text-center mb-7 font-medium">
                         El acceso es del tipo{' '}
                         <span className="text-[#D52B1E] font-bold font-mono">tuorganizacion.sigele.com.py</span>
                     </p>
@@ -80,7 +80,7 @@ export function NoTenantPage() {
                     {/* Input */}
                     <div className="mb-4">
                         <label
-                            className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2"
+                            className="block text-xs font-bold text-[#8a6840] uppercase tracking-widest mb-2"
                             style={{ letterSpacing: '0.1em' }}
                         >
                             Nombre de organización
@@ -88,11 +88,11 @@ export function NoTenantPage() {
                         <div
                             className="flex items-center overflow-hidden transition-all"
                             style={{
-                                background: 'rgba(255,255,255,0.04)',
-                                border: '1px solid rgba(255,255,255,0.1)',
+                                background: '#ffffff',
+                                border: '1px solid rgba(180,130,70,0.3)',
                                 borderRadius: '10px',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                             }}
-                            onFocus={() => {}}
                         >
                             <input
                                 type="text"
@@ -102,12 +102,10 @@ export function NoTenantPage() {
                                 }
                                 onKeyDown={handleKeyDown}
                                 placeholder="tuorganizacion"
-                                className="flex-1 px-4 py-3 bg-transparent outline-none text-white font-bold placeholder:text-slate-600 text-sm focus:outline-none"
-                                style={{
-                                    caretColor: '#D52B1E',
-                                }}
+                                className="flex-1 px-4 py-3 bg-transparent outline-none text-[#1c1208] font-bold placeholder:text-[#c4a882] text-sm focus:outline-none"
+                                style={{ caretColor: '#D52B1E' }}
                             />
-                            <span className="pr-4 text-slate-500 text-xs font-bold whitespace-nowrap">
+                            <span className="pr-4 text-[#9a7a55] text-xs font-bold whitespace-nowrap">
                                 .sigele.com.py
                             </span>
                         </div>
@@ -120,15 +118,15 @@ export function NoTenantPage() {
                         style={{
                             background: tenant.trim()
                                 ? 'linear-gradient(135deg, #D52B1E, #b02318)'
-                                : 'rgba(213,43,30,0.5)',
-                            boxShadow: tenant.trim() ? '0 4px 16px rgba(213,43,30,0.35)' : 'none',
+                                : 'rgba(213,43,30,0.4)',
+                            boxShadow: tenant.trim() ? '0 4px 16px rgba(213,43,30,0.3)' : 'none',
                         }}
                     >
                         Ir a mi organización
                         <ArrowRight size={15} weight="bold" />
                     </button>
 
-                    <div className="flex items-start gap-2 justify-center text-slate-600 text-xs font-medium text-center">
+                    <div className="flex items-start gap-2 justify-center text-[#9a7a55] text-xs font-medium text-center">
                         <WarningCircle size={13} weight="fill" className="shrink-0 mt-0.5" />
                         Si no tienes un link, contacta al responsable de tu campaña.
                     </div>
@@ -137,7 +135,7 @@ export function NoTenantPage() {
                 <div className="mt-5 text-center">
                     <button
                         onClick={() => navigate('/')}
-                        className="text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors"
+                        className="text-[#8a6840] hover:text-[#1c1208] text-sm font-medium transition-colors"
                     >
                         ← Volver al inicio
                     </button>
