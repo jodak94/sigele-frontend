@@ -15,7 +15,7 @@ import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
 import { useAuthStore } from "./store/authStore"
 import { getBranding } from "./api/brandingApi"
-import { useBrandingStore } from "./store/brandingStore"
+import { useBrandingStore, BRANDING_TTL_MS } from "./store/brandingStore"
 import { getTenant } from "./utils/tenant"
 import { applyPrimaryColor } from "./utils/color"
 
@@ -25,11 +25,13 @@ function App() {
   const mustChangePassword = useAuthStore((s) => s.mustChangePassword);
   const clearMustChangePassword = useAuthStore((s) => s.clearMustChangePassword);
   const branding = useBrandingStore((s) => s.branding);
+  const cachedAt = useBrandingStore((s) => s.cachedAt);
   const setBranding = useBrandingStore((s) => s.setBranding);
 
   useEffect(() => {
     if (!hasTenant) return; // No cargar branding en el dominio principal
-    if (branding) {
+    const isStale = !cachedAt || Date.now() - cachedAt > BRANDING_TTL_MS;
+    if (branding && !isStale) {
       document.title = branding.appTitle;
       applyPrimaryColor(branding.primaryColor);
       return;
