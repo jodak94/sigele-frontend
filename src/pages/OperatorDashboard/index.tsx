@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { getCaptaciones, deleteCaptacion, restoreCaptacion, updateCaptacion } from '../../api/captacionApi';
 import { useAuthStore } from '../../store/authStore';
 import { useToast } from '../../components/Toast';
+import { usePlanStore } from '../../store/planStore';
+import { PlanBanner } from '../../components/PlanBanner';
 import type { CaptacionRecord, UpdateCaptacionRequest } from '../../types/captacion';
 import { CaptureForm } from './CaptureForm';
 import { ElectorTable } from './ElectorTable';
@@ -10,6 +12,7 @@ import { EditRecordModal } from './EditRecordModal';
 export function OperatorDashboard() {
     const userId = useAuthStore((s) => s.user!.id);
     const toast = useToast();
+    const refreshPlan = usePlanStore((s) => s.refreshPlan);
 
     const [records, setRecords] = useState<CaptacionRecord[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +33,12 @@ export function OperatorDashboard() {
 
     useEffect(() => {
         loadRecords();
+        refreshPlan();
     }, []);
 
     const handleNewRecord = () => {
         loadRecords();
+        refreshPlan();
     };
 
     const handleDelete = async (electorId: number) => {
@@ -41,6 +46,7 @@ export function OperatorDashboard() {
             await deleteCaptacion(electorId);
             setRecords((prev) => prev.filter((r) => r.electorId !== electorId));
             toast.success('Registro eliminado correctamente.');
+            refreshPlan();
         } catch {
             toast.error('No se pudo eliminar el registro. Intente de nuevo.');
         }
@@ -54,10 +60,13 @@ export function OperatorDashboard() {
     const handleEditSave = async (electorId: number, data: UpdateCaptacionRequest) => {
         await updateCaptacion(electorId, data);
         setRecords((prev) => prev.map((r) => (r.electorId === electorId ? { ...r, ...data } : r)));
+        refreshPlan();
     };
 
     return (
         <div className="fade-in space-y-6">
+            <PlanBanner />
+
             {/* KPI Header */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>

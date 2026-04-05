@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass } from '@phosphor-icons/react';
+import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass, Lock } from '@phosphor-icons/react';
 import { createCaptacion } from '../../api/captacionApi';
 import { getElectorAuth } from '../../api/padronApi';
 import type { ElectorResult } from '../../types/padron';
 import type { Ubicacion } from '../../types/captacion';
 import { MapPicker } from '../../components/MapPicker';
 import { useAuthStore } from '../../store/authStore';
+import { usePlanStore } from '../../store/planStore';
 import axios from 'axios';
 
 interface CaptureFormProps {
@@ -34,6 +35,9 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
     const [message, setMessage] = useState<Message | null>(null);
 
     const soportaUbicacion = useAuthStore((s) => s.tenantConfig?.soportaUbicacion ?? false);
+    const plan = usePlanStore((s) => s.plan);
+    const refreshPlan = usePlanStore((s) => s.refreshPlan);
+    const captacionBloqueada = plan?.captacionBloqueada ?? false;
 
     // Obtener ubicación del operador silenciosamente al montar
     useEffect(() => {
@@ -129,6 +133,10 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                 setMessage({ type: 'error', text: `Registrado por ${owner ?? 'otro operador'}.` });
             } else if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setMessage({ type: 'error', text: 'Cédula no está en el padrón.' });
+            } else if (axios.isAxiosError(err) && err.response?.status === 400) {
+                const serverMsg = err.response.data?.message ?? err.response.data?.detail;
+                setMessage({ type: 'error', text: serverMsg ?? 'No se pudo registrar. Verificá el estado de tu plan.' });
+                refreshPlan();
             } else {
                 setMessage({ type: 'error', text: 'Error al registrar. Intente de nuevo.' });
             }
@@ -137,7 +145,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
         }
     };
 
-    const disabled = !elector;
+    const disabled = !elector || captacionBloqueada;
 
     return (
         <div className="lg:col-span-1">
@@ -259,13 +267,20 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                         )}
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isSubmitting || disabled}
-                        className="w-full font-bold py-3 px-4 rounded-xl shadow-sm btn-primary"
-                    >
-                        {isSubmitting ? 'Registrando...' : 'Registrar Captación'}
-                    </button>
+                    {captacionBloqueada ? (
+                        <div className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-100 border border-gray-200 text-gray-400 font-bold text-sm cursor-not-allowed select-none">
+                            <Lock size={16} weight="fill" />
+                            Captación bloqueada
+                        </div>
+                    ) : (
+                        <button
+                            type="submit"
+                            disabled={isSubmitting || disabled}
+                            className="w-full font-bold py-3 px-4 rounded-xl shadow-sm btn-primary"
+                        >
+                            {isSubmitting ? 'Registrando...' : 'Registrar Captación'}
+                        </button>
+                    )}
                 </form>
 
                 <div

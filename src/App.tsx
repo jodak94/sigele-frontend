@@ -8,6 +8,7 @@ import { OperatorDashboard } from "./pages/OperatorDashboard"
 import { AdminDashboard } from "./pages/AdminDashboard"
 import { ReportesPage } from "./pages/ReportesPage"
 import { AuditoriaPage } from "./pages/AuditoriaPage"
+import { PlanPage } from "./pages/PlanPage"
 import { PublicSearchPage } from "./pages/PublicSearchPage"
 import { LandingPage } from "./pages/LandingPage"
 import { NoTenantPage } from "./pages/NoTenantPage"
@@ -90,6 +91,11 @@ function App() {
               <Route path="/auditoria" element={
                 <RoleGuard allowed={['coordinador', 'admin']}>
                   <AuditoriaPage />
+                </RoleGuard>
+              } />
+              <Route path="/plan" element={
+                <RoleGuard allowed={['coordinador', 'admin']}>
+                  <PlanPage />
                 </RoleGuard>
               } />
             </Route>

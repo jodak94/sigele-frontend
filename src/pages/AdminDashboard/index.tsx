@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Users, UserPlus, MapPin, Fingerprint } from '@phosphor-icons/react';
+import { FileText, Users, UserPlus, MapPin, Package } from '@phosphor-icons/react';
 import { getAdminKpis, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
+import { usePlanStore } from '../../store/planStore';
+import { PlanBanner } from '../../components/PlanBanner';
 import type { AdminKpis, ConsultasStats } from '../../types/admin';
 import { VoterSearch } from './VoterSearch';
 import { KpiCards } from './KpiCards';
@@ -17,7 +19,9 @@ export function AdminDashboard() {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
     const isSuperAdmin = user?.role.toLowerCase() === 'admin';
-    
+    const refreshPlan = usePlanStore((s) => s.refreshPlan);
+    const esPlanFull = usePlanStore((s) => s.plan?.esPlanFull ?? false);
+
     const [kpis, setKpis] = useState<AdminKpis | null>(null);
     const [consultas, setConsultas] = useState<ConsultasStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,10 +40,13 @@ export function AdminDashboard() {
 
     useEffect(() => {
         loadData();
+        refreshPlan();
     }, []);
 
     return (
         <div className="fade-in space-y-6">
+            <PlanBanner />
+
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -70,13 +77,15 @@ export function AdminDashboard() {
                             Mapa de Electores
                         </button>
                     )}
-                    <button
-                        onClick={() => navigate('/auditoria')}
-                        className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
-                    >
-                        <Fingerprint size={16} weight="fill" className="text-primary mr-2" />
-                        Auditoría
-                    </button>
+{!esPlanFull && (
+                        <button
+                            onClick={() => navigate('/plan')}
+                            className="bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded-xl hover:bg-gray-50 font-bold text-sm flex items-center"
+                        >
+                            <Package size={16} weight="fill" className="text-primary mr-2" />
+                            Mi Plan
+                        </button>
+                    )}
                     <button
                         onClick={() => setShowCreateModal(true)}
                         className="text-white px-4 py-2.5 rounded-xl font-bold text-sm flex items-center shadow-sm btn-primary"
