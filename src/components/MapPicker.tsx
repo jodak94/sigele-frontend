@@ -64,11 +64,19 @@ export function MapPicker({ value, onChange }: MapPickerProps) {
                 markerRef.current = L.marker([initial.lat, initial.lng]).addTo(map);
             }
 
-            // Center on user location only when there is no existing value
+            // Center on user location and place pin automatically when there is no existing value
             if (!initial && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
-                        map.setView([pos.coords.latitude, pos.coords.longitude], DEFAULT_ZOOM);
+                        const lat = parseFloat(pos.coords.latitude.toFixed(7));
+                        const lng = parseFloat(pos.coords.longitude.toFixed(7));
+                        map.setView([lat, lng], DEFAULT_ZOOM);
+                        if (markerRef.current) {
+                            markerRef.current.setLatLng([lat, lng]);
+                        } else {
+                            markerRef.current = L.marker([lat, lng]).addTo(map);
+                        }
+                        onChangeRef.current({ lat, lng, descripcion: descripcionRef.current });
                     },
                     () => { /* permission denied or unavailable, keep default */ }
                 );

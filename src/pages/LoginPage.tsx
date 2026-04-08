@@ -129,9 +129,6 @@ export function LoginPage(){
                                 />
                                 <span className="ml-2 text-sm font-bold text-gray-400">Recordarme</span>
                             </label>
-                            <a href="#" className="text-sm font-bold text-primary hover:opacity-75">
-                                ¿Olvidó su contraseña?
-                            </a>
                         </div>
 
                         <button
