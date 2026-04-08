@@ -167,7 +167,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
                                 value={roleId}
                                 onChange={(v) => setRoleId(v === '' ? '' : Number(v))}
                                 placeholder="— Seleccione un rol —"
-                                options={roles.map((r) => ({ value: r.id, label: r.name }))}
+                                options={roles.filter((r) => !r.name.toLowerCase().includes('admin')).map((r) => ({ value: r.id, label: r.name }))}
                             />
                         </div>
                     )}
