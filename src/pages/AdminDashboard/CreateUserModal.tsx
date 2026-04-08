@@ -26,7 +26,7 @@ export function CreateUserModal({ onClose, onSuccess }: CreateUserModalProps) {
     const [roles, setRoles] = useState<Role[]>([]);
     const [coordinatorId, setCoordinatorId] = useState<number | ''>('');
     const [coordinators, setCoordinators] = useState<CoordinatorListItem[]>([]);
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(true);
     const [copied, setCopied] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
