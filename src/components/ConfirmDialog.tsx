@@ -1,8 +1,9 @@
+import React from 'react';
 import { WarningCircle } from '@phosphor-icons/react';
 
 interface ConfirmDialogProps {
     title: string;
-    message: string;
+    message: React.ReactNode;
     confirmLabel?: string;
     cancelLabel?: string;
     onConfirm: () => void;

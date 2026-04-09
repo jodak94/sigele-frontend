@@ -12,6 +12,7 @@ import { OperatorDirectory } from './OperatorDirectory';
 import { CoordPerformance } from './CoordPerformance';
 import { RankingCards } from './RankingCards';
 import { CreateUserModal } from './CreateUserModal';
+import { UserManagementTable } from './UserManagementTable';
 import { ConsultasStatsCard } from './ConsultasStats';
 import { MapaElectores } from './MapaElectores';
 
@@ -107,6 +108,8 @@ export function AdminDashboard() {
             <RankingCards />
 
             <OperatorDirectory />
+
+            {isSuperAdmin && <UserManagementTable />}
 
             {showCreateModal && (
                 <CreateUserModal
