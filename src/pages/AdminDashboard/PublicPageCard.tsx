@@ -5,7 +5,7 @@ import { buildTenantUrl, getTenant } from '../../utils/tenant';
 
 export function PublicPageCard() {
     const slug = getTenant();
-    const url = slug ? buildTenantUrl(slug) : null;
+    const url = slug ? `${buildTenantUrl(slug)}/sobre-mi` : null;
     const canvasRef = useRef<HTMLDivElement>(null);
     const [habilitado, setHabilitado] = useState(false);
 
