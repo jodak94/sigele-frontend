@@ -77,9 +77,15 @@ const features = [
     },
     {
         icon: NavigationArrow,
-        title: 'Mapa Georreferenciado ✦ Nuevo',
+        title: 'Mapa Georreferenciado',
         description:
             'El operador marca la ubicación exacta del elector en el mapa al momento de la captación. El coordinador visualiza todos los pines en tiempo real desde su panel.',
+    },
+    {
+        icon: Buildings,
+        title: 'Página Pública del Candidato ✦ Nuevo',
+        description:
+            'Cada campaña tiene su propia página web con la propuesta, trayectoria y redes del candidato. Se genera automáticamente con tu dominio y un QR listo para imprimir.',
         highlight: true,
     },
 ];

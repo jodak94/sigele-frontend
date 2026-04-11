@@ -15,6 +15,7 @@ import { CreateUserModal } from './CreateUserModal';
 import { UserManagementTable } from './UserManagementTable';
 import { ConsultasStatsCard } from './ConsultasStats';
 import { MapaElectores } from './MapaElectores';
+import { PublicPageCard } from './PublicPageCard';
 
 export function AdminDashboard() {
     const navigate = useNavigate();
@@ -106,6 +107,8 @@ export function AdminDashboard() {
 
             {/* Ranking Cargas + Electores por Barrio */}
             <RankingCards />
+
+            <PublicPageCard />
 
             <OperatorDirectory />
 

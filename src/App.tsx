@@ -12,6 +12,8 @@ import { PlanPage } from "./pages/PlanPage"
 import { PublicSearchPage } from "./pages/PublicSearchPage"
 import { LandingPage } from "./pages/LandingPage"
 import { NoTenantPage } from "./pages/NoTenantPage"
+import { TenantHomePage } from "./pages/TenantHomePage"
+import { NotFound404 } from "./pages/NotFound404.jsx"
 import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
 import { useAuthStore } from "./store/authStore"
@@ -68,7 +70,7 @@ function App() {
         {hasTenant ? (
           /* ── Rutas con tenant (tenant.sigele.com.py) ── */
           <Routes>
-            <Route path="/" element={<Navigate to="/padron" replace />} />
+            <Route path="/" element={<TenantHomePage />} />
             <Route path="/padron" element={<PublicSearchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
@@ -99,6 +101,7 @@ function App() {
                 </RoleGuard>
               } />
             </Route>
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
         ) : (
           /* ── Rutas sin tenant (sigele.com.py) ── */

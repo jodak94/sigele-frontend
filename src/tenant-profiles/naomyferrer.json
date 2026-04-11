@@ -1,0 +1,16 @@
+{
+  "habilitado": false,
+  "nombre": "Naomy Ferrer",
+  "cargo": "Candidata a Concejal",
+  "bio": "...",
+  "foto": "",
+  "secciones": [
+    { "tipo": "texto", "titulo": "Mi propuesta", "contenido": "..." },
+    { "tipo": "lista", "titulo": "Trayectoria", "items": ["...", "..."] },
+    { "tipo": "imagen", "url": "" }
+  ],
+  "redesSociales": {
+    "facebook": "",
+    "instagram": ""
+  }
+}
