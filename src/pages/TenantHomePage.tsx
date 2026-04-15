@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ComponentType } from 'react';
 import { Navigate } from 'react-router-dom';
 import { getTenant } from '../utils/tenant';
-import { TenantPublicPage } from '../components/TenantPublicPage';
 
 type Status = 'loading' | 'ok' | 'redirect';
 
 export function TenantHomePage() {
     const [status, setStatus] = useState<Status>('loading');
-    const [perfil, setPerfil] = useState<Record<string, unknown> | null>(null);
+    const [Page, setPage] = useState<ComponentType | null>(null);
 
     useEffect(() => {
         const slug = getTenant();
@@ -16,20 +15,15 @@ export function TenantHomePage() {
             return;
         }
 
-        import(`../tenant-profiles/${slug}.json`)
+        import(`./tenants/${slug}`)
             .then((mod) => {
-                const data = mod.default ?? mod;
-                if (data?.habilitado) {
-                    setPerfil(data);
-                    setStatus('ok');
-                } else {
-                    setStatus('redirect');
-                }
+                setPage(() => mod.default);
+                setStatus('ok');
             })
             .catch(() => setStatus('redirect'));
     }, []);
 
     if (status === 'loading') return null;
-    if (status === 'redirect') return <Navigate to="/padron" replace />;
-    return <TenantPublicPage perfil={perfil} />;
+    if (status === 'redirect' || !Page) return <Navigate to="/padron" replace />;
+    return <Page />;
 }

@@ -11,11 +11,8 @@ export function PublicPageCard() {
 
     useEffect(() => {
         if (!slug) return;
-        import(`../../tenant-profiles/${slug}.json`)
-            .then((mod) => {
-                const data = mod.default ?? mod;
-                setHabilitado(!!data?.habilitado);
-            })
+        import(`../tenants/${slug}`)
+            .then(() => setHabilitado(true))
             .catch(() => setHabilitado(false));
     }, [slug]);
 
