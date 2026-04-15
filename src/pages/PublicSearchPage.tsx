@@ -27,8 +27,8 @@ export function PublicSearchPage() {
     const [results, setResults] = useState<ElectorResult[]>([]);
 
     const candidateImage = branding?.candidateImageUrl ?? null;
-    const candidateName = branding?.appTitle ?? 'Naomy Ferrer';
-    const candidateTitle = branding?.candidateTitle ?? 'Concejal';
+    const candidateName = branding?.appTitle ?? '';
+    const candidateTitle = branding?.candidateTitle ?? '';
     const zona = branding?.zona ?? '';
 
     const handleSearch = async () => {
