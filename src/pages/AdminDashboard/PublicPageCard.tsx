@@ -11,7 +11,7 @@ export function PublicPageCard() {
 
     useEffect(() => {
         if (!slug) return;
-        import(`../tenants/${slug}`)
+        import(`../tenants/${slug}.tsx`)
             .then(() => setHabilitado(true))
             .catch(() => setHabilitado(false));
     }, [slug]);

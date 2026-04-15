@@ -16,7 +16,7 @@ export function TenantHomePage() {
             return;
         }
 
-        import(`./tenants/${slug}`)
+        import(`./tenants/${slug}.tsx`)
             .then((mod) => {
                 setPage(() => mod.default);
                 setStatus('ok');
