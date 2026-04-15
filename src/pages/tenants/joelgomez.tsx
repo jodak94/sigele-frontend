@@ -9,7 +9,7 @@ const FOTO = 'https://assets.sigele.com.py/tenants/joelgomez/sobre_mi.png';
 const REDES = {
     facebook:  null, //'https://facebook.com/joelgomezconcejal',
     instagram: null, // 'https://instagram.com/joelgomezconcejal',
-    whatsapp:  null, //'https://wa.me/595985000000',
+    whatsapp:  'https://wa.me/595982678308',
 };
 
 const EJES = [
