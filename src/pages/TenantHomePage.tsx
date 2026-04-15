@@ -1,4 +1,5 @@
-import { useEffect, useState, ComponentType } from 'react';
+import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 import { Navigate } from 'react-router-dom';
 import { getTenant } from '../utils/tenant';
 
