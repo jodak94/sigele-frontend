@@ -13,6 +13,7 @@ import { PublicSearchPage } from "./pages/PublicSearchPage"
 import { LandingPage } from "./pages/LandingPage"
 import { NoTenantPage } from "./pages/NoTenantPage"
 import { TenantHomePage } from "./pages/TenantHomePage"
+import { SimuladorPage } from "./pages/Simulador"
 import { NotFound404 } from "./pages/NotFound404.jsx"
 import { ChangePasswordModal } from "./components/ChangePasswordModal"
 import { ToastProvider } from "./components/Toast"
@@ -72,6 +73,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/padron" replace />} />
             <Route path="/sobre-mi" element={<TenantHomePage />} />
+            <Route path="/simulador" element={<SimuladorPage />} />
             <Route path="/padron" element={<PublicSearchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
