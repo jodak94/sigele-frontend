@@ -73,7 +73,7 @@ function CardLista({
 
 /* ─── Card voto en blanco ────────────────────────────────────────────────── */
 
-function CardVotoEnBlanco({ onClick }: { onClick: () => void }) {
+function CardVotoEnBlanco(_: { onClick: () => void }) {
     return (
         <div
             onClick={undefined}
