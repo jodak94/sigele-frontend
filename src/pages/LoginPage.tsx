@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, MagnifyingGlass } from '@phosphor-icons/react';
+import { User, Lock, MagnifyingGlass, Sliders } from '@phosphor-icons/react';
+import { getDatosSimulador } from './Simulador/data';
 import { login } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
 import { useBrandingStore } from '../store/brandingStore';
@@ -14,6 +15,8 @@ export function LoginPage(){
     const candidateName = branding?.appTitle ?? 'Naomy Ferrer';
     const candidateTitle = branding?.candidateTitle ?? 'Concejal';
     const zona = branding?.zona ?? '';
+
+    const simuladorHabilitado = getDatosSimulador() !== null;
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -147,14 +150,26 @@ export function LoginPage(){
                         <p className="text-sm font-black uppercase tracking-widest text-primary">
                             {zona}
                         </p>
-                        <button
-                            type="button"
-                            onClick={() => navigate('/')}
-                            className="mt-8 flex items-center justify-center bg-white border border-gray-200 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold w-full"
-                        >
-                            <MagnifyingGlass size={18} className="text-primary mr-2" />
-                            Consultar Padrón Público
-                        </button>
+                        <div className={`mt-8 grid gap-3 w-full ${simuladorHabilitado ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                            <button
+                                type="button"
+                                onClick={() => navigate('/')}
+                                className="flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-50 shadow-sm font-bold text-sm"
+                            >
+                                <MagnifyingGlass size={16} className="text-primary flex-shrink-0" />
+                                Consultar Padrón
+                            </button>
+                            {simuladorHabilitado && (
+                                <button
+                                    type="button"
+                                    onClick={() => navigate('/simulador')}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm shadow-sm btn-primary"
+                                >
+                                    <Sliders size={16} className="flex-shrink-0" />
+                                    Simulador de voto
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

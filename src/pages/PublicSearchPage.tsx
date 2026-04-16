@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MagnifyingGlass, CaretLeft, MapPin, FileText, CheckCircle, WarningCircle } from '@phosphor-icons/react';
+import { MagnifyingGlass, CaretLeft, MapPin, FileText, CheckCircle, WarningCircle, Sliders } from '@phosphor-icons/react';
+import { getDatosSimulador } from './Simulador/data';
 import { getElector } from '../api/padronApi';
 import type { ElectorResult } from '../types/padron';
 import axios from 'axios';
@@ -25,6 +26,8 @@ export function PublicSearchPage() {
     const [cedula, setCedula] = useState('');
     const [state, setState] = useState<SearchState>('idle');
     const [results, setResults] = useState<ElectorResult[]>([]);
+
+    const simuladorHabilitado = getDatosSimulador() !== null;
 
     const candidateImage = branding?.candidateImageUrl ?? null;
     const candidateName = branding?.appTitle ?? '';
@@ -58,18 +61,43 @@ export function PublicSearchPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans">
-            <div className="w-full max-w-6xl">
-                {/* Back button */}
-                <button
-                    onClick={handleBack}
-                    className="text-gray-500 hover:text-black mb-4 flex items-center font-bold px-2 transition-colors"
-                >
-                    <CaretLeft size={16} weight="bold" className="mr-1" />
-                    {isAuthenticated ? 'Ir al panel' : 'Ir al Login'}
-                </button>
+        <div className="h-screen bg-gray-50 flex flex-col items-center justify-center p-4 font-sans overflow-hidden">
+            <div className="w-full max-w-6xl flex flex-col h-full">
+                <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col flex-1 border border-gray-100">
 
-                <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row-reverse min-h-[750px] border border-gray-100">
+                    {/* Banner de navegación superior — Variante C */}
+                    <div
+                        className="w-full flex items-center justify-between px-5 py-3 flex-shrink-0"
+                        style={{ background: 'var(--primary)' }}
+                    >
+                        <button
+                            onClick={handleBack}
+                            className="flex items-center gap-1.5 text-white/70 hover:text-white font-bold text-sm transition-colors"
+                        >
+                            <CaretLeft size={14} weight="bold" />
+                            {isAuthenticated ? 'Ir al panel' : 'Ir al Login'}
+                        </button>
+
+                        <span className="font-black text-white text-sm tracking-[0.18em] uppercase select-none">
+                            SIGELE
+                        </span>
+
+                        {simuladorHabilitado ? (
+                            <button
+                                onClick={() => navigate('/simulador')}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-sm text-white transition-all"
+                                style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.28)' }}
+                            >
+                                <Sliders size={13} weight="bold" />
+                                Simulador
+                            </button>
+                        ) : (
+                            <div className="w-24" /> /* placeholder para mantener el centrado del título */
+                        )}
+                    </div>
+
+                    {/* Contenido: sidebar + buscador */}
+                    <div className="flex flex-col md:flex-row-reverse flex-1 min-h-0">
 
                     {/* Sidebar Candidato — derecha en desktop */}
                     <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center sidebar-primary p-10 text-white relative overflow-hidden">
@@ -101,7 +129,7 @@ export function PublicSearchPage() {
                     </div>
 
                     {/* Buscador — izquierda */}
-                    <div className="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50">
+                    <div className="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gray-50/50 overflow-y-auto">
                         <div className="text-center mb-10">
                             <div className="inline-flex items-center justify-center p-4 rounded-2xl mb-6 shadow-inner" style={{ background: 'rgba(var(--primary-rgb), 0.07)' }}>
                                 <MagnifyingGlass size={40} weight="bold" className="text-primary" />
@@ -216,7 +244,9 @@ export function PublicSearchPage() {
                             )}
                         </div>
                     </div>
-                </div>
+                    </div>{/* fin contenido flex-row */}
+                </div>{/* fin card */}
+
             </div>
         </div>
     );
