@@ -126,8 +126,7 @@ export function SimuladorPaso2({
 
     return (
         <div style={{
-            height: '100dvh',
-            minHeight: '100vh',
+            height: '100%',
             background: '#eeeeee',
             display: 'flex',
             flexDirection: 'column',
