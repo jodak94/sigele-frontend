@@ -184,9 +184,9 @@ export function SimuladorPaso1({
     onAceptar: (sel: SeleccionIntendente) => void;
     onVolver?: () => void;
 }) {
-    // Grid 2 columnas; filas dinámicas según cantidad de candidatos + voto en blanco
+    // Grid dinámico: ≤3 candidatos → 2 cols, 4-5 → 3 cols
     const total = candidatos.length + 1;
-    const cols = 2;
+    const cols = candidatos.length <= 3 ? 2 : 3;
     const rows = Math.ceil(total / cols);
     const vacias = rows * cols - total;
 

@@ -3,6 +3,7 @@ import type { DatosMunicipio, ConfigTenant } from './tipos';
 
 // ── Importar un archivo por cada municipio configurado ───────────────────────
 import { datosSanLorenzo } from './municipios/sanLorenzo';
+import { datosLimpio } from './municipios/limpio';
 
 // ── Configuración por tenant ──────────────────────────────────────────────────
 // municipio: datos electorales compartidos entre tenants del mismo municipio
@@ -14,6 +15,14 @@ const TENANTS: Record<string, { municipio: DatosMunicipio; config: ConfigTenant 
             intendenteId: 'sli1',          // Felipito Salomón - Honor Colorado A
             listaJuntaId: 'sl-junta-1',    // Honor Colorado A
             candidatoJuntaOpcion: 10,       // Naomy Ferrer
+        },
+    },
+    'joelgomez': {
+        municipio: datosLimpio,
+        config: {
+            intendenteId: 'lm1',          // Manuel Aguilar - Honor Colorado A
+            listaJuntaId: 'lm-junta-1',    // Honor Colorado A
+            candidatoJuntaOpcion: 10,       // Joel Gomez
         },
     },
     // 'otro-candidato': {
