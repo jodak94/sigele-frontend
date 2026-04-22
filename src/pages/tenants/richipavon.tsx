@@ -10,7 +10,7 @@ const FOTO_2 = 'https://assets.sigele.com.py/tenants/richipavon/sobre_mi_2.png';
 const REDES = {
     facebook:  null,
     instagram: null,
-    whatsapp:  null,
+    whatsapp:  'https://wa.me/595971286199',
 };
 
 const EJES = [
