@@ -1,184 +1,175 @@
-import { useState } from 'react';
-
-/* ─── Pasos ──────────────────────────────────────────────────────────────── */
+import { IdentificationCard, ArrowFatLineRight, CursorClick, ArrowRight } from '@phosphor-icons/react';
 
 const PASOS = [
     {
-        imagen: '/simulador/maquina0.webp',
-        titulo: 'Simulador de votación',
-        texto: 'Practicá el proceso de votación con la máquina de Boleta Única Electrónica antes del día de la elección.',
-        boton: 'Comenzar',
-    },
-    {
-        imagen: '/simulador/boleta.webp',
+        Icono: IdentificationCard,
         titulo: 'Presentá tu cédula',
-        texto: 'Presentá tu cédula de identidad civil a los miembros de la mesa receptora de votos. Ellos te entregarán el boletín firmado por los dos vocales.',
-        boton: 'Continuar',
+        texto: 'Acercate a la mesa receptora con tu cédula de identidad. Los vocales te entregarán el boletín firmado.',
     },
     {
-        imagen: '/simulador/maquina_boleta.webp',
-        titulo: 'Insertá el boletín',
-        texto: 'Colocá el boletín en la ranura de la máquina como lo indica la flecha.',
-        boton: 'Ir al simulador',
+        Icono: ArrowFatLineRight,
+        titulo: 'Insertá el boletín en la máquina',
+        texto: 'Colocá el boletín en la ranura siguiendo la dirección de la flecha indicada.',
+    },
+    {
+        Icono: CursorClick,
+        titulo: 'Seleccioná tus candidatos',
+        texto: 'Tocá la pantalla para elegir tu candidato a Intendente y tu lista a Junta Municipal.',
     },
 ];
 
-/* ─── Componente ─────────────────────────────────────────────────────────── */
-
 export function SimuladorIntro({ onTerminar }: { onTerminar: () => void }) {
-    const [paso, setPaso] = useState(0);
-    const esBienvenida = paso === 0;
-    const esUltimo = paso === PASOS.length - 1;
-    const { imagen, titulo, texto, boton } = PASOS[paso];
-
-    function avanzar() {
-        if (!esUltimo) setPaso(p => p + 1);
-        else onTerminar();
-    }
-
     return (
         <div style={{
             minHeight: '100vh',
             height: '100dvh',
-            background: '#e6e5e4',
+            background: '#f3f2f0',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
             fontFamily: 'system-ui, -apple-system, sans-serif',
+            overflow: 'hidden',
         }}>
 
             {/* ── Header ── */}
             <header style={{
-                background: '#545859',
-                padding: '12px',
+                background: 'var(--primary)',
+                padding: '13px 20px',
                 flexShrink: 0,
-                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             }}>
-                <p style={{
-                    margin: '0 auto',
-                    display: 'inline-block',
-                    fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
-                    fontWeight: 700,
+                <span style={{
                     color: 'white',
-                    borderBottom: '2px solid rgba(255,255,255,0.6)',
-                    paddingBottom: '4px',
+                    fontWeight: 800,
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
                 }}>
-                    GUÍA RÁPIDA PARA VOTAR EN LA MÁQUINA DE VOTACIÓN
-                </p>
+                    SIGELE · Simulador de Votación
+                </span>
             </header>
 
             {/* ── Contenido ── */}
             <main style={{
                 flex: 1,
+                overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'space-around',
-                padding: 'clamp(0.5rem, 2vh, 2rem) clamp(1rem, 4vw, 2rem)',
-                textAlign: 'center',
-                minHeight: 0,
+                justifyContent: 'center',
+                padding: 'clamp(1.5rem, 4vh, 2.5rem) clamp(1rem, 5vw, 2rem)',
             }}>
+                <div style={{ width: '100%', maxWidth: '500px' }}>
 
-                {/* Imagen */}
-                <img
-                    key={imagen}
-                    src={imagen}
-                    alt={titulo}
-                    style={{
-                        display: 'block',
-                        maxHeight: 'clamp(80px, 32vh, 320px)',
-                        maxWidth: '90%',
-                        objectFit: 'contain',
-                        flexShrink: 0,
-                        animation: 'sim-fadein 0.35s ease both',
-                    }}
-                />
-
-                {/* Texto */}
-                <div style={{
-                    maxWidth: '560px',
-                    animation: 'sim-fadein 0.35s 0.08s ease both',
-                }}>
-                    <h1 style={{
-                        fontSize: 'clamp(0.9rem, 2vw, 1.6rem)',
-                        fontWeight: 700,
-                        color: '#000',
-                        margin: 'clamp(4px, 1.5vh, 20px) auto',
-                        lineHeight: 1.35,
-                    }}>
-                        {titulo}
-                    </h1>
-                    {!esBienvenida && (
+                    {/* ── Encabezado ── */}
+                    <div style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}>
                         <p style={{
-                            fontSize: 'clamp(0.85rem, 1.6vw, 1.1rem)',
-                            color: '#222',
-                            lineHeight: 1.5,
-                            margin: 0,
+                            margin: '0 0 0.6rem',
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            color: 'var(--primary)',
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
                         }}>
-                            {texto}
+                            Guía rápida
                         </p>
-                    )}
-                </div>
+                        <h1 style={{
+                            margin: '0 0 0.5rem',
+                            fontSize: 'clamp(1.4rem, 4vw, 1.75rem)',
+                            fontWeight: 800,
+                            color: '#111',
+                            lineHeight: 1.2,
+                            letterSpacing: '-0.02em',
+                        }}>
+                            ¿Cómo se vota con la máquina?
+                        </h1>
+                        <p style={{
+                            margin: 0,
+                            fontSize: '0.88rem',
+                            color: '#666',
+                            lineHeight: 1.5,
+                        }}>
+                            Practicá el proceso antes del día de la elección.
+                        </p>
+                    </div>
 
-                {/* Botones */}
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    animation: 'sim-fadein 0.35s 0.15s ease both',
-                }}>
+                    {/* ── Pasos ── */}
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.75rem',
+                        marginBottom: 'clamp(1.5rem, 3vh, 2rem)',
+                    }}>
+                        {PASOS.map(({ Icono, titulo, texto }, i) => (
+                            <div key={i} style={{
+                                display: 'flex',
+                                gap: '1rem',
+                                alignItems: 'flex-start',
+                                background: 'white',
+                                border: '1px solid #e2e0dd',
+                                borderRadius: '10px',
+                                padding: '1rem 1.1rem',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                            }}>
+                                {/* Número */}
+                                <div style={{
+                                    width: 36,
+                                    height: 36,
+                                    borderRadius: '50%',
+                                    background: 'var(--primary)',
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                    fontWeight: 800,
+                                    fontSize: '0.9rem',
+                                }}>
+                                    {i + 1}
+                                </div>
+                                {/* Texto */}
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
+                                        <Icono size={15} weight="fill" style={{ color: 'var(--primary)', flexShrink: 0 }} />
+                                        <p style={{ margin: 0, fontWeight: 700, color: '#111', fontSize: '0.9rem' }}>{titulo}</p>
+                                    </div>
+                                    <p style={{ margin: 0, fontSize: '0.82rem', color: '#5a5a5a', lineHeight: 1.55 }}>{texto}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* ── Botón ── */}
                     <button
-                        onClick={avanzar}
+                        onClick={onTerminar}
                         style={{
-                            width: '300px',
-                            maxWidth: '90vw',
-                            minHeight: '60px',
-                            padding: '15px 30px',
-                            fontSize: '1rem',
-                            fontWeight: 600,
-                            borderRadius: '4px',
+                            width: '100%',
+                            padding: '14px',
+                            borderRadius: '8px',
                             border: 'none',
-                            cursor: 'pointer',
-                            background: esBienvenida ? '#5cb85c' : '#337ab7',
+                            background: 'var(--primary)',
                             color: 'white',
-                            lineHeight: 1.4,
+                            fontWeight: 700,
+                            fontSize: '0.9rem',
+                            letterSpacing: '0.07em',
+                            textTransform: 'uppercase',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
                             transition: 'filter 0.15s',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
+                        onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(0.88)')}
                         onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(1)')}
                     >
-                        {boton}
+                        Comenzar simulación
+                        <ArrowRight size={16} weight="bold" />
                     </button>
 
-                    {paso > 1 && (
-                        <button
-                            onClick={() => setPaso(p => p - 1)}
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#666',
-                                fontSize: '0.85rem',
-                                cursor: 'pointer',
-                                padding: '0.25rem 0.5rem',
-                                transition: 'color 0.2s',
-                            }}
-                            onMouseEnter={e => (e.currentTarget.style.color = '#333')}
-                            onMouseLeave={e => (e.currentTarget.style.color = '#666')}
-                        >
-                            ← Volver
-                        </button>
-                    )}
                 </div>
-
             </main>
-
-            <style>{`
-                @keyframes sim-fadein {
-                    from { opacity: 0; transform: translateY(12px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
         </div>
     );
 }
