@@ -15,6 +15,35 @@ function CardLista({
     activa: boolean;
     onClick: () => void;
 }) {
+    if (lista.placeholder) {
+        return (
+            <div style={{
+                background: 'white',
+                border: '1px solid #bec3be',
+                cursor: 'default',
+                opacity: 0.35,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                userSelect: 'none',
+                textAlign: 'center',
+                boxSizing: 'border-box',
+                padding: 'clamp(10px, 2.5vh, 24px) clamp(8px, 2vw, 20px)',
+            }}>
+                <p style={{
+                    margin: 0,
+                    fontWeight: 700,
+                    fontSize: 'calc(1.66rem * 0.8 * 1.33)',
+                    color: '#555',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.3,
+                }}>
+                    Lista participante
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div
             onClick={activa ? onClick : undefined}

@@ -2,10 +2,11 @@ export interface CandidatoIntendente {
     id: string;
     lista: string;
     partido: string;
-    siglas: string,
-    colores: string[];   // [primary] o [primary, secondary]
+    siglas: string;
+    colores: string[];
     nombre: string;
-    foto?: string;       // URL CloudFront, ej: "https://cdn.sigele.com.py/simulador/naomyferrer/martinez.webp"
+    foto?: string;
+    placeholder?: boolean;
 }
 
 export interface ListaJunta {
@@ -13,26 +14,32 @@ export interface ListaJunta {
     numero: string;
     partido: string;
     siglas: string;
-    color: string;       // color del partido, usado en avatares de candidatos
+    color: string;
+    placeholder?: boolean;
 }
 
 export interface CandidatoJunta {
     opcion: number;
     nombre: string;
-    foto?: string;       // URL CloudFront
+    foto?: string;
+    placeholder?: boolean;
 }
 
-export interface DatosMunicipio {
+/** Datos del tenant — única fuente de candidatos reales */
+export interface DatosTenant {
     municipio: string;
-    candidatosIntendente: CandidatoIntendente[];
-    listasJunta: ListaJunta[];
-    /** Mapa lista.id → candidatos a junta de esa lista */
-    candidatosPorLista: Record<string, CandidatoJunta[]>;
-}
-
-/** Candidaturas propias del tenant — las demás opciones se muestran deshabilitadas */
-export interface ConfigTenant {
-    intendenteId: string;         // CandidatoIntendente.id
-    listaJuntaId: string;         // ListaJunta.id
-    candidatoJuntaOpcion: number; // CandidatoJunta.opcion
+    intendente: CandidatoIntendente;
+    /** Posición (1-based) del intendente del tenant en la boleta */
+    posicionIntendente: number;
+    /** Total de candidatos a intendente en el municipio */
+    totalIntendentes: number;
+    listaJunta: ListaJunta;
+    /** Candidato propio del tenant en la lista de junta */
+    candidatoJunta: CandidatoJunta;
+    /** Total de candidatos en la lista (incluyendo el del tenant) */
+    totalCandidatosJunta: number;
+    /** Posición (1-based) de la lista del tenant en la boleta */
+    posicionListaJunta: number;
+    /** Total de listas participantes a junta en el municipio */
+    totalListasJunta: number;
 }

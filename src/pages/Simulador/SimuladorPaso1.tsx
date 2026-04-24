@@ -39,6 +39,41 @@ function CardCandidato({
     activo: boolean;
     onClick: () => void;
 }) {
+    if (candidato.placeholder) {
+        return (
+            <div style={{
+                background: 'white',
+                border: '1px solid #bec3be',
+                cursor: 'default',
+                opacity: 0.35,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 'clamp(6px, 1.5vh, 14px)',
+                padding: 'clamp(8px, 2vh, 20px)',
+                boxSizing: 'border-box',
+                userSelect: 'none',
+                overflow: 'hidden',
+            }}>
+                <div style={{ height: 'clamp(60px, 15vh, 130px)', aspectRatio: '1/1' }}>
+                    <Avatar color="#aaa" />
+                </div>
+                <p style={{
+                    margin: 0,
+                    fontWeight: 700,
+                    fontSize: 'calc(1.66rem * 0.8 * 1.33)',
+                    color: '#555',
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                    lineHeight: 1.2,
+                }}>
+                    {candidato.nombre}
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div
             onClick={activo ? onClick : undefined}

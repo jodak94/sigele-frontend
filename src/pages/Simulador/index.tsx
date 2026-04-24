@@ -6,7 +6,7 @@ import { SimuladorPaso2 } from './SimuladorPaso2';
 import { SimuladorPaso3 } from './SimuladorPaso3';
 import { SimuladorPaso4 } from './SimuladorPaso4';
 import { SimuladorPaso5 } from './SimuladorPaso5';
-import { getDatosSimulador } from './data';
+import { getDatosSimulador, buildCandidatosIntendente, buildListasJunta, buildCandidatosJunta } from './data';
 import type { SeleccionIntendente } from './SimuladorPaso1';
 import type { Lista } from './SimuladorPaso2';
 import type { SeleccionJunta } from './SimuladorPaso3';
@@ -82,7 +82,10 @@ export function SimuladorPage() {
 
     if (!datosSimulador) return <Navigate to="/padron" replace />;
 
-    const { municipio, config } = datosSimulador;
+    const datos = datosSimulador;
+    const candidatosIntendente = buildCandidatosIntendente(datos);
+    const listasJunta = buildListasJunta(datos);
+    const candidatosJunta = buildCandidatosJunta(datos);
 
     // Intro y Paso5: responsive sin escalar
     if (fase === 'intro') return <SimuladorIntro onTerminar={() => setFase('paso1')} />;
@@ -101,15 +104,15 @@ export function SimuladorPage() {
         <ScaledSimulador>
             {fase === 'paso1' && (
                 <SimuladorPaso1
-                    candidatos={municipio.candidatosIntendente}
-                    intendenteIdActivo={config.intendenteId}
+                    candidatos={candidatosIntendente}
+                    intendenteIdActivo={datos.intendente.id}
                     onAceptar={(sel) => { setIntendente(sel); setFase('paso2'); }}
                 />
             )}
             {fase === 'paso2' && (
                 <SimuladorPaso2
-                    listas={municipio.listasJunta}
-                    listaIdActiva={config.listaJuntaId}
+                    listas={listasJunta}
+                    listaIdActiva={datos.listaJunta.id}
                     onAceptar={(lista) => {
                         if (lista === 'blanco') {
                             setListaJunta(null);
@@ -126,8 +129,8 @@ export function SimuladorPage() {
             {fase === 'paso3' && listaJunta && (
                 <SimuladorPaso3
                     lista={listaJunta}
-                    candidatos={municipio.candidatosPorLista[listaJunta.id] ?? []}
-                    opcionActiva={config.candidatoJuntaOpcion}
+                    candidatos={candidatosJunta}
+                    opcionActiva={datos.candidatoJunta.opcion}
                     onAceptar={(sel) => { setJunta(sel); setFase('paso4'); }}
                     onVolver={() => setFase('paso2')}
                 />

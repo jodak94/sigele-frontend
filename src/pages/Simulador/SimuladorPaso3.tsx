@@ -43,6 +43,36 @@ function CardCandidato({
     activo: boolean;
     onClick: () => void;
 }) {
+    if (candidato.placeholder) {
+        return (
+            <div style={{
+                background: 'white',
+                border: '1px solid #bec3be',
+                cursor: 'default',
+                opacity: 0.35,
+                display: 'grid',
+                alignItems: 'center',
+                gridTemplateAreas: '"fotoCandidato numeroOrden" "nombreCandidato nombreCandidato"',
+                gridTemplateColumns: '1fr 1fr',
+                gridTemplateRows: 'minmax(50%, 2fr) 1fr',
+                boxSizing: 'border-box',
+                userSelect: 'none',
+                overflow: 'hidden',
+            }}>
+                <div style={{ gridArea: 'fotoCandidato', overflow: 'hidden', alignSelf: 'stretch' }}>
+                    <Avatar color="#aaa" />
+                </div>
+                <div style={{ gridArea: 'numeroOrden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', lineHeight: 1.1 }}>
+                    <p style={{ margin: 0, fontWeight: 700, fontSize: 'calc(1.66rem * 0.8 * 1.1)', color: '#555' }}>Opción</p>
+                    <p style={{ margin: 0, fontWeight: 700, fontSize: 'calc(1.66rem * 0.8 * 1.33)', color: '#555' }}>{candidato.opcion}</p>
+                </div>
+                <p style={{ gridArea: 'nombreCandidato', margin: 0, padding: '2px 4px', textAlign: 'center', fontSize: 'calc(1.66rem * 0.8 * 0.9)', color: '#555', lineHeight: 1.2 }}>
+                    {candidato.nombre}
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div
             onClick={activo ? onClick : undefined}
