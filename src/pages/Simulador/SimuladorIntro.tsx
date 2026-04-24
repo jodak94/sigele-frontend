@@ -1,4 +1,5 @@
-import { IdentificationCard, ArrowFatLineRight, CursorClick, ArrowRight } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
+import { IdentificationCard, ArrowFatLineRight, CursorClick, ArrowRight, CaretLeft } from '@phosphor-icons/react';
 
 const PASOS = [
     {
@@ -19,6 +20,8 @@ const PASOS = [
 ];
 
 export function SimuladorIntro({ onTerminar }: { onTerminar: () => void }) {
+    const navigate = useNavigate();
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -37,8 +40,30 @@ export function SimuladorIntro({ onTerminar }: { onTerminar: () => void }) {
                 flexShrink: 0,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
             }}>
+                <button
+                    onClick={() => navigate('/login')}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        color: 'rgba(255,255,255,0.75)',
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                        padding: 0,
+                        transition: 'color 0.15s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'white')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+                >
+                    <CaretLeft size={13} weight="bold" />
+                    Ir al login
+                </button>
+
                 <span style={{
                     color: 'white',
                     fontWeight: 800,
@@ -48,6 +73,9 @@ export function SimuladorIntro({ onTerminar }: { onTerminar: () => void }) {
                 }}>
                     SIGELE · Simulador de Votación
                 </span>
+
+                {/* Espaciador para centrar el título */}
+                <div style={{ width: 72 }} />
             </header>
 
             {/* ── Contenido ── */}
