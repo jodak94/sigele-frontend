@@ -218,6 +218,16 @@ export function PublicSearchPage() {
                                             </div>
                                         </div>
                                     ))}
+
+                                    {simuladorHabilitado && (
+                                        <button
+                                            onClick={() => navigate('/simulador')}
+                                            className="fade-in w-full py-4 rounded-2xl font-extrabold text-lg shadow-md btn-primary flex items-center justify-center gap-2"
+                                        >
+                                            <Sliders size={22} weight="bold" />
+                                            Simulá tu voto
+                                        </button>
+                                    )}
                                 </>
                             )}
 
