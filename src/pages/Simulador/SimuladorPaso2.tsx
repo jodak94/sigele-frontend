@@ -147,8 +147,8 @@ export function SimuladorPaso2({
 }) {
     // Cuántas celdas necesitamos: listas + VOTO EN BLANCO
     const total = listas.length + 1;
-    // Siempre grid 3 columnas; filas las que hagan falta
-    const cols = 3;
+    // 4 ítems → 2×2; resto → 3 columnas
+    const cols = total === 4 ? 2 : 3;
     const rows = Math.ceil(total / cols);
     // Celdas vacías para completar el grid
     const vacias = rows * cols - total;

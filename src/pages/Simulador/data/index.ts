@@ -84,6 +84,32 @@ const TENANTS: Record<string, DatosTenant> = {
         totalListasJunta: 4,
     },
 
+    'mariajosecardenas': {
+        municipio: 'Villeta',
+        intendente: {
+            id: 'vi1',
+            lista: '2R',
+            partido: 'HONOR COLORADO R',
+            siglas: 'MHC',
+            colores: ['#CC0E22'],
+            nombre: 'Ricardo Arroyo',
+            foto: 'https://assets.sigele.com.py/simulador/villeta/i1.webp',
+        },
+        posicionIntendente: 1,
+        totalIntendentes: 2,
+        listaJunta: {
+            id: 'vi-junta-1',
+            numero: '2R',
+            partido: 'HONOR COLORADO R',
+            siglas: 'MHC',
+            color: '#CC0E22',
+        },
+        candidatoJunta: { opcion: 8, nombre: 'Maria Jose Cardenas C', foto: 'https://assets.sigele.com.py/simulador/villeta/jm8.webp' },
+        totalCandidatosJunta: 12,
+        posicionListaJunta: 1,
+        totalListasJunta: 3,
+    },
+
     'demo': {
         municipio: 'Demo',
         intendente: {
