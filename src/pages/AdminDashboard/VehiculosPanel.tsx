@@ -381,7 +381,6 @@ function ResolveModal({ solicitud, accion, onClose, onResolved }: ResolveModalPr
 // ─── Tab solicitudes ──────────────────────────────────────────────────────────
 
 function SolicitudesTab() {
-    const toast = useToast();
     const hasPermission = useAuthStore(s => s.hasPermission);
     const canResolve = hasPermission('vehiculo:create');
 

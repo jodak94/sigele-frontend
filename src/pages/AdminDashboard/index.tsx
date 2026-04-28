@@ -20,14 +20,15 @@ import { MapaElectores } from './MapaElectores';
 import { PublicPageCard } from './PublicPageCard';
 import { VehiculosPanel } from './VehiculosPanel';
 import { ReportesPage } from '../ReportesPage';
+import type { Icon } from "@phosphor-icons/react";
 
 type ViewId = 'panel' | 'reportes' | 'mapa' | 'vehiculos' | 'usuarios';
 
-interface NavItem {
-    id: ViewId;
-    label: string;
-    icon: React.ComponentType<{ size?: number; weight?: string; className?: string }>;
-}
+type NavItem = {
+  id: ViewId;
+  label: string;
+  icon: Icon;
+};
 
 export function AdminDashboard() {
     const navigate = useNavigate();
