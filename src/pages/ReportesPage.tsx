@@ -5,20 +5,23 @@ import { getSeccionalStats, getPadronPublicoStats, getTopLocales, getUltimasCons
 import { searchOperadores, getCoordinators } from '../api/usersApi';
 import { CustomSelect } from '../components/CustomSelect';
 import { getReporteElectores, exportarReporteElectores, getReporteResumenOperadores, exportarReporteResumenOperadores, getReporteDiaD, exportarReporteDiaD, getReporteCandidatosMesa, exportarReporteCandidatosMesa } from '../api/captacionApi';
+import { getReporteVehiculos, exportarReporteVehiculos } from '../api/vehiculosApi';
 import { useAuthStore } from '../store/authStore';
+import type { VehiculoReporteItem, VehiculosReporteData } from '../types/vehiculo';
 import type { SeccionalStat, PadronPublicoStats, TopLocalItem, UltimaConsultaItem } from '../types/admin';
 import type { UserListItem, CoordinatorListItem } from '../types/user';
 import type { ReporteElectorItem, ReporteOperadorItem, ReporteResumenOperadoresResponse, ReporteDiaDResponse, ReporteDiaDLocal, ReporteCandidatosMesaResponse, ReporteCandidatosMesaLocal } from '../types/captacion';
 
-type TabId = 'planilla' | 'coordinador' | 'diad' | 'mesas' | 'stats' | 'zonas';
+type TabId = 'planilla' | 'coordinador' | 'diad' | 'mesas' | 'stats' | 'zonas' | 'vehiculos';
 
-const TABS: { id: TabId; label: string }[] = [
+const ALL_TABS: { id: TabId; label: string; permission?: string }[] = [
     { id: 'planilla', label: 'Planilla Operador' },
     { id: 'coordinador', label: 'Lista Coordinador' },
     { id: 'diad', label: 'Reporte Día D' },
     { id: 'mesas', label: 'Miembros de Mesa' },
     { id: 'stats', label: 'Stats Padrón' },
     { id: 'zonas', label: 'Stats Zonas' },
+    { id: 'vehiculos', label: 'Vehículos', permission: 'vehiculo:read' },
 ];
 
 // ─── Tab: planilla ────────────────────────────────────────────────────────────
@@ -933,10 +936,129 @@ function TabZonas() {
     );
 }
 
+// ─── Tab: vehiculos ───────────────────────────────────────────────────────────
+
+function TabVehiculos() {
+    const [reportData, setReportData] = useState<VehiculosReporteData | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [exporting, setExporting] = useState<'xls' | 'pdf' | null>(null);
+
+    useEffect(() => {
+        getReporteVehiculos()
+            .then(setReportData)
+            .catch(() => setReportData(null))
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    const handleExport = async (fmt: 'xls' | 'pdf') => {
+        setExporting(fmt);
+        try {
+            await exportarReporteVehiculos(fmt);
+        } finally {
+            setExporting(null);
+        }
+    };
+
+    const fmtGs = (n: number) => `Gs. ${n.toLocaleString('es-PY')}`;
+
+    if (isLoading) {
+        return (
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 text-center text-gray-500 font-bold animate-pulse">
+                Cargando reporte...
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <h2 className="text-xl font-extrabold uppercase text-black tracking-tight">
+                        Reporte de Vehículos de Campaña
+                    </h2>
+                    <p className="text-gray-500 text-sm font-medium mt-0.5">
+                        Flota disponible con operadores asignados y montos de alquiler.
+                    </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                    <button
+                        onClick={() => handleExport('xls')}
+                        disabled={exporting !== null || !reportData}
+                        className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
+                    >
+                        <FileXls size={15} weight="bold" className="text-green-600" />
+                        {exporting === 'xls' ? 'Exportando...' : 'Excel'}
+                    </button>
+                    <button
+                        onClick={() => handleExport('pdf')}
+                        disabled={exporting !== null || !reportData}
+                        className="flex items-center gap-1.5 text-sm border border-gray-300 px-3 py-2 rounded-lg text-gray-800 hover:bg-gray-50 font-bold disabled:opacity-50"
+                    >
+                        <FilePdf size={15} weight="bold" className="text-primary" />
+                        {exporting === 'pdf' ? 'Exportando...' : 'PDF'}
+                    </button>
+                    {reportData && (
+                        <span className="bg-gray-100 text-gray-700 text-sm font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
+                            {reportData.total} vehículo{reportData.total !== 1 ? 's' : ''}
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            {!reportData || reportData.vehiculos.length === 0 ? (
+                <div className="p-8 text-center text-gray-400 font-medium">
+                    No hay vehículos registrados.
+                </div>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                {['N°', 'Dueño', 'Teléfono', 'Cap.', 'Monto Alquiler', 'Operador Asignado', 'Observación'].map(h => (
+                                    <th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase whitespace-nowrap">
+                                        {h}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {reportData.vehiculos.map((v: VehiculoReporteItem, i: number) => (
+                                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                    <td className="px-4 py-3 font-black text-gray-400">{i + 1}</td>
+                                    <td className="px-4 py-3 font-bold text-black">{v.nombreDueno}</td>
+                                    <td className="px-4 py-3 text-gray-700 font-medium">{v.telefonoDueno}</td>
+                                    <td className="px-4 py-3 text-center font-black">{v.capacidad}</td>
+                                    <td className="px-4 py-3 font-bold text-gray-800">{fmtGs(v.montoAlquiler)}</td>
+                                    <td className="px-4 py-3 text-gray-600">{v.operadorNombre ?? '—'}</td>
+                                    <td className="px-4 py-3 text-gray-500 max-w-xs">{v.observacion ?? '—'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                        <tfoot>
+                            <tr className="bg-gray-100 font-black text-black">
+                                <td colSpan={3} className="px-4 py-3 text-right text-xs uppercase">TOTALES:</td>
+                                <td className="px-4 py-3 text-center">
+                                    {reportData.vehiculos.reduce((s, v) => s + v.capacidad, 0)}
+                                </td>
+                                <td className="px-4 py-3 font-bold">
+                                    {fmtGs(reportData.vehiculos.reduce((s, v) => s + v.montoAlquiler, 0))}
+                                </td>
+                                <td colSpan={2} />
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export function ReportesPage() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const hasPermission = useAuthStore(s => s.hasPermission);
+    const TABS = ALL_TABS.filter(t => !t.permission || hasPermission(t.permission));
     const rawTab = searchParams.get('tab') as TabId | null;
     const activeTab: TabId = TABS.some((t) => t.id === rawTab) ? rawTab! : 'planilla';
 
@@ -999,6 +1121,8 @@ export function ReportesPage() {
             {activeTab === 'stats' && <TabStats />}
 
             {activeTab === 'zonas' && <TabZonas />}
+
+            {activeTab === 'vehiculos' && <TabVehiculos />}
         </div>
     );
 }

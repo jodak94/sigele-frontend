@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { X, MapPin, SpinnerGap, MagnifyingGlass } from '@phosphor-icons/react';
+import { MapPin, SpinnerGap, MagnifyingGlass } from '@phosphor-icons/react';
 import { getElectoresUbicaciones } from '../../api/captacionApi';
 import type { ElectorUbicacion } from '../../types/captacion';
 
@@ -17,7 +17,7 @@ const DEFAULT_LNG = -57.647;
 const DEFAULT_ZOOM = 13;
 
 interface MapaElectoresProps {
-    onClose: () => void;
+    onClose?: () => void;
 }
 
 function calcularCentro(ubicaciones: ElectorUbicacion[]): [number, number] {
@@ -38,8 +38,7 @@ export function MapaElectores({ onClose }: MapaElectoresProps) {
     const [searchError, setSearchError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Close on Escape key
-        const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && onClose) onClose(); };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
     }, [onClose]);
@@ -126,25 +125,16 @@ export function MapaElectores({ onClose }: MapaElectoresProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white">
+        <div className="rounded-2xl border border-gray-200 overflow-hidden bg-white flex flex-col" style={{ height: 'calc(100vh - 240px)', minHeight: '420px' }}>
             {/* Topbar */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white z-10 shrink-0">
-                <div className="flex items-center gap-2">
-                    <MapPin size={20} weight="fill" className="text-primary" />
-                    <span className="font-extrabold text-gray-900 text-base">Mapa de Electores</span>
-                    {!isLoading && !error && (
-                        <span className="ml-2 text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                            {total} {total === 1 ? 'ubicación' : 'ubicaciones'}
-                        </span>
-                    )}
-                </div>
-                <button
-                    onClick={onClose}
-                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors"
-                    title="Cerrar"
-                >
-                    <X size={20} weight="bold" />
-                </button>
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 bg-gray-50 shrink-0">
+                <MapPin size={18} weight="fill" className="text-primary" />
+                <span className="font-extrabold text-gray-900 text-sm">Mapa de Electores</span>
+                {!isLoading && !error && (
+                    <span className="text-xs font-bold text-gray-400 bg-white border border-gray-200 px-2 py-0.5 rounded-full">
+                        {total} {total === 1 ? 'ubicación' : 'ubicaciones'}
+                    </span>
+                )}
             </div>
 
             {/* Map area */}

@@ -35,6 +35,9 @@ export interface CreateCaptacionRequest {
     requiereTransporte: boolean;
     ubicacion?: Ubicacion;
     operadorUbicacion: Ubicacion | null;
+    solicitudAlquiler?: boolean;
+    capacidadVehiculo?: number;
+    montoAlquilerVehiculo?: number;
 }
 
 export interface UpdateCaptacionRequest {

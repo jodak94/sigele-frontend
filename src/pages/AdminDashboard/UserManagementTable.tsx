@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Users, ArrowLeft, ArrowRight, LockKey, MagnifyingGlass } from '@phosphor-icons/react';
+import { Users, ArrowLeft, ArrowRight, LockKey, MagnifyingGlass, UserPlus } from '@phosphor-icons/react';
 import { getAllUsers, adminResetPassword } from '../../api/usersApi';
 import { useToast } from '../../components/Toast';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
@@ -8,7 +8,11 @@ import type { UserListItem } from '../../types/user';
 const PAGE_SIZE = 10;
 const TEMP_PASSWORD = 'SGELE-2026!';
 
-export function UserManagementTable() {
+interface UserManagementTableProps {
+    onCreateUser?: () => void;
+}
+
+export function UserManagementTable({ onCreateUser }: UserManagementTableProps = {}) {
     const toast = useToast();
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [page, setPage] = useState(1);
@@ -65,6 +69,16 @@ export function UserManagementTable() {
                     <Users size={20} weight="bold" className="text-primary" />
                     <h2 className="text-lg font-extrabold text-black">Gestión de Usuarios</h2>
                 </div>
+                <div className="flex items-center gap-3">
+                {onCreateUser && (
+                    <button
+                        onClick={onCreateUser}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-extrabold btn-primary whitespace-nowrap shrink-0"
+                    >
+                        <UserPlus size={15} weight="bold" />
+                        Nuevo Usuario
+                    </button>
+                )}
                 <div className="relative w-full sm:w-64">
                     <MagnifyingGlass size={15} weight="bold" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
@@ -74,6 +88,7 @@ export function UserManagementTable() {
                         placeholder="Buscar por nombre..."
                         className="w-full pl-8 pr-4 py-2 bg-gray-50 border border-gray-300 rounded-xl outline-none font-bold text-sm input-focus-primary"
                     />
+                </div>
                 </div>
             </div>
 

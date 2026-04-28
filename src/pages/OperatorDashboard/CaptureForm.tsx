@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass, Lock } from '@phosphor-icons/react';
+import { UserPlus, CheckCircle, WarningCircle, MagnifyingGlass, Lock, Truck } from '@phosphor-icons/react';
 import { createCaptacion } from '../../api/captacionApi';
 import { getElectorAuth } from '../../api/padronApi';
 import type { ElectorResult } from '../../types/padron';
@@ -31,6 +31,11 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
     const [operadorUbicacion, setOperadorUbicacion] = useState<Ubicacion | null>(null);
     const [disponibleMiembroMesa, setDisponibleMiembroMesa] = useState(false);
     const [requiereTransporte, setRequiereTransporte] = useState(false);
+
+    const [solicitudAlquiler, setSolicitudAlquiler] = useState(false);
+    const [capacidadVehiculo, setCapacidadVehiculo] = useState('');
+    const [montoAlquilerVehiculo, setMontoAlquilerVehiculo] = useState('');
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState<Message | null>(null);
 
@@ -39,7 +44,6 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
     const refreshPlan = usePlanStore((s) => s.refreshPlan);
     const captacionBloqueada = plan?.captacionBloqueada ?? false;
 
-    // Obtener ubicación del operador silenciosamente al montar
     useEffect(() => {
         if (!navigator.geolocation) return;
         navigator.geolocation.getCurrentPosition(
@@ -68,6 +72,9 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
         setUbicacion(null);
         setDisponibleMiembroMesa(false);
         setRequiereTransporte(false);
+        setSolicitudAlquiler(false);
+        setCapacidadVehiculo('');
+        setMontoAlquilerVehiculo('');
     };
 
     const handleSearch = async () => {
@@ -112,6 +119,7 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!elector) return;
+        if (solicitudAlquiler && !capacidadVehiculo.trim()) return;
         setIsSubmitting(true);
         try {
             await createCaptacion({
@@ -122,6 +130,9 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                 requiereTransporte,
                 ubicacion: ubicacion ?? undefined,
                 operadorUbicacion,
+                solicitudAlquiler: solicitudAlquiler || undefined,
+                capacidadVehiculo: solicitudAlquiler && capacidadVehiculo ? Number(capacidadVehiculo) : undefined,
+                montoAlquilerVehiculo: solicitudAlquiler && montoAlquilerVehiculo ? Number(montoAlquilerVehiculo) : undefined,
             });
             onSuccess();
             resetForm();
@@ -182,7 +193,6 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                             </button>
                         </div>
 
-                        {/* Resultado de búsqueda */}
                         {elector && (
                             <div className="mt-2 px-3 py-2 bg-gray-900 text-white rounded-xl flex items-center gap-2">
                                 <CheckCircle size={18} weight="fill" className="text-green-400 shrink-0" />
@@ -228,6 +238,58 @@ export function CaptureForm({ onSuccess }: CaptureFormProps) {
                                 Requiere transporte Día D
                             </span>
                         </label>
+                        <label className={`flex items-center ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}>
+                            <input
+                                type="checkbox"
+                                checked={solicitudAlquiler}
+                                onChange={(e) => {
+                                    setSolicitudAlquiler(e.target.checked);
+                                    if (!e.target.checked) {
+                                        setCapacidadVehiculo('');
+                                        setMontoAlquilerVehiculo('');
+                                    }
+                                }}
+                                disabled={disabled}
+                                className="w-5 h-5 border-2 rounded checkbox-primary"
+                            />
+                            <span className="ml-3 text-sm text-gray-800 font-bold flex items-center gap-1.5">
+                                <Truck size={15} weight="bold" className="text-primary" />
+                                Alquiler de vehículo propio
+                            </span>
+                        </label>
+
+                        {solicitudAlquiler && !disabled && (
+                            <div className="mt-2 pl-8 space-y-3">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 mb-1">
+                                        Capacidad (personas) <span className="text-primary">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        value={capacidadVehiculo}
+                                        onChange={(e) => setCapacidadVehiculo(e.target.value)}
+                                        required={solicitudAlquiler}
+                                        placeholder="Ej: 8"
+                                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none font-bold text-sm input-focus-primary"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 mb-1">
+                                        Monto tentativo (Gs.) <span className="text-gray-400 font-medium">(opcional)</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        step="1000"
+                                        value={montoAlquilerVehiculo}
+                                        onChange={(e) => setMontoAlquilerVehiculo(e.target.value)}
+                                        placeholder="Ej: 150000"
+                                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg outline-none font-bold text-sm input-focus-primary"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="pt-3 border-t border-gray-200 space-y-4">
