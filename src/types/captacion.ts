@@ -25,6 +25,10 @@ export interface CaptacionRecord {
     nroTelefono: string;
     direccionRecogida: string;
     ubicacion?: Ubicacion;
+    ciudad?: string | null;
+    departamento?: string | null;
+    mensajeWhatsapp?: string | null;
+    telefonoWhatsapp?: string | null;
 }
 
 export interface CreateCaptacionRequest {

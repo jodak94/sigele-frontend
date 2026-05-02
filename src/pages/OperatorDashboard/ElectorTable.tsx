@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { FilePdf, FileXls, PencilSimple, Trash } from '@phosphor-icons/react';
+import { FilePdf, FileXls, PencilSimple, Trash, WhatsappLogo } from '@phosphor-icons/react';
 import type { CaptacionRecord } from '../../types/captacion';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { exportarElectores } from '../../api/captacionApi';
 import { useToast } from '../../components/Toast';
+import { useTenantPageEnabled } from '../../utils/useTenantPageEnabled';
 
 interface ElectorTableProps {
     records: CaptacionRecord[];
@@ -20,6 +21,7 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
     const toast = useToast();
     const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
     const [exporting, setExporting] = useState<'xls' | 'pdf' | null>(null);
+    const tenantPageHabilitado = useTenantPageEnabled();
 
     const handleExport = async (formato: 'xls' | 'pdf') => {
         setExporting(formato);
@@ -67,22 +69,20 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Elector</th>
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Contacto</th>
                                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase">Etiquetas</th>
-                                {!readOnly && (
-                                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Acciones</th>
-                                )}
+                                <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase">Acciones</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100">
                             {isLoading && (
                                 <tr>
-                                    <td colSpan={readOnly ? 3 : 4} className="p-8 text-center text-gray-500 font-bold">
+                                    <td colSpan={4} className="p-8 text-center text-gray-500 font-bold">
                                         Cargando...
                                     </td>
                                 </tr>
                             )}
                             {!isLoading && records.length === 0 && (
                                 <tr>
-                                    <td colSpan={readOnly ? 3 : 4} className="p-8 text-center text-gray-500 font-bold">
+                                    <td colSpan={4} className="p-8 text-center text-gray-500 font-bold">
                                         No hay registros aún.
                                     </td>
                                 </tr>
@@ -123,26 +123,39 @@ export function ElectorTable({ records, isLoading, onEdit, onDelete, onRestore, 
                                             )}
                                         </div>
                                     </td>
-                                    {!readOnly && (
-                                        <td className="px-6 py-4 text-center">
-                                            <div className="flex items-center justify-center space-x-3">
-                                                <button
-                                                    onClick={() => onEdit(r)}
-                                                    className="text-gray-600 hover:text-black"
-                                                    title="Editar"
+                                    <td className="px-6 py-4 text-center">
+                                        <div className="flex items-center justify-center space-x-3">
+                                            {tenantPageHabilitado && r.telefonoWhatsapp && r.mensajeWhatsapp && (
+                                                <a
+                                                    href={`https://wa.me/${r.telefonoWhatsapp}?text=${encodeURIComponent(r.mensajeWhatsapp)}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-green-600 hover:opacity-75"
+                                                    title="Contactar por WhatsApp"
                                                 >
-                                                    <PencilSimple size={20} weight="bold" />
-                                                </button>
-                                                <button
-                                                    onClick={() => setPendingDeleteId(r.electorId)}
-                                                    className="text-primary hover:opacity-75"
-                                                    title="Eliminar"
-                                                >
-                                                    <Trash size={20} weight="bold" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    )}
+                                                    <WhatsappLogo size={20} weight="bold" />
+                                                </a>
+                                            )}
+                                            {!readOnly && (
+                                                <>
+                                                    <button
+                                                        onClick={() => onEdit(r)}
+                                                        className="text-gray-600 hover:text-black"
+                                                        title="Editar"
+                                                    >
+                                                        <PencilSimple size={20} weight="bold" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setPendingDeleteId(r.electorId)}
+                                                        className="text-primary hover:opacity-75"
+                                                        title="Eliminar"
+                                                    >
+                                                        <Trash size={20} weight="bold" />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

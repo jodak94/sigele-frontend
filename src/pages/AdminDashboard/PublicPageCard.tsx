@@ -1,20 +1,14 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Link, ArrowSquareOut, DownloadSimple } from '@phosphor-icons/react';
 import { buildTenantUrl, getTenant } from '../../utils/tenant';
+import { useTenantPageEnabled } from '../../utils/useTenantPageEnabled';
 
 export function PublicPageCard() {
     const slug = getTenant();
     const url = slug ? `${buildTenantUrl(slug)}/sobre-mi` : null;
     const canvasRef = useRef<HTMLDivElement>(null);
-    const [habilitado, setHabilitado] = useState(false);
-
-    useEffect(() => {
-        if (!slug) return;
-        import(`../tenants/${slug}.tsx`)
-            .then(() => setHabilitado(true))
-            .catch(() => setHabilitado(false));
-    }, [slug]);
+    const habilitado = useTenantPageEnabled();
 
     const handleDownload = () => {
         const canvas = canvasRef.current?.querySelector('canvas');
