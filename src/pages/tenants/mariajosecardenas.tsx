@@ -14,32 +14,70 @@ const REDES = {
 
 /* ─── Contenido ──────────────────────────────────────────────────────────── */
 
-const TAGLINE = 'Nací y crecí en Villeta. Es esa misma ciudad la que me da la fuerza para trabajar cada día por quienes confían en mí.';
+const TAGLINE = 'Villeta necesita de tu voz, tu decisión con sabiduría, compromiso y gestión, cuento con tu voto para trabajar por nuestra ciudad.';
+
+const YO_SOY = {
+    frase: 'Hija de Dios, Mujer, hermana, esposa y madre.',
+    formacion: [
+        'Prof. en E.E.B.',
+        'Lic. en Adm. de Empresas',
+        'Diplomado en Liderazgo Estratégico (IAEE)',
+        'Posgrado en Didáctica Universitaria',
+        'Lic. en Ciencias Contables',
+        'Mg. en Planificación y Conducción Estratégica Nacional (IAEE)',
+        'Dra. en Ciencias de la Educación',
+        'Dra. en Defensa, Desarrollo y Seguridad Estratégica Nacional (IAEE)',
+    ],
+};
 
 const PROPUESTAS = [
     {
         num: '01',
-        titulo: 'Salud Comunitaria',
-        texto: 'Ampliar el acceso a servicios de salud en los barrios más alejados del centro, con énfasis en atención materno-infantil y adultos mayores. Cada villetano merece atención digna cerca de su hogar.',
+        titulo: 'Seguridad Ciudadana',
+        subtitulo: 'La seguridad se construye con presencia, organización y comunidad.',
+        items: [
+            'Instalación de Cámaras de Seguridad y Alarmas en lugares vulnerables.',
+            'Trabajo con Comisiones Vecinales en limpieza e iluminación por sector.',
+            'Levantamiento estadístico de mejoras por barrios para gestionar proyectos ante la Intendencia.',
+        ],
+        cierre: 'La seguridad se construye entre todos, desde el barrio.',
     },
     {
         num: '02',
-        titulo: 'Educación con Oportunidades',
-        texto: 'Promover programas de apoyo escolar, becas y capacitaciones técnicas para jóvenes. La educación es la herramienta más poderosa para construir un futuro mejor para Villeta.',
+        titulo: 'Educación',
+        subtitulo: 'Apoyo a la comunidad educativa, formación con oportunidades y educación con valores.',
+        items: [
+            'Charlas con Profesionales que apoyen la labor docente.',
+            'Trabajo con Psicólogos para reforzar el aprendizaje de niños y adolescentes.',
+            'Alianzas con el sector Público y Privado para crear centros telemáticos.',
+        ],
+        cierre: 'La educación transforma realidades.',
     },
     {
         num: '03',
-        titulo: 'Crecimiento Local',
-        texto: 'Fomentar el comercio local, el turismo y las pymes villetanas. Nuestra ciudad tiene un potencial enorme; trabajaremos para dar a nuestros emprendedores las herramientas que necesitan para crecer.',
+        titulo: 'Villeta Activa y Deportiva',
+        subtitulo: 'Invertir en deporte es invertir en salud, disciplina y oportunidades para nuestra juventud.',
+        items: [
+            'Torneos intercolegiales permanentes en fútbol, futsal, vóley, básquet, atletismo y handball.',
+            'Complejo Deportivo Municipal Multiespacio: canchas y pista de atletismo en zonas estratégicas.',
+            'Plan "Canchas Dignas en tu Barrio": mejora de canchitas en barrios y compañías.',
+        ],
+        cierre: 'La juventud necesita oportunidades reales, no promesas.',
     },
     {
         num: '04',
-        titulo: 'Mujeres que Transforman',
-        texto: 'Impulsar políticas de inclusión y protección para la mujer villetana: desde programas de formación laboral hasta centros de atención integral. Cuando las mujeres prosperan, toda la comunidad avanza.',
+        titulo: 'Villeta Ciudad Histórica y Cultural',
+        subtitulo: 'Cuando una ciudad reconoce su historia y apoya su cultura, construye identidad, orgullo y futuro.',
+        items: [
+            'Construcción o adecuación de un teatro municipal como espacio multifuncional.',
+            'Ruta Histórica de Villeta: circuito turístico-cultural señalizado de los sitios históricos.',
+            'Convenio con FFAA para proteger y custodiar los espacios históricos y patrimoniales.',
+        ],
+        cierre: 'Historia viva, cultura que une.',
     },
 ];
 
-const CITA = 'Vengo a trabajar con convicción y corazón, porque Villeta se lo merece.';
+const CITA = 'Villeta necesita de tu voz, tu decisión con sabiduría, compromiso y gestión, cuento con tu voto para trabajar por nuestra ciudad.';
 
 /* ─── Paleta ─────────────────────────────────────────────────────────────── */
 
@@ -140,7 +178,9 @@ function Ticker() {
 
 /* ─── Tarjeta de propuesta ───────────────────────────────────────────────── */
 
-function PropuestaCard({ num, titulo, texto }: { num: string; titulo: string; texto: string }) {
+function PropuestaCard({ num, titulo, subtitulo, items, cierre }: {
+    num: string; titulo: string; subtitulo: string; items: string[]; cierre: string;
+}) {
     const [hovered, setHovered] = useState(false);
     return (
         <div
@@ -148,7 +188,7 @@ function PropuestaCard({ num, titulo, texto }: { num: string; titulo: string; te
             onMouseLeave={() => setHovered(false)}
             style={{
                 background: hovered ? C.white : C.warm,
-                border: `1px solid ${hovered ? C.warmBorder : C.warmBorder}`,
+                border: `1px solid ${C.warmBorder}`,
                 borderRadius: '0.75rem',
                 padding: '2rem',
                 boxShadow: hovered ? '0 8px 32px rgba(213,43,30,0.12)' : '0 1px 4px rgba(213,43,30,0.06)',
@@ -204,19 +244,57 @@ function PropuestaCard({ num, titulo, texto }: { num: string; titulo: string; te
                 fontWeight: 700,
                 fontSize: '1.2rem',
                 color: C.textDark,
-                marginBottom: '0.75rem',
+                marginBottom: '0.5rem',
                 lineHeight: 1.25,
             }}>
                 {titulo}
             </h3>
+
             <p style={{
                 fontFamily: 'Outfit, sans-serif',
                 fontWeight: 400,
-                fontSize: '0.9rem',
-                color: C.textMid,
-                lineHeight: 1.75,
+                fontStyle: 'italic',
+                fontSize: '0.82rem',
+                color: C.textLight,
+                lineHeight: 1.5,
+                marginBottom: '1rem',
             }}>
-                {texto}
+                "{subtitulo}"
+            </p>
+
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', marginBottom: '1rem' }}>
+                {items.map((item, i) => (
+                    <li key={i} style={{
+                        display: 'flex',
+                        gap: '0.6rem',
+                        alignItems: 'flex-start',
+                        fontFamily: 'Outfit, sans-serif',
+                        fontWeight: 400,
+                        fontSize: '0.88rem',
+                        color: C.textMid,
+                        lineHeight: 1.65,
+                        marginBottom: i < items.length - 1 ? '0.5rem' : 0,
+                    }}>
+                        <span style={{
+                            width: '5px', height: '5px', borderRadius: '50%',
+                            background: C.red, flexShrink: 0, marginTop: '0.55rem',
+                        }} />
+                        {item}
+                    </li>
+                ))}
+            </ul>
+
+            <p style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontWeight: 600,
+                fontSize: '0.8rem',
+                color: C.red,
+                fontStyle: 'italic',
+                borderTop: `1px solid ${C.warmBorder}`,
+                paddingTop: '0.75rem',
+                margin: 0,
+            }}>
+                {cierre}
             </p>
         </div>
     );
@@ -520,6 +598,94 @@ export default function MariaJoseCardenasPage() {
             {/* ── Ticker ─────────────────────────────────────────────────── */}
             <Ticker />
 
+            {/* ── Sección Yo Soy ────────────────────────────────────────── */}
+            <section style={{
+                background: C.warmMid,
+                borderTop: `1px solid ${C.warmBorder}`,
+                borderBottom: `1px solid ${C.warmBorder}`,
+                padding: 'clamp(3.5rem, 7vw, 5.5rem) clamp(1rem, 4vw, 2.5rem)',
+            }}>
+                <div style={{ maxWidth: '80rem', margin: '0 auto' }}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'auto 1fr',
+                        gap: 'clamp(2rem, 5vw, 5rem)',
+                        alignItems: 'start',
+                    }}>
+                        {/* Etiqueta lateral */}
+                        <div style={{ paddingTop: '0.35rem' }}>
+                            <span style={{
+                                fontFamily: 'Outfit, sans-serif',
+                                fontWeight: 700,
+                                fontSize: '0.68rem',
+                                color: C.red,
+                                letterSpacing: '0.25em',
+                                textTransform: 'uppercase',
+                                writingMode: 'vertical-rl',
+                                transform: 'rotate(180deg)',
+                                display: 'block',
+                            }}>
+                                Yo Soy
+                            </span>
+                        </div>
+
+                        <div>
+                            {/* Frase identitaria */}
+                            <blockquote style={{
+                                fontFamily: '"Playfair Display", serif',
+                                fontWeight: 700,
+                                fontStyle: 'italic',
+                                fontSize: 'clamp(1.4rem, 3vw, 2rem)',
+                                color: C.textDark,
+                                lineHeight: 1.35,
+                                margin: '0 0 2.5rem',
+                                borderLeft: `3px solid ${C.red}`,
+                                paddingLeft: '1.25rem',
+                            }}>
+                                "{YO_SOY.frase}"
+                            </blockquote>
+
+                            {/* Formación académica */}
+                            <div>
+                                <span style={{
+                                    fontFamily: 'Outfit, sans-serif',
+                                    fontWeight: 700,
+                                    fontSize: '0.68rem',
+                                    color: C.textLight,
+                                    letterSpacing: '0.2em',
+                                    textTransform: 'uppercase',
+                                    display: 'block',
+                                    marginBottom: '1.25rem',
+                                }}>
+                                    Formación Académica
+                                </span>
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    gap: '0.6rem',
+                                }}>
+                                    {YO_SOY.formacion.map((titulo, i) => (
+                                        <span key={i} style={{
+                                            fontFamily: 'Outfit, sans-serif',
+                                            fontWeight: 500,
+                                            fontSize: '0.82rem',
+                                            color: C.textMid,
+                                            background: C.warm,
+                                            border: `1px solid ${C.warmBorder}`,
+                                            borderRadius: '2rem',
+                                            padding: '0.35rem 0.9rem',
+                                            whiteSpace: 'nowrap',
+                                        }}>
+                                            {titulo}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* ── Sección de propuestas ──────────────────────────────────── */}
             <section style={{
                 background: C.warm,
@@ -549,9 +715,8 @@ export default function MariaJoseCardenasPage() {
                             color: C.textDark,
                             letterSpacing: '-0.01em',
                         }}>
-                            Cuatro ejes para{' '}
-                            <span style={{ color: C.red, fontStyle: 'italic' }}>transformar</span>{' '}
-                            nuestra ciudad
+                            Mis ejes para{' '}
+                            <span style={{ color: C.red, fontStyle: 'italic' }}>Villeta</span>
                         </h2>
                     </div>
 
