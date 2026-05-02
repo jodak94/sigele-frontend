@@ -102,6 +102,12 @@ const C = {
     textDark:   '#1C0507',
     textMid:    '#7A2020',
     textLight:  '#B54040',
+
+    honey:       '#F5A623',
+    honeyDark:   '#D4890A',
+    honeyFaint:  'rgba(245,166,35,0.08)',
+    honeyMid:    'rgba(245,166,35,0.18)',
+    honeyBorder: 'rgba(245,166,35,0.35)',
 };
 
 /* ─── Hooks ──────────────────────────────────────────────────────────────── */
@@ -129,7 +135,7 @@ function useScrolled(threshold = 10) {
 
 /* ─── Ticker ─────────────────────────────────────────────────────────────── */
 
-const TICKER_ITEMS = ['Lista 2R', 'Opción 8', 'Concejal Municipal', 'Villeta', 'Elecciones 2026', 'María José Cárdenas'];
+const TICKER_ITEMS = ['Lista 2R', 'Opción 8', 'Concejal Municipal', 'Villeta', 'Elecciones 2026', 'María José Cárdenas', '#VilletaNosUne'];
 
 function Ticker() {
     return (
@@ -176,6 +182,92 @@ function Ticker() {
     );
 }
 
+/* ─── Cluster de panal decorativo ───────────────────────────────────────── */
+
+function HoneycombCluster({ scale = 1, opacity = 1, style }: {
+    scale?: number; opacity?: number; style?: React.CSSProperties;
+}) {
+    // Pointy-top hexagons, side = 22px, tesselated in a 3x3 grid with offset rows
+    // Pre-computed vertices: each hex shares edges perfectly with its neighbors
+    const hexes = [
+        { pts: '19,0 38,11 38,33 19,44 0,33 0,11',      fo: 0.9  },
+        { pts: '57,0 76,11 76,33 57,44 38,33 38,11',     fo: 0.75 },
+        { pts: '95,0 114,11 114,33 95,44 76,33 76,11',   fo: 0.5  },
+        { pts: '38,33 57,44 57,66 38,77 19,66 19,44',    fo: 0.65 },
+        { pts: '76,33 95,44 95,66 76,77 57,66 57,44',    fo: 0.8  },
+        { pts: '19,66 38,77 38,99 19,110 0,99 0,77',     fo: 0.4  },
+        { pts: '57,66 76,77 76,99 57,110 38,99 38,77',   fo: 0.55 },
+        { pts: '95,66 114,77 114,99 95,110 76,99 76,77', fo: 0.3  },
+    ];
+    return (
+        <svg width={114 * scale} height={110 * scale} viewBox="0 0 114 110" style={style}>
+            {hexes.map((h, i) => (
+                <polygon key={i} points={h.pts}
+                    fill="#F5A623" fillOpacity={h.fo * opacity}
+                    stroke="#D4890A" strokeWidth="0.8"
+                    strokeOpacity={Math.min(1, (h.fo + 0.1) * opacity)}
+                />
+            ))}
+        </svg>
+    );
+}
+
+/* ─── Abejita SVG ────────────────────────────────────────────────────────── */
+
+function BeeSvg({ size = 36, style }: { size?: number; style?: React.CSSProperties }) {
+    const h = Math.round(size * 1.11);
+    return (
+        <svg width={size} height={h} viewBox="0 0 36 40" fill="none" style={style}>
+            {/* Alas */}
+            <ellipse cx="10" cy="15" rx="9" ry="5" fill="rgba(210,235,255,0.85)"
+                stroke="rgba(150,190,220,0.4)" strokeWidth="0.5" transform="rotate(-20 10 15)"/>
+            <ellipse cx="26" cy="15" rx="9" ry="5" fill="rgba(210,235,255,0.85)"
+                stroke="rgba(150,190,220,0.4)" strokeWidth="0.5" transform="rotate(20 26 15)"/>
+            {/* Cuerpo */}
+            <ellipse cx="18" cy="28" rx="8" ry="10" fill="#F5A623"/>
+            {/* Rayas */}
+            <path d="M10.5,26 Q18,24 25.5,26 Q25.5,30 18,30 Q10.5,30 10.5,26Z" fill="#2C1810" opacity="0.8"/>
+            <path d="M11.5,32 Q18,30 24.5,32 Q24,35.5 18,36 Q12,35.5 11.5,32Z" fill="#2C1810" opacity="0.8"/>
+            {/* Cabeza */}
+            <circle cx="18" cy="14" r="6.5" fill="#F5A623"/>
+            {/* Ojos */}
+            <circle cx="15.5" cy="13" r="1.4" fill="#2C1810"/>
+            <circle cx="20.5" cy="13" r="1.4" fill="#2C1810"/>
+            <circle cx="15.9" cy="12.5" r="0.5" fill="white"/>
+            <circle cx="20.9" cy="12.5" r="0.5" fill="white"/>
+            {/* Sonrisa */}
+            <path d="M15.5,16.5 Q18,18 20.5,16.5" stroke="#2C1810" strokeWidth="0.9" strokeLinecap="round" fill="none"/>
+            {/* Antenas */}
+            <path d="M15.5,8.5 L12.5,3" stroke="#2C1810" strokeWidth="1.1" strokeLinecap="round"/>
+            <circle cx="12" cy="2.5" r="1.5" fill="#F5A623" stroke="#2C1810" strokeWidth="0.7"/>
+            <path d="M20.5,8.5 L23.5,3" stroke="#2C1810" strokeWidth="1.1" strokeLinecap="round"/>
+            <circle cx="24" cy="2.5" r="1.5" fill="#F5A623" stroke="#2C1810" strokeWidth="0.7"/>
+            {/* Aguijón */}
+            <path d="M16,37.5 Q18,40 20,37.5" stroke="#C07800" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+        </svg>
+    );
+}
+
+/* ─── Badge hexagonal ────────────────────────────────────────────────────── */
+
+function HexBadge({ label, hovered }: { label: string; hovered: boolean }) {
+    return (
+        <svg width="36" height="40" viewBox="0 0 36 40" style={{ marginBottom: '0.875rem', display: 'block' }}>
+            <polygon
+                points="18,1 35,10.5 35,29.5 18,39 1,29.5 1,10.5"
+                fill={hovered ? C.honey : C.honeyFaint}
+                stroke={hovered ? C.honeyDark : C.honeyBorder}
+                strokeWidth="1.5"
+            />
+            <text x="18" y="25" textAnchor="middle"
+                fill={hovered ? '#2C1810' : C.honey}
+                fontSize="11" fontWeight="700" fontFamily="Outfit, sans-serif">
+                {label}
+            </text>
+        </svg>
+    );
+}
+
 /* ─── Tarjeta de propuesta ───────────────────────────────────────────────── */
 
 function PropuestaCard({ num, titulo, subtitulo, items, cierre }: {
@@ -215,29 +307,7 @@ function PropuestaCard({ num, titulo, subtitulo, items, cierre }: {
                 {num}
             </span>
 
-            {/* Número pequeño — acento */}
-            <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '2rem',
-                height: '2rem',
-                borderRadius: '50%',
-                background: hovered ? C.red : C.warmMid,
-                border: `1.5px solid ${hovered ? C.red : C.warmBorder}`,
-                marginBottom: '1rem',
-                transition: 'all 0.25s',
-            }}>
-                <span style={{
-                    fontFamily: 'Outfit, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '0.72rem',
-                    color: hovered ? C.white : C.textLight,
-                    transition: 'color 0.25s',
-                }}>
-                    {num}
-                </span>
-            </div>
+            <HexBadge label={num} hovered={hovered} />
 
             <h3 style={{
                 fontFamily: '"Playfair Display", serif',
@@ -446,6 +516,14 @@ export default function MariaJoseCardenasPage() {
                             MJC
                         </span>
 
+                        {/* Honeycomb — esquina superior derecha del panel de texto */}
+                        <div style={{
+                            position: 'absolute', top: '-1rem', right: '-2rem',
+                            pointerEvents: 'none', zIndex: 0,
+                        }}>
+                            <HoneycombCluster scale={1.25} opacity={0.14} />
+                        </div>
+
                         <div style={{ position: 'relative', zIndex: 1 }}>
                             {/* Badge superior */}
                             <div className="mjc-f0" style={{
@@ -466,6 +544,7 @@ export default function MariaJoseCardenasPage() {
                                 }}>
                                     Concejal · Villeta
                                 </span>
+                                <BeeSvg size={22} style={{ marginLeft: '0.1rem', flexShrink: 0 }} />
                             </div>
 
                             {/* Nombre */}
@@ -543,6 +622,14 @@ export default function MariaJoseCardenasPage() {
                                 display: 'block',
                             }}
                         />
+
+                        {/* Honeycomb — esquina superior derecha del panel de foto */}
+                        <div style={{
+                            position: 'absolute', top: 0, right: 0,
+                            pointerEvents: 'none', zIndex: 3,
+                        }}>
+                            <HoneycombCluster scale={0.95} opacity={0.6} />
+                        </div>
 
                         {/* Gradiente de transición inferior */}
                         <div style={{
@@ -695,18 +782,19 @@ export default function MariaJoseCardenasPage() {
 
                     {/* Encabezado */}
                     <div style={{ marginBottom: '3.5rem', maxWidth: '52rem' }}>
-                        <span style={{
-                            display: 'inline-block',
-                            fontFamily: 'Outfit, sans-serif',
-                            fontWeight: 700,
-                            fontSize: '0.68rem',
-                            color: C.red,
-                            letterSpacing: '0.25em',
-                            textTransform: 'uppercase',
-                            marginBottom: '1rem',
-                        }}>
-                            Mis compromisos con Villeta
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                            <span style={{
+                                fontFamily: 'Outfit, sans-serif',
+                                fontWeight: 700,
+                                fontSize: '0.68rem',
+                                color: C.red,
+                                letterSpacing: '0.25em',
+                                textTransform: 'uppercase',
+                            }}>
+                                Mis compromisos con Villeta
+                            </span>
+                            <BeeSvg size={20} />
+                        </div>
                         <h2 style={{
                             fontFamily: '"Playfair Display", serif',
                             fontWeight: 900,
@@ -746,6 +834,22 @@ export default function MariaJoseCardenasPage() {
                     backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)',
                     backgroundSize: '28px 28px',
                 }} />
+
+                {/* Honeycomb — esquina inferior derecha */}
+                <div style={{
+                    position: 'absolute', bottom: '-1rem', right: '-1rem',
+                    pointerEvents: 'none', zIndex: 1, opacity: 0.18,
+                }}>
+                    <HoneycombCluster scale={1.1} opacity={1} />
+                </div>
+
+                {/* Abejita decorativa — esquina superior izquierda */}
+                <div style={{
+                    position: 'absolute', top: '1.5rem', left: 'clamp(1rem, 5vw, 4rem)',
+                    pointerEvents: 'none', zIndex: 2, opacity: 0.55,
+                }}>
+                    <BeeSvg size={42} />
+                </div>
 
                 {/* Comilla grande decorativa */}
                 <div style={{
