@@ -56,8 +56,11 @@ export interface BarrioStat {
     total: number;
 }
 
-export interface SeccionalStat {
-    codigoSeccional: number;
+export interface ZonaStat {
+    depart: number | null;
+    distrito: number | null;
+    zona: number | null;
+    descripcion: string | null;
     totalElectores: number;
 }
 

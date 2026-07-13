@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Printer, MagnifyingGlass, X, FileText, FileXls, FilePdf } from '@phosphor-icons/react';
-import { getSeccionalStats, getPadronPublicoStats, getTopLocales, getUltimasConsultas } from '../api/adminApi';
+import { getZonaStats, getPadronPublicoStats, getTopLocales, getUltimasConsultas } from '../api/adminApi';
 import { searchOperadores, getCoordinators } from '../api/usersApi';
 import { CustomSelect } from '../components/CustomSelect';
 import { getReporteElectores, exportarReporteElectores, getReporteResumenOperadores, exportarReporteResumenOperadores, getReporteDiaD, exportarReporteDiaD, getReporteCandidatosMesa, exportarReporteCandidatosMesa } from '../api/captacionApi';
 import { getReporteVehiculos, exportarReporteVehiculos } from '../api/vehiculosApi';
 import { useAuthStore } from '../store/authStore';
 import type { VehiculoReporteItem, VehiculosReporteData } from '../types/vehiculo';
-import type { SeccionalStat, PadronPublicoStats, TopLocalItem, UltimaConsultaItem } from '../types/admin';
+import type { ZonaStat, PadronPublicoStats, TopLocalItem, UltimaConsultaItem } from '../types/admin';
 import type { UserListItem, CoordinatorListItem } from '../types/user';
 import type { ReporteElectorItem, ReporteOperadorItem, ReporteResumenOperadoresResponse, ReporteDiaDResponse, ReporteDiaDLocal, ReporteCandidatosMesaResponse, ReporteCandidatosMesaLocal } from '../types/captacion';
 
@@ -855,25 +855,25 @@ function TabStats() {
 // ─── Tab: zonas ───────────────────────────────────────────────────────────────
 
 function TabZonas() {
-    const [seccionales, setSeccionales] = useState<SeccionalStat[]>([]);
+    const [zonas, setZonas] = useState<ZonaStat[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getSeccionalStats()
-            .then(setSeccionales)
+        getZonaStats()
+            .then(setZonas)
             .finally(() => setIsLoading(false));
     }, []);
 
-    const sorted = [...seccionales].sort((a, b) => b.totalElectores - a.totalElectores);
+    const sorted = [...zonas].sort((a, b) => b.totalElectores - a.totalElectores);
     const max = sorted[0]?.totalElectores || 1;
-    const total = seccionales.reduce((sum, s) => sum + s.totalElectores, 0);
+    const total = zonas.reduce((sum, z) => sum + z.totalElectores, 0);
 
     return (
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
             {/* Card header */}
             <div className="px-6 py-5 border-b border-gray-100">
                 <h2 className="text-xl font-extrabold uppercase text-black tracking-tight">
-                    Captación por Seccionales
+                    Captación por Zonas
                 </h2>
                 <p className="text-gray-500 text-sm font-medium mt-0.5">
                     Distribución territorial de electores captados.
@@ -893,21 +893,21 @@ function TabZonas() {
                         No hay datos disponibles.
                     </p>
                 ) : (
-                    sorted.map((s, i) => {
-                        const pct = Math.round((s.totalElectores / max) * 100);
+                    sorted.map((z, i) => {
+                        const pct = Math.round((z.totalElectores / max) * 100);
                         return (
-                            <div key={s.codigoSeccional}>
+                            <div key={`${z.depart}-${z.distrito}-${z.zona}`}>
                                 <div className="flex items-center justify-between mb-1">
                                     <div className="flex items-center gap-3">
                                         <span className="w-6 text-right text-xs font-black text-gray-400">
                                             {i + 1}
                                         </span>
                                         <span className="text-sm font-bold text-black">
-                                            Seccional {s.codigoSeccional}
+                                            {z.descripcion ?? 'Sin zona'}
                                         </span>
                                     </div>
                                     <span className="text-sm font-extrabold text-black">
-                                        {s.totalElectores.toLocaleString('es-PY')}
+                                        {z.totalElectores.toLocaleString('es-PY')}
                                     </span>
                                 </div>
                                 <div className="ml-9 h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -922,7 +922,7 @@ function TabZonas() {
                 )}
             </div>
 
-            {!isLoading && seccionales.length > 0 && (
+            {!isLoading && zonas.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
                     <span className="text-sm font-bold text-gray-500 uppercase tracking-wide">
                         Total electores captados

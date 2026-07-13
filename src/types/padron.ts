@@ -3,20 +3,22 @@ export interface ElectorResult {
     numeroCed: number;
     nombre: string;
     apellido: string;
-    direccion: string;
+    direccion: string | null;
     fechaNaci: string;
-    mesa: number;
-    orden: number;
+    mesa: number | null;
+    orden: number | null;
     codigoSex: number;
     local: {
-        seccLoc: number;
+        codigoLocal: number;
         nombreLoc: string;
         direccion: string | null;
     };
-    seccional: {
-        nDepart: string;
-        nDistrito: string;
-        descripcio: string;
-        direccion: string;
+    zona: {
+        depart: number | null;
+        distrito: number | null;
+        zona: number | null;
+        nombreDepart: string | null;
+        nombreDistrito: string | null;
+        nombreZona: string | null;
     };
 }

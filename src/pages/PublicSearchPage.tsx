@@ -193,7 +193,7 @@ export function PublicSearchPage() {
                                                         </p>
                                                         <p className="text-black font-extrabold">{result.local.nombreLoc}</p>
                                                         <p className="text-sm text-gray-600 font-medium">
-                                                            {result.seccional.nDistrito} — {result.seccional.nDepart}
+                                                            {result.zona.nombreDistrito} — {result.zona.nombreDepart}
                                                         </p>
                                                         {result.local.direccion && (
                                                             <p className="text-xs text-gray-500 font-medium mt-0.5">
@@ -202,19 +202,25 @@ export function PublicSearchPage() {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
-                                                    <FileText size={22} weight="fill" className="text-primary mr-3 shrink-0 mt-0.5" />
-                                                    <div className="flex space-x-8">
-                                                        <div>
-                                                            <p className="text-xs uppercase text-gray-500 font-bold mb-1">Mesa</p>
-                                                            <p className="text-2xl font-black text-black">{result.mesa}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-xs uppercase text-gray-500 font-bold mb-1">Orden</p>
-                                                            <p className="text-2xl font-black text-black">{result.orden}</p>
+                                                {(result.mesa !== null || result.orden !== null) && (
+                                                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-start">
+                                                        <FileText size={22} weight="fill" className="text-primary mr-3 shrink-0 mt-0.5" />
+                                                        <div className="flex space-x-8">
+                                                            {result.mesa !== null && (
+                                                                <div>
+                                                                    <p className="text-xs uppercase text-gray-500 font-bold mb-1">Mesa</p>
+                                                                    <p className="text-2xl font-black text-black">{result.mesa}</p>
+                                                                </div>
+                                                            )}
+                                                            {result.orden !== null && (
+                                                                <div>
+                                                                    <p className="text-xs uppercase text-gray-500 font-bold mb-1">Orden</p>
+                                                                    <p className="text-2xl font-black text-black">{result.orden}</p>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
