@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    House, FileText, MapPin, Truck, Users, UserPlus, Package,
+    House, FileText, MapPin, Truck, Users, UserPlus, Package, CheckSquare,
 } from '@phosphor-icons/react';
 import { getAdminKpis, getConsultasStats } from '../../api/adminApi';
 import { useAuthStore } from '../../store/authStore';
@@ -19,10 +19,11 @@ import { ConsultasStatsCard } from './ConsultasStats';
 import { MapaElectores } from './MapaElectores';
 import { PublicPageCard } from './PublicPageCard';
 import { VehiculosPanel } from './VehiculosPanel';
+import { AsistenciaPanel } from './AsistenciaPanel';
 import { ReportesPage } from '../ReportesPage';
 import type { Icon } from "@phosphor-icons/react";
 
-type ViewId = 'panel' | 'reportes' | 'mapa' | 'vehiculos' | 'usuarios';
+type ViewId = 'panel' | 'reportes' | 'mapa' | 'vehiculos' | 'asistencia' | 'usuarios';
 
 type NavItem = {
   id: ViewId;
@@ -50,6 +51,7 @@ export function AdminDashboard() {
         { id: 'reportes', label: 'Reportes', icon: FileText },
         ...(soportaUbicacion ? [{ id: 'mapa' as ViewId, label: 'Mapa', icon: MapPin }] : []),
         ...(hasPermission('vehiculo:read') ? [{ id: 'vehiculos' as ViewId, label: 'Vehículos', icon: Truck }] : []),
+        ...(hasPermission('asistencia:read') ? [{ id: 'asistencia' as ViewId, label: 'Asistencia Día-D', icon: CheckSquare }] : []),
         { id: 'usuarios', label: 'Usuarios', icon: Users },
     ];
 
@@ -79,6 +81,7 @@ export function AdminDashboard() {
                         {activeView === 'reportes' && 'Documentación y estadísticas para análisis.'}
                         {activeView === 'mapa' && 'Distribución geográfica de electores captados.'}
                         {activeView === 'vehiculos' && 'Flota de campaña y solicitudes de alquiler.'}
+                        {activeView === 'asistencia' && 'Marcación manual de asistencia el día de la elección.'}
                         {activeView === 'usuarios' && 'Administración de usuarios del sistema.'}
                     </p>
                 </div>
@@ -141,6 +144,8 @@ export function AdminDashboard() {
             {activeView === 'mapa' && <MapaElectores />}
 
             {activeView === 'vehiculos' && <VehiculosPanel />}
+
+            {activeView === 'asistencia' && <AsistenciaPanel />}
 
             {activeView === 'usuarios' && (
                 <div className="space-y-6">
