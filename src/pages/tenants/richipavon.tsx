@@ -4,8 +4,8 @@ import { WhatsappLogo, FacebookLogo, InstagramLogo } from '@phosphor-icons/react
 
 /* ─── Assets / Contenido ─────────────────────────────────────────────────── */
 
-const FOTO_1 = 'https://assets.sigele.com.py/tenants/richipavon/sobre_mi_1.png';
-const FOTO_2 = 'https://assets.sigele.com.py/tenants/richipavon/sobre_mi_2.png';
+const FOTO_1 = 'https://assets.sigele.com.py/tenants/richipavon/sobre_mi_1.jpeg';
+const FOTO_2 = 'https://assets.sigele.com.py/tenants/richipavon/sobre_mi_2.jpeg';
 
 const REDES = {
     facebook:  null,
@@ -271,7 +271,7 @@ export default function RichiPavonPage() {
                             fontFamily: '"Barlow Condensed", sans-serif',
                             fontWeight: 800, fontSize: '0.75rem',
                             color: '#1A0000', letterSpacing: '0.16em', textTransform: 'uppercase',
-                        }}>Lista 8 · Opción 1</div>
+                        }}>Lista 1 · Opción 1</div>
                         <div style={{
                             padding: '0.35rem 1rem',
                             border: '1px solid rgba(255,255,255,0.35)',
@@ -366,7 +366,7 @@ export default function RichiPavonPage() {
                     display: 'flex', alignItems: 'center',
                     gap: '2rem', flexWrap: 'wrap', justifyContent: 'center',
                 }}>
-                    {['RP · Lista 8', 'Opción 1', 'Richi Pavón · Concejal', 'Lima 2026'].map((t, i) => (
+                    {['RP · Lista 1', 'Opción 1', 'Richi Pavón · Concejal', 'Lima 2026'].map((t, i) => (
                         <span key={i} style={{
                             fontFamily: '"Barlow Condensed", sans-serif',
                             fontWeight: 700, fontSize: '0.82rem',
