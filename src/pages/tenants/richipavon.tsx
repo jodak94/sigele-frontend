@@ -406,7 +406,6 @@ export default function RichiPavonPage() {
                             overflow: 'hidden',
                             boxShadow: '0 8px 28px rgba(120,12,24,0.14)',
                             border: `2px solid ${C.red}`,
-                            aspectRatio: '938 / 496',
                         }}>
                             <img
                                 src={FOTO_1}
@@ -421,7 +420,6 @@ export default function RichiPavonPage() {
                             overflow: 'hidden',
                             boxShadow: '0 8px 28px rgba(120,12,24,0.14)',
                             border: `2px solid ${C.red}`,
-                            aspectRatio: '938 / 496',
                         }}>
                             <img
                                 src={FOTO_2}
